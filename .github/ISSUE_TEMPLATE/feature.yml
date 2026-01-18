@@ -63,15 +63,6 @@ body:
       required: false
 
   - type: textarea
-    id: acceptance
-    attributes:
-      label: "완료 기준(Acceptance Criteria)"
-      description: "이 이슈가 '완료'라고 판단할 기준"
-      placeholder: "- Given/When/Then 또는 체크리스트\n- [ ] 조건 1\n- [ ] 조건 2"
-    validations:
-      required: true
-
-  - type: textarea
     id: api_contract
     attributes:
       label: "API/데이터 계약(Optional)"
