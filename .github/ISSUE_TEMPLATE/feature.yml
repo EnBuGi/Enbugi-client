@@ -1,0 +1,112 @@
+name: "✨ Feature"
+description: "새 기능/개선 작업 요청"
+title: "[FEAT] "
+labels: ["feature"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: "영역(Area)"
+      description: "프런트/백엔드/공통 중 선택"
+      options:
+        - Frontend
+        - Backend
+        - Common
+        - DevOps/Infra
+        - Docs
+    validations:
+      required: true
+
+  - type: input
+    id: epic
+    attributes:
+      label: "연관 Epic / 상위 이슈(Optional)"
+      description: "예) #123"
+      placeholder: "#123"
+    validations:
+      required: false
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: "요약(Summary)"
+      description: "무엇을 만들거나 개선하나요?"
+      placeholder: "예) 학습 이력 날짜별 조회 API 및 UI 구현"
+    validations:
+      required: true
+
+  - type: textarea
+    id: background
+    attributes:
+      label: "배경/목적(Why)"
+      description: "왜 필요한지, 어떤 문제를 해결하는지"
+      placeholder: "- 사용자 관점의 문제\n- 비즈니스/운영 관점의 이유"
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: "범위/요구사항(Scope)"
+      description: "기능 범위와 핵심 요구사항을 bullet로 적어주세요"
+      placeholder: "- [ ] 요구사항 1\n- [ ] 요구사항 2\n- [ ] 요구사항 3"
+    validations:
+      required: true
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: "비범위(Out of Scope)"
+      description: "이번 작업에서 하지 않을 것"
+      placeholder: "- 이번 스프린트에서는 제외할 항목"
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "완료 기준(Acceptance Criteria)"
+      description: "이 이슈가 '완료'라고 판단할 기준"
+      placeholder: "- Given/When/Then 또는 체크리스트\n- [ ] 조건 1\n- [ ] 조건 2"
+    validations:
+      required: true
+
+  - type: textarea
+    id: api_contract
+    attributes:
+      label: "API/데이터 계약(Optional)"
+      description: "FE/BE 공용으로 계약(엔드포인트/요청/응답/에러코드 등) 적기"
+      placeholder: |
+        Endpoint:
+        Request:
+        Response:
+        Error:
+    validations:
+      required: false
+
+  - type: textarea
+    id: uiux
+    attributes:
+      label: "UI/UX(Optional)"
+      description: "화면 흐름, 디자인 링크(피그마), 스크린샷"
+      placeholder: "- Figma:\n- Flow:\n- Screenshot:"
+    validations:
+      required: false
+
+  - type: textarea
+    id: tech_notes
+    attributes:
+      label: "기술 메모(Technical Notes)"
+      description: "구현 힌트, 고려사항, 리스크"
+      placeholder: "- 사용 라이브러리/모듈\n- 성능/보안 고려\n- 마이그레이션 여부"
+    validations:
+      required: false
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: "작업 목록(Tasks)"
+      description: "세부 작업으로 쪼개기"
+      placeholder: "- [ ] FE: \n- [ ] BE: \n- [ ] Test: \n- [ ] Docs:"
+    validations:
+      required: true
