@@ -1,4 +1,4 @@
-import { ElementType, ReactNode } from 'react';
+import { ElementType, ReactNode, InputHTMLAttributes } from 'react';
 
 export type TextVariant =
   | 'display-2xl'
@@ -23,4 +23,18 @@ export interface TextProps<T extends ElementType> {
   gradient?: boolean;
   className?: string;
   children?: ReactNode;
+}
+
+
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  helperText?: string;
+
+  /** string이면 메시지 출력하고 true면 스타일만 */
+
+  error?: string | boolean;
+  icon?: ReactNode;
+
+  className?: string;
+  inputClassName?: string;
 }
