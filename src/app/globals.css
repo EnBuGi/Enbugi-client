@@ -1,28 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* Colors */
-  --color-background: #09090B;
-  --color-surface: #18181B;
-  --color-surfaceHighlight: #27272A;
-  --color-border: #27272A;
+  --color-background: #09090b;
+  --color-surface: #18181b;
+  --color-surfaceHighlight: #27272a;
+  --color-border: #27272a;
 
-  --color-main: #FFFFFF;
-  --color-sub: #D4D4D8;
-  --color-muted: #A1A1AA;
-  --color-tertiary: #52525B;
+  --color-main: #ffffff;
+  --color-sub: #d4d4d8;
+  --color-muted: #a1a1aa;
+  --color-tertiary: #52525b;
 
-  --color-primary: #B93234;
+  --color-primary: #b93234;
   --color-primaryHover: #962426;
   --color-primaryLight: rgba(185, 50, 52, 0.1);
-  --color-primaryBorder: #5C191A;
+  --color-primaryBorder: #5c191a;
 
-  --color-success: #2E9F74;
-  --color-warning: #F59E0B;
-  --color-error: #E11D48;
-  --color-info: #3B82F6;
+  --color-success: #2e9f74;
+  --color-warning: #f59e0b;
+  --color-error: #e11d48;
+  --color-info: #3b82f6;
 
   --color-glass: rgba(24, 24, 27, 0.7);
   --color-glassBorder: rgba(255, 255, 255, 0.08);
@@ -36,8 +36,8 @@
   --shadow-glow: 0 0 20px -5px rgba(185, 50, 52, 0.5);
   --shadow-glow-sm: 0 0 10px -2px rgba(185, 50, 52, 0.4);
 
-  --image-dot-pattern: radial-gradient(#27272A 1px, transparent 1px);
-  --image-gradient-main: linear-gradient(to right, #B93234, #E11D48, #F59E0B);
+  --image-dot-pattern: radial-gradient(#27272a 1px, transparent 1px);
+  --image-gradient-main: linear-gradient(to right, #b93234, #e11d48, #f59e0b);
 }
 
 /* Typography Utilities (Bundled styles) */
@@ -118,7 +118,7 @@
 @layer base {
   body {
     @apply bg-background text-main font-sans antialiased;
-    background-image: radial-gradient(#27272A 1px, transparent 1px);
+    background-image: radial-gradient(#27272a 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
