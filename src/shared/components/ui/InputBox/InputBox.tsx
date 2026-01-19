@@ -3,11 +3,20 @@ import { AlertCircle } from 'lucide-react';
 import { InputProps } from '../../../types/ui';
 import { Text } from '../Text';
 
-export const InputBox: React.FC<InputProps> = ({
+type InputBoxProps = InputProps & {
+    rightIcon?: React.ReactNode;
+    onRightIconClick?: () => void;
+    hideErrorIcon?: boolean;
+};
+
+export const InputBox: React.FC<InputBoxProps> = ({
     label,
     error,
     helperText,
     icon,
+    rightIcon,
+    onRightIconClick,
+    hideErrorIcon,
     className = '',
     id,
     disabled,
@@ -15,6 +24,10 @@ export const InputBox: React.FC<InputProps> = ({
 }) => {
     const generatedId = React.useId();
     const inputId = id || generatedId;
+
+    const hasLeftIcon = !!icon;
+    const canShowErrorIcon = !hideErrorIcon && !!error && typeof error === 'string';
+    const hasRightIcon = !!rightIcon || canShowErrorIcon;
 
     return (
         <div className={`flex flex-col gap-1.5 w-full ${className}`}>
@@ -27,7 +40,7 @@ export const InputBox: React.FC<InputProps> = ({
             )}
 
             <div className="relative group">
-                {icon && (
+                {hasLeftIcon && (
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none group-focus-within:text-primary transition-colors">
                         {icon}
                     </div>
@@ -37,9 +50,12 @@ export const InputBox: React.FC<InputProps> = ({
                     id={inputId}
                     disabled={disabled}
                     className={`
-            flex h-10 w-full rounded-md border bg-surface px-3 py-2 text-sm text-white shadow-sm transition-all file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-600 focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 font-sans
-            ${icon ? 'pl-9' : ''}
-            ${error
+            flex h-10 w-full rounded-md border bg-surface px-3 py-2 text-sm text-white shadow-sm transition-all
+            file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-600
+            focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 font-sans
+            ${hasLeftIcon ? 'pl-10' : 'pl-3'}
+            ${hasRightIcon ? 'pr-10' : 'pr-3'}
+            ${error && typeof error === 'string'
                             ? 'border-red-900/50 focus-visible:border-red-500 focus-visible:ring-red-500/50 bg-red-950/10'
                             : 'border-border focus-visible:border-primary focus-visible:ring-primary'
                         }
@@ -47,14 +63,28 @@ export const InputBox: React.FC<InputProps> = ({
                     {...props}
                 />
 
-                {error && typeof error === 'string' && (
+                {/* ✅ 우측 클릭 아이콘 슬롯 */}
+                {rightIcon && (
+                    <button
+                        type="button"
+                        disabled={disabled}
+                        onClick={onRightIconClick}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="input action"
+                    >
+                        {rightIcon}
+                    </button>
+                )}
+
+                {/* ✅ 기본 에러 아이콘 (hideErrorIcon이면 숨김) */}
+                {!rightIcon && canShowErrorIcon && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500 pointer-events-none animate-in fade-in zoom-in-95 duration-200">
                         <AlertCircle size={16} />
                     </div>
                 )}
             </div>
 
-            {(error && typeof error === 'string') ? (
+            {error && typeof error === 'string' ? (
                 <Text variant="tiny" className="text-red-400 font-medium">
                     {error}
                 </Text>
