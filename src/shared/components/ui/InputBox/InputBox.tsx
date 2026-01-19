@@ -50,15 +50,16 @@ export const InputBox: React.FC<InputBoxProps> = ({
           id={inputId}
           disabled={disabled}
           className={`
-            flex h-10 w-full rounded-md border bg-surface px-3 py-2 text-sm text-white shadow-sm transition-all
+            flex h-10 w-full rounded-md border px-3 py-2 text-sm text-white shadow-sm transition-all
             file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-600
             focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 font-sans
             ${hasLeftIcon ? 'pl-10' : 'pl-3'}
             ${hasRightIcon ? 'pr-10' : 'pr-3'}
             ${error && typeof error === 'string'
               ? 'border-red-900/50 focus-visible:border-red-500 focus-visible:ring-red-500/50 bg-red-950/10'
-              : 'border-border focus-visible:border-primary focus-visible:ring-primary'
+              : 'bg-surface border-border ring-1 ring-white/5 focus-visible:border-primary focus-visible:ring-primary'
             }
+
           `}
           {...props}
         />
