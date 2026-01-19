@@ -30,9 +30,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <div className="dark bg-background rounded-md text-main font-sans antialiased p-4">
-        <Story />
-      </div>
+      <Story />
     ),
   ],
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { cn } from '../../utils/cn'
 import { TextProps, TextVariant } from '../../types/ui';
 
 // Variant Logic: Maps logical variants to Tailwind classes (using system tokens)
@@ -42,12 +42,12 @@ export const Text = <T extends React.ElementType = 'p'>({
         ? 'bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/50'
         : '';
 
-    const finalClassName = `
-    ${variantStyles[variant]}
-    ${weight ? `font-${weight}` : ''}
-    ${gradientClass}
-    ${className}
-  `.trim();
+    const finalClassName = cn(
+        variantStyles[variant],
+        weight && `font-${weight}`,
+        gradientClass,
+        className
+    );
 
     return (
         <Component className={finalClassName} {...props}>
