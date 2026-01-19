@@ -40,22 +40,37 @@ export const ErrorState: Story = {
 export const Password: Story = {
     render: (args) => {
         const [show, setShow] = React.useState(false);
+        const [hasError, setHasError] = React.useState(false);
 
         return (
-            <InputBox
-                {...args}
-                type={show ? 'text' : 'password'}
-                icon={<Lock size={18} />}
-                rightIcon={show ? <EyeOff size={18} /> : <Eye size={18} />}
-                onRightIconClick={() => setShow((v) => !v)}
-                hideErrorIcon
-            />
+            <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-sm text-zinc-300">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                            type="checkbox"
+                            checked={hasError}
+                            onChange={(e) => setHasError(e.target.checked)}
+                        />
+                        Error state
+                    </label>
+                </div>
+
+                <InputBox
+                    {...args}
+                    type={show ? 'text' : 'password'}
+                    icon={<Lock size={18} />}
+                    rightIcon={show ? <EyeOff size={18} /> : <Eye size={18} />}
+                    onRightIconClick={() => setShow((v) => !v)}
+                    error={hasError ? 'Password must be at least 8 characters.' : undefined}
+                    helperText={!hasError ? 'Use at least 8 characters.' : undefined}
+                    hideErrorIcon
+                />
+            </div>
         );
     },
     args: {
         label: 'Password',
         placeholder: 'Enter your password',
-        error: 'Password must be at least 8 characters.',
     },
 };
 
