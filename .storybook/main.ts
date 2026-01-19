@@ -19,7 +19,7 @@ const config: StorybookConfig = {
   ],
   "framework": "@storybook/nextjs-vite",
   "staticDirs": [
-    "..\\public"
+    "../public"
   ],
   async viteFinal(config) {
     if (config.resolve) {
