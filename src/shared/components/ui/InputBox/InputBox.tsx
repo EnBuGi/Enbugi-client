@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
-import { InputProps } from '../../types/ui';
-import { Text } from './Text';
+import { InputProps } from '../../../types/ui';
+import { Text } from '../Text';
 
 export const InputBox: React.FC<InputProps> = ({
     label,
