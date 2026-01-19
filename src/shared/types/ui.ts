@@ -35,4 +35,15 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: ButtonSize;
     isLoading?: boolean;
     asChild?: boolean;
+    leftIcon?: React.ReactNode;
+    rightIcon?: React.ReactNode;
 }
+
+
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    label?: string;
+    error?: string | boolean;
+    helperText?: string;
+    icon?: React.ReactNode;
+}
+
