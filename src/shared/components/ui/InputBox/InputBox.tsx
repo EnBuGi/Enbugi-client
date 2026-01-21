@@ -24,8 +24,9 @@ export const InputBox: React.FC<InputBoxProps> = ({
   ...props
 }) => {
   const inputId = id ?? React.useId();
+  const hasError = !!error;
   const errorMsg = typeof error === 'string' ? error : '';
-  const showErrorIcon = !rightIcon && !hideErrorIcon && !!errorMsg;
+  const showErrorIcon = !rightIcon && !hideErrorIcon && hasError;
 
   return (
     <div className={cn('flex w-full flex-col gap-1.5', className)}>
@@ -53,7 +54,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
             'focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50',
             icon ? 'pl-10' : 'pl-3',
             (rightIcon || showErrorIcon) ? 'pr-10' : 'pr-3',
-            errorMsg
+            hasError
               ? 'border-red-900/50 bg-red-950/10 focus-visible:border-red-500 focus-visible:ring-red-500/50'
               : 'bg-surface border-border ring-1 ring-white/5 focus-visible:border-primary focus-visible:ring-primary'
           )}
