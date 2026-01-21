@@ -20,7 +20,7 @@ const variantStyles: Record<TextVariant, string> = {
     small: 'font-sans text-body-sm text-muted',
 
     // Utilities
-    label: 'font-mono text-label uppercase tracking-widest text-muted',
+    label: 'font-mono text-label uppercase tracking-normal text-muted',
     code: 'font-mono text-code bg-surfaceHighlight/50 px-1.5 py-0.5 rounded text-primary border border-white/5',
     mono: 'font-mono text-body-sm text-current',
     tiny: 'font-mono text-[10px] leading-tight text-muted',

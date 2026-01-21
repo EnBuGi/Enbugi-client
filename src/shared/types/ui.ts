@@ -1,4 +1,4 @@
-import { ElementType, ReactNode, ButtonHTMLAttributes } from 'react';
+import { ElementType, ReactNode, ButtonHTMLAttributes, InputHTMLAttributes } from 'react';
 
 export type TextVariant =
     | 'display-2xl'
@@ -35,4 +35,15 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: ButtonSize;
     isLoading?: boolean;
     asChild?: boolean;
+    leftIcon?: React.ReactNode;
+    rightIcon?: React.ReactNode;
 }
+
+
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    label?: string;
+    error?: string | boolean;
+    helperText?: string;
+    icon?: React.ReactNode;
+}
+
