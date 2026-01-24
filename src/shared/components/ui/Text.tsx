@@ -3,26 +3,27 @@ import { cn } from '../../utils/cn'
 import { TextProps, TextVariant } from '../../types/ui';
 
 // Variant Logic: Maps logical variants to Tailwind classes (using system tokens)
+// Variant Logic: Maps logical variants to Tailwind classes
 const variantStyles: Record<TextVariant, string> = {
     // Hero & Display
-    'display-2xl': 'font-display text-display-2xl tracking-tighter text-main',
-    'display-xl': 'font-display text-display-xl tracking-tighter text-main',
+    'display-2xl': 'font-display text-7xl font-bold tracking-tighter text-main',
+    'display-xl': 'font-display text-6xl font-bold tracking-tighter text-main',
 
     // Headings
-    h1: 'font-display text-heading-xl tracking-tight text-main',
-    h2: 'font-display text-heading-lg tracking-tight text-main',
-    h3: 'font-display text-heading-md tracking-tight text-main',
-    h4: 'font-display text-heading-sm tracking-tight text-main',
+    h1: 'font-display text-5xl font-semibold tracking-tight text-main', // 3rem
+    h2: 'font-display text-4xl font-semibold tracking-tight text-main', // 2.25rem
+    h3: 'font-display text-3xl font-medium tracking-tight text-main',   // 1.875rem
+    h4: 'font-display text-2xl font-medium tracking-tight text-main',   // 1.5rem
 
     // Body
-    body: 'font-sans text-body-base text-sub',
-    large: 'font-sans text-body-lg text-sub',
-    small: 'font-sans text-body-sm text-muted',
+    body: 'font-sans text-base text-sub',
+    large: 'font-sans text-lg text-sub',
+    small: 'font-sans text-sm text-muted',
 
     // Utilities
-    label: 'font-mono text-label uppercase tracking-normal text-muted',
-    code: 'font-mono text-code bg-surfaceHighlight/50 px-1.5 py-0.5 rounded text-primary border border-white/5',
-    mono: 'font-mono text-body-sm text-current',
+    label: 'font-mono text-xs font-semibold uppercase tracking-wider text-muted',
+    code: 'font-mono text-sm bg-surfaceHighlight/50 px-1.5 py-0.5 rounded text-primary border border-white/5',
+    mono: 'font-mono text-sm text-current',
     tiny: 'font-mono text-[10px] leading-tight text-muted',
 };
 
