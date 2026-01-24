@@ -86,7 +86,7 @@ export const LoginForm = () => {
                         Forgot password?
                     </button>
                 </div>
-
+                {/* card컴포넌트 구현시 하단부에 에러메세지 표시 변경 예정 */}
                 {globalError && (
                     <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
                         <Text variant="small" className="text-red-500">
