@@ -3,27 +3,27 @@ import { cn } from '../../utils/cn'
 import { TextProps, TextVariant } from '../../types/ui';
 
 // Variant Logic: Maps logical variants to Tailwind classes (using system tokens)
-// Variant Logic: Maps logical variants to Tailwind classes
+// Variant Logic: Maps logical variants to Tailwind classes (Arbitrary Values for Precision)
 const variantStyles: Record<TextVariant, string> = {
     // Hero & Display
-    'display-2xl': 'font-display text-7xl font-bold tracking-tighter text-main',
-    'display-xl': 'font-display text-6xl font-bold tracking-tighter text-main',
+    'display-2xl': 'font-display text-[4.5rem] leading-[1] tracking-[-0.04em] font-bold text-main',
+    'display-xl': 'font-display text-[3.75rem] leading-[1.1] tracking-[-0.03em] font-bold text-main',
 
     // Headings
-    h1: 'font-display text-5xl font-semibold tracking-tight text-main', // 3rem
-    h2: 'font-display text-4xl font-semibold tracking-tight text-main', // 2.25rem
-    h3: 'font-display text-3xl font-medium tracking-tight text-main',   // 1.875rem
-    h4: 'font-display text-2xl font-medium tracking-tight text-main',   // 1.5rem
+    h1: 'font-display text-[3rem] leading-[1.2] tracking-[-0.02em] font-semibold text-main',
+    h2: 'font-display text-[2.25rem] leading-[1.2] tracking-[-0.02em] font-semibold text-main',
+    h3: 'font-display text-[1.875rem] leading-[1.3] tracking-[-0.02em] font-medium text-main',
+    h4: 'font-display text-[1.5rem] leading-[1.3] tracking-[-0.01em] font-medium text-main',
 
     // Body
-    body: 'font-sans text-base text-sub',
-    large: 'font-sans text-lg text-sub',
-    small: 'font-sans text-sm text-muted',
+    body: 'font-sans text-[1rem] leading-[1.6] tracking-[-0.01em] text-sub',
+    large: 'font-sans text-[1.125rem] leading-[1.6] tracking-[-0.01em] text-sub',
+    small: 'font-sans text-[0.875rem] leading-[1.5] text-muted',
 
     // Utilities
-    label: 'font-mono text-xs font-semibold uppercase tracking-wider text-muted',
-    code: 'font-mono text-sm bg-surfaceHighlight/50 px-1.5 py-0.5 rounded text-primary border border-white/5',
-    mono: 'font-mono text-sm text-current',
+    label: 'font-mono text-[0.75rem] leading-[1] tracking-[0.05em] font-semibold uppercase text-muted',
+    code: 'font-mono text-[0.875rem] leading-[1.5] bg-surfaceHighlight/50 px-1.5 py-0.5 rounded text-primary border border-white/5',
+    mono: 'font-mono text-[0.875rem] leading-[1.5] text-current',
     tiny: 'font-mono text-[10px] leading-tight text-muted',
 };
 
