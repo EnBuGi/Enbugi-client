@@ -19,7 +19,7 @@ export const LoginForm = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isLoading },
+        formState: { errors, isSubmitting },
     } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -100,7 +100,7 @@ export const LoginForm = () => {
                     variant="primary"
                     size="lg"
                     className="w-full"
-                    isLoading={isLoading}
+                    isLoading={isSubmitting}
                     rightIcon={<ArrowRight />}
                 >
                     Login
