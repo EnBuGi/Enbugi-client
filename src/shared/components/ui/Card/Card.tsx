@@ -47,15 +47,14 @@ export const Card: React.FC<CardProps> = ({
                     {hasHeader && (
                         <div className={cn('mb-3', !children && !hasFooter && 'mb-0')}>
                             {title && (
-                                <Text variant="h4" className="text-white">
+                                <Text
+                                    variant="h4"
+                                    className="text-white font-semibold"
+                                >
                                     {title}
                                 </Text>
                             )}
-                            {description && (
-                                <Text variant="small" className="mt-1 text-zinc-400">
-                                    {description}
-                                </Text>
-                            )}
+
                         </div>
                     )}
 
