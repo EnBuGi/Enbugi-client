@@ -71,9 +71,9 @@ export const LoginForm = () => {
                     />
                 </div>
 
-                <div className="flex items-center justify-between"
-                    onClick={() => setKeepSession(!keepSession)}>
-                    <label className="flex items-center gap-2 cursor-pointer group">
+                <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-2 cursor-pointer group"
+                        onClick={() => setKeepSession(!keepSession)}>
                         <div
                             className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${keepSession ? 'bg-primary border-primary' : 'border-zinc-700 bg-zinc-900 group-hover:border-zinc-500'}`}
                         >
