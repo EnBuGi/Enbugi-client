@@ -71,20 +71,20 @@ export const LoginForm = () => {
                     />
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between"
+                    onClick={() => setKeepSession(!keepSession)}>
                     <label className="flex items-center gap-2 cursor-pointer group">
                         <div
-                            onClick={() => setKeepSession(!keepSession)}
                             className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${keepSession ? 'bg-primary border-primary' : 'border-zinc-700 bg-zinc-900 group-hover:border-zinc-500'}`}
                         >
                             {keepSession && <Check size={12} className="text-white" />}
                         </div>
-                        <Text variant="small" className="text-zinc-400 group-hover:text-zinc-300">Keep Session</Text>
+                        <Text variant="small" className="text-zinc-400 group-hover:text-zinc-300">로그인 유지</Text>
                     </label>
 
-                    <button type="button" className="text-xs text-zinc-500 hover:text-primary transition-colors font-mono">
-                        Forgot password?
-                    </button>
+                    <Button variant="link" size="sm" className="text-muted ">
+                        비밀번호 찾기
+                    </Button>
                 </div>
                 {/* card컴포넌트 구현시 하단부에 에러메세지 표시 변경 예정 */}
                 {globalError && (
@@ -106,15 +106,6 @@ export const LoginForm = () => {
                     Login
                 </Button>
             </form>
-
-            <div className="text-center pt-2">
-                <Text variant="tiny" className="text-zinc-500">
-                    Don't have an account?{' '}
-                    <button className="text-zinc-300 hover:text-primary transition-colors font-medium border-b border-transparent hover:border-primary ml-1">
-                        Request Access
-                    </button>
-                </Text>
-            </div>
         </div>
     );
 };
