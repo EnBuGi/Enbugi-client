@@ -26,7 +26,7 @@ export function AppShell({ headerNav, sidebarNav, children, className }: AppShel
             <Header centerSlot={headerNav} />
             <div className="relative flex w-full">
                 {hasSidebar && (
-                    <aside className="fixed left-0 top-16 w-[200px] h-[calc(100vh-64px)] overflow-y-auto z-10 border-r border-white/5 bg-background/70 backdrop-blur">
+                    <aside className="fixed left-0 top-16 w-[200px] h-[calc(100vh-64px)] overflow-y-auto z-10 border-r border-white/5 bg-background">
                         <div className="p-3 h-full">
                             {sidebarNav}
                         </div>

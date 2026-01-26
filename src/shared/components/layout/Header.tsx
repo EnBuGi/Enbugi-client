@@ -9,7 +9,7 @@ type HeaderProps = {
 
 export function Header({ centerSlot, rightSlot }: HeaderProps) {
     return (
-        <header className="relative z-20 border-b border-white/5 bg-background/70 backdrop-blur">
+        <header className="relative z-20 border-b border-white/5 bg-background">
             <div className="flex h-16 items-center justify-between px-6">
 
                 {/* Left: Logo + Nav */}
