@@ -41,17 +41,14 @@ export function Gnb({ variant = "header", items, sections, activeHref }: GnbProp
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 relative",
+                "flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 relative h-16 items-center",
                 hasActive && !active ? "opacity-50" : "",
                 active
-                  ? "text-white hover:bg-white/10"
+                  ? "text-white hover:bg-white/10 border-b-2 border-primary"
                   : "text-sub hover:text-white hover:bg-surface/70"
               )}
             >
               {item.label}
-              {active && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-              )}
             </Link>
           );
         })}
