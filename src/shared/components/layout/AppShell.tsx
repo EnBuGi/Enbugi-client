@@ -14,15 +14,6 @@ export function AppShell({ headerNav, sidebarNav, children, className }: AppShel
 
     return (
         <div className={cn("relative min-h-screen", className)}>
-            <div
-                aria-hidden
-                className="pointer-events-none fixed inset-0 opacity-[0.18]"
-                style={{
-                    backgroundImage:
-                        "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
-                    backgroundSize: "18px 18px",
-                }}
-            />
             <Header centerSlot={headerNav} />
             <div className="relative flex w-full">
                 {hasSidebar && (
