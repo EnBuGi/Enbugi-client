@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "mock": "prism mock .agent/openapi.yaml -p 4010",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.0",
+    "@stoplight/prism-cli": "^5.14.2",
     "@storybook/addon-a11y": "^10.1.11",
     "@storybook/addon-docs": "^10.1.11",
     "@storybook/addon-onboarding": "^10.1.11",
