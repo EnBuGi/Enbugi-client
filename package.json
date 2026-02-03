@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "mock": "prism mock .agent/openapi.yaml -p 4010",
+    "mock": "prism mock docs/openapi.yaml -p 4010",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
