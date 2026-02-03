@@ -14,14 +14,8 @@ interface SignupRequiredResponse {
     profileImageUrl: string;
 }
 
-export class ApiError extends Error {
-    code: string;
-    constructor(message: string, code: string) {
-        super(message);
-        this.code = code;
-        this.name = 'ApiError';
-    }
-}
+// ApiError는 shared/utils/ApiError.ts 로 이동됨
+import { ApiError } from "@/shared/utils/ApiError";
 
 export type LoginResult = 
     | { type: 'SUCCESS'; data: LoginResponse }
@@ -56,8 +50,13 @@ export const authApi = {
         });
 
         if (res.status === 403) {
-            const data = await res.json();
-            return { type: 'SIGNUP_REQUIRED', data };
+            try {
+                const data = await res.json();
+                return { type: 'SIGNUP_REQUIRED', data };
+            } catch (e) {
+                // 응답 본문이 JSON이 아닌 경우 
+                throw new ApiError("Failed to parse signup requirement data.", "ERR_INVALID_RESPONSE");
+            }
         }
 
         if (!res.ok) {
