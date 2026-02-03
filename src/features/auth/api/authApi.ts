@@ -33,15 +33,16 @@ export const authApi = {
             "Content-Type": "application/json",
         };
 
-        if (inviteCode && process.env.NODE_ENV === 'development') {
+        // 개발 환경에서 쉬운 테스트를 위해 특정 초대 코드나 localStorage 플래그가 있으면 가입 필요 응답을 강제함
+        if (process.env.NODE_ENV === 'development') {
+            const isTestSignup = inviteCode === 'TEST_SIGNUP' || 
+                               (typeof window !== 'undefined' && localStorage.getItem('MOCK_FORCE_SIGNUP') === 'true');
+            
+            if (isTestSignup) {
+                headers['Prefer'] = 'code=403';
+                console.info("⚡️ Mocking Signup Required Flow triggered via TEST_SIGNUP code or local flag.");
+            }
         }
-
-        /* 
-           Simulate Signup Required Flow
-           강제로 403 응답을 요청하여 회원가입 프로세스를 테스트합니다.
-        */
-        headers['Prefer'] = 'code=403';
-
 
         const body: Record<string, string> = { code };
         if (inviteCode) {
