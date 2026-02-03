@@ -1,16 +1,20 @@
 import { Text } from "@/shared/components/ui/Text";
+import Image from "next/image";
 
 export function AuthHeader() {
     return (
-        <div className="text-center space-y-3">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-zinc-800 to-black border border-white/10 shadow-lg mb-2 group">
-                <span className="font-display font-bold text-xl text-primary group-hover:text-white transition-colors">En#</span>
+        <div className="flex items-center justify-center flex-row text-center space-x-3">
+             <div className="flex justify-center mb-2">
+                <Image 
+                    src="/logo.svg" 
+                    alt="En# Logo" 
+                    width={50} 
+                    height={50} 
+                    priority
+                />
             </div>
             <div>
-                <Text variant="h3" className="text-white">En# Online Judge</Text>
-                <Text variant="body" className="text-muted text-sm mt-1">
-                    환영합니다!
-                </Text>
+                <Text variant="h4" className="text-white">En# Online Judge</Text>
             </div>
         </div>
     );

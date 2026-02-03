@@ -1,111 +1,44 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { InputBox } from "@/shared/components/ui/InputBox/InputBox";
 import { Button } from "@/shared/components/ui/Button";
 import { Text } from "@/shared/components/ui/Text";
-import { loginSchema } from "../model/schema";
-import type { LoginFormData } from "../model/types";
-import { ArrowRight, Check } from "lucide-react";
+import Image from "next/image";
+
+import { useLogin } from "../hooks/useLogin";
 
 export const LoginForm = () => {
-    const router = useRouter();
-    const [globalError, setGlobalError] = useState<string | null>(null);
-    const [keepSession, setKeepSession] = useState(false);
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
-    });
-    {/* 로그인 Mock함수 */ }
-    const onSubmit = async (data: LoginFormData) => {
-        setGlobalError(null);
-        try {
-            // Mock API Call
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-
-            if (data.email === "error@test.com") {
-                throw new Error("존재하지 않는 계정입니다.");
-            }
-
-            console.log("Login Success", data, { keepSession });
-            router.push("/");
-        } catch (error) {
-            if (error instanceof Error) {
-                setGlobalError(error.message);
-            } else {
-                setGlobalError("로그인 중 알 수 없는 오류가 발생했습니다.");
-            }
-        }
-    };
+    const { isRedirecting, handleGithubLogin } = useLogin();
 
     return (
         <div className="w-full space-y-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-4">
-                    <InputBox
-                        label="Email"
-                        placeholder="sejong@sju.ac.kr"
-                        error={!!errors.email}
-                        helperText={errors.email?.message}
-                        {...register("email")}
-                        autoFocus
+            <div className="text-center space-y-2">
+            </div>
+
+            <Button
+                type="button"
+                variant="secondary"
+                size="lg"
+                className="w-full gap-2 relative overflow-hidden bg-[#24292f] hover:bg-[#24292f]/90 border-transparent text-white"
+                onClick={handleGithubLogin}
+                isLoading={isRedirecting}
+                leftIcon={
+                    <Image
+                        src="/github.svg"
+                        alt="GitHub"
+                        width={20}
+                        height={20}
                     />
-                    <InputBox
-                        label="Password"
-                        type="password"
-                        placeholder="••••••••"
-                        error={!!errors.password}
-                        helperText={errors.password?.message}
-                        {...register("password")}
-                    />
-                </div>
-
-                <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-2 cursor-pointer group"
-                        onClick={() => setKeepSession(!keepSession)}>
-                        <div
-                            className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${keepSession ? 'bg-primary border-primary' : 'border-zinc-700 bg-zinc-900 group-hover:border-zinc-500'}`}
-                        >
-                            {keepSession && <Check size={12} className="text-white" />}
-                        </div>
-                        <Text variant="small" className="text-zinc-400 group-hover:text-zinc-300">로그인 유지</Text>
-                    </label>
-
-                    <Button variant="link" size="sm" className="text-muted ">
-                        비밀번호 찾기
-                    </Button>
-                </div>
-                {/* card컴포넌트 구현시 하단부에 에러메세지 표시 변경 예정 */}
-                {globalError && (
-                    <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
-                        <Text variant="small" className="text-red-500">
-                            Error: {globalError}
-                        </Text>
-                    </div>
-                )}
-
-                <Button
-                    type="submit"
-                    variant="primary"
-                    size="lg"
-                    className="w-full"
-                    isLoading={isSubmitting}
-                    rightIcon={<ArrowRight />}
-                >
-                    Login
-                </Button>
-            </form>
+                }
+            >
+                GitHub로 로그인
+            </Button>
+            
+            <div className="text-center">
+                 <Text variant="tiny" className="text-muted-foreground">
+                    로그인 시 <span className="font-semibold text-primary/80">GitHub 프로필(이름, 이메일)</span> 정보가 제공되며,<br />
+                    이용약관 및 개인정보처리방침에 동의하게 됩니다.
+                </Text>
+            </div>
         </div>
     );
 };

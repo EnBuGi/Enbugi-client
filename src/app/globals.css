@@ -62,4 +62,15 @@
   ::-webkit-scrollbar-thumb {
     @apply bg-surfaceHighlight rounded-full hover:bg-tertiary;
   }
+
+  /* Remove Number Input Spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 }
