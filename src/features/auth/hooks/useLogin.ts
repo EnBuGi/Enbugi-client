@@ -24,8 +24,12 @@ export const useLogin = () => {
             return;
         }
 
+        // CSRF 방지를 위한 state 생성 및 저장
+        const state = crypto.randomUUID();
+        localStorage.setItem("oauth_state", state);
+
         // GitHub OAuth Authorize URL로 이동
-        window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=read:user user:email`;
+        window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=read:user user:email&state=${state}`;
     };
 
     return {

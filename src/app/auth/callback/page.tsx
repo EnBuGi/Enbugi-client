@@ -12,6 +12,20 @@ export default function GithubCallbackPage() {
 
     useEffect(() => {
         const code = searchParams.get("code");
+        const state = searchParams.get("state");
+        const storedState = localStorage.getItem("oauth_state");
+
+        // state 검증 (CSRF 방지)
+        if (!state || !storedState || state !== storedState) {
+            setStatus("잘못된 접근입니다. (State 불일치)");
+            // 보안상 state 삭제
+            localStorage.removeItem("oauth_state");
+            return;
+        }
+
+        // 검증 완료 후 state 삭제
+        localStorage.removeItem("oauth_state");
+
         if (!code) {
             setStatus("잘못된 접근입니다. (Code 누락)");
             return;
