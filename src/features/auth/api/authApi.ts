@@ -1,4 +1,6 @@
 import { SignupFormData } from "../model/types";
+import { ApiError } from "@/shared/utils/ApiError";
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 
@@ -13,9 +15,6 @@ interface SignupRequiredResponse {
     email: string;
     profileImageUrl: string;
 }
-
-// ApiError는 shared/utils/ApiError.ts 로 이동됨
-import { ApiError } from "@/shared/utils/ApiError";
 
 export type LoginResult = 
     | { type: 'SUCCESS'; data: LoginResponse }
