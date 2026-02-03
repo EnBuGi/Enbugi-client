@@ -13,7 +13,7 @@ import { ListRow } from "@/shared/components/ui/list/ListRow";
 
 
 const meta: Meta<typeof Badge> = {
-    title: "shared/ui/Badge",
+    title: "UI/Badge",
     component: Badge,
     parameters: {
         layout: "centered",
