@@ -1,6 +1,7 @@
 "use client";
 
-import { ApiError, authApi } from "@/features/auth/api/authApi";
+import { authApi } from "@/features/auth/api/authApi";
+import { ApiError } from "@/shared/utils/ApiError";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
