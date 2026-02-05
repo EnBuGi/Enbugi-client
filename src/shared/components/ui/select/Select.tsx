@@ -219,7 +219,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                     )}
                 </div>
 
-                {isErrorState && (
+                {isErrorState && (typeof error === 'string' || helperText) && (
                     <div
                         className={cn(
                             'mt-2 text-xs',
