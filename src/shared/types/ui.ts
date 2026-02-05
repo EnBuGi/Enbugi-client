@@ -64,6 +64,7 @@ export interface SelectProps<V = string> extends Omit<React.HTMLAttributes<HTMLD
     error?: string | boolean;
     helperText?: string;
     disabled?: boolean;
+    isLoading?: boolean;
     hasMore?: boolean;
     onLoadMore?: () => void;
 }
