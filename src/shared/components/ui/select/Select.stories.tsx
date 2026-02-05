@@ -216,6 +216,7 @@ export const WithLoadMore: Story = {
                     items={displayedItems}
                     value={value}
                     onChange={setValue}
+                    isLoading={isLoading}
                     hasMore={hasMore}
                     onLoadMore={handleLoadMore}
                     helperText="스크롤하면 더 많은 항목이 로드됩니다"
@@ -237,6 +238,28 @@ export const Empty: Story = {
                     value=""
                     onChange={() => { }}
                     helperText="이용 가능한 항목이 없습니다"
+                />
+            </div>
+        );
+    },
+};
+
+export const LoadingState: Story = {
+    render: () => {
+        const [value, setValue] = useState<string>('');
+
+        return (
+            <div className="w-full max-w-md">
+                <Select
+                    label="Repository 선택"
+                    placeholder="Repository를 선택해주세요"
+                    items={repositoryItems.slice(0, 4)}
+                    value={value}
+                    onChange={setValue}
+                    isLoading={true}
+                    hasMore={true}
+                    onLoadMore={() => { }}
+                    helperText="로딩 상태에서 더 보기 버튼이 비활성화됩니다"
                 />
             </div>
         );

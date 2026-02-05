@@ -17,6 +17,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             error = false,
             helperText,
             disabled = false,
+            isLoading = false,
             hasMore = false,
             onLoadMore,
             className = '',
@@ -74,7 +75,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                 50;
 
             if (isNearBottom && hasMore && onLoadMore) {
-                onLoadMore();
+                if (!isLoading) {
+                    onLoadMore();
+                }
             }
         };
 
@@ -206,19 +209,10 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                                     ))
                                 )}
 
-                                {hasMore && (
-                                    <button
-                                        type="button"
-                                        onClick={onLoadMore}
-                                        className={cn(
-                                            'w-full px-4 py-3',
-                                            'text-center text-sm text-primary hover:bg-surfaceHighlight',
-                                            'border-t border-border/50 transition-colors',
-                                            'font-medium'
-                                        )}
-                                    >
-                                        더 보기
-                                    </button>
+                                {isLoading && (
+                                    <div className="px-4 py-3 text-center text-sm text-muted border-t border-border/50">
+                                        로딩 중...
+                                    </div>
                                 )}
                             </div>
                         </div>
