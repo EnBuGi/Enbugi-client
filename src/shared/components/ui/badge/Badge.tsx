@@ -114,8 +114,11 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
                     hasBorder && "border",
                     sizeStyles[size],
                     shapeStyles[shape],
+                    useRing && "ring-1 ring-inset",
                     useRing ? intentRingStyles(intent, tone) : intentStyles(intent, tone),
                     truncate && "max-w-[140px] truncate",
+                    className
+                )}
                     className
                 )}
                 {...props}
