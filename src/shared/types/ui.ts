@@ -47,3 +47,24 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     icon?: React.ReactNode;
 }
 
+// Select/Dropdown Types
+export interface DropdownItem<V = string> {
+    label: string;
+    value: V;
+    description?: string;
+    disabled?: boolean;
+}
+
+export interface SelectProps<V = string> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+    label?: string;
+    placeholder?: string;
+    value?: V | null;
+    onChange?: (value: V) => void;
+    items?: DropdownItem<V>[];
+    error?: string | boolean;
+    helperText?: string;
+    disabled?: boolean;
+    hasMore?: boolean;
+    onLoadMore?: () => void;
+}
+
