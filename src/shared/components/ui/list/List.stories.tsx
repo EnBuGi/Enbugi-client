@@ -7,7 +7,7 @@ import { List } from "./List";
 import { ListRow } from "./ListRow";
 
 const meta: Meta<typeof List> = {
-    title: "shared/list/List",
+    title: "UI/List",
     component: List,
     parameters: {
         layout: "centered",
