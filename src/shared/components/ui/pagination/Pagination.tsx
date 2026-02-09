@@ -21,11 +21,11 @@ export const Pagination: React.FC<PaginationProps> = ({
     const safePagesPerBlock = Math.max(1, pagesPerBlock);
 
     const totalPageCount = Math.ceil(Math.max(0, total) / safePageSize);
-    if (totalPageCount <= 1) return null;
 
     const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPageCount);
 
     useEffect(() => {
+        if (totalPageCount <= 1) return;
         if (currentPage < 1) onPageChange(1);
         else if (currentPage > totalPageCount) onPageChange(totalPageCount);
     }, [currentPage, totalPageCount, onPageChange]);
@@ -35,6 +35,8 @@ export const Pagination: React.FC<PaginationProps> = ({
     const blockEnd = Math.min((currentBlock + 1) * safePagesPerBlock, totalPageCount);
 
     const paginationRange = useMemo(() => range(blockStart, blockEnd), [blockStart, blockEnd]);
+
+    if (totalPageCount <= 1) return null;
 
     const canGoPrevBlock = blockStart > 1;
     const canGoNextBlock = blockEnd < totalPageCount;
