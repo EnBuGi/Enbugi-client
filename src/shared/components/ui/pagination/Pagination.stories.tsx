@@ -9,14 +9,14 @@ const meta = {
         layout: 'centered',
         docs: {
             description: {
-                component:
-                    'Block pagination (5 pages per block). Controlled component with optional page size selector.',
+                component: 'Block pagination. Controlled component with configurable pagesPerBlock.',
             },
         },
     },
     tags: ['autodocs'],
     argTypes: {
         pageSize: { control: { type: 'number', min: 1 } },
+        pagesPerBlock: { control: { type: 'number', min: 1, max: 12 } },
         total: { control: { type: 'number', min: 0 } },
     },
 } as Meta<typeof Pagination>;
@@ -27,40 +27,32 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
     render: (args) => {
         const [page, setPage] = useState(1);
-        const [size, setSize] = useState(args.pageSize ?? 10);
 
         return (
             <div style={{ width: 640 }}>
-                <Pagination
-                    {...args}
-                    total={args.total ?? 123}
-                    currentPage={page}
-                    pageSize={size}
-                    onPageChange={setPage}
-                    onPageSizeChange={setSize}
-                />
+                <Pagination {...args} total={args.total ?? 123} currentPage={page} onPageChange={setPage} />
             </div>
         );
     },
     args: {
         total: 123,
         pageSize: 10,
-        pageSizeOptions: [10, 20, 50],
+        pagesPerBlock: 5,
     },
 };
 
-
-export const WithoutPageSizeSelector: Story = {
+export const ManyPages_BlockJump: Story = {
     render: (args) => {
         const [page, setPage] = useState(1);
 
         return (
             <div style={{ width: 640 }}>
-                <Pagination {...args} total={300} currentPage={page} onPageChange={setPage} />
+                <Pagination {...args} total={999} currentPage={page} onPageChange={setPage} />
             </div>
         );
     },
     args: {
         pageSize: 10,
+        pagesPerBlock: 5,
     },
 };
