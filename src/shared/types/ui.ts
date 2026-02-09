@@ -71,14 +71,12 @@ export interface SelectProps<V = string> extends Omit<React.HTMLAttributes<HTMLD
 
 // Pagination Types
 export interface PaginationProps {
-
     total: number;
     currentPage: number;
     pageSize?: number;
-    pageSizeOptions?: number[];
     onPageChange: (page: number) => void;
-    onPageSizeChange?: (size: number) => void;
     pagesPerBlock?: number;
     className?: string;
 }
+
 
