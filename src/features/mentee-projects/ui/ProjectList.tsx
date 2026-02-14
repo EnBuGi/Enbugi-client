@@ -97,9 +97,14 @@ export function ProjectList() {
                         );
                     })
                 ) : (
-                    <div className="p-6 text-sm text-white/60">항목이 없습니다.</div>
+                    <div className="w-full py-12 text-center">
+                        <span className="text-sm text-white/60">
+                            항목이 없습니다.
+                        </span>
+                    </div>
                 )}
             </List>
+
         </div>
     );
 
