@@ -1,4 +1,4 @@
-import { ElementType, ReactNode, ButtonHTMLAttributes, InputHTMLAttributes } from 'react';
+import { ElementType, ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, HTMLAttributes, } from 'react';
 
 export type TextVariant =
     | 'display-2xl'
@@ -47,6 +47,14 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     icon?: React.ReactNode;
 }
 
+
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+    title?: string;
+    description?: string;
+    cover?: ReactNode;
+    footer?: ReactNode;
+    hover?: boolean;
+}
 // Select/Dropdown Types
 export interface DropdownItem<V = string> {
     label: string;
