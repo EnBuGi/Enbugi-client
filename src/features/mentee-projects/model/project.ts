@@ -7,5 +7,5 @@ export interface Project {
     startDate: string;
     dueDate: string;
     score?: number;
-    status?: ProjectStatus;
+    status: ProjectStatus;
 }
