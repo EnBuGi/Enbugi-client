@@ -55,3 +55,25 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
     footer?: ReactNode;
     hover?: boolean;
 }
+// Select/Dropdown Types
+export interface DropdownItem<V = string> {
+    label: string;
+    value: V;
+    description?: string;
+    disabled?: boolean;
+}
+
+export interface SelectProps<V = string> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+    label?: string;
+    placeholder?: string;
+    value?: V | null;
+    onChange?: (value: V) => void;
+    items?: DropdownItem<V>[];
+    error?: string | boolean;
+    helperText?: string;
+    disabled?: boolean;
+    isLoading?: boolean;
+    hasMore?: boolean;
+    onLoadMore?: () => void;
+}
+
