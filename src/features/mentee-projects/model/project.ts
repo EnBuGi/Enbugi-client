@@ -1,4 +1,4 @@
-export type ProjectStatus = "ONGOING" | "DONE";
+export type ProjectStatus = "BEFORE" | "ONGOING" | "DONE";
 
 export interface Project {
     id: string;
