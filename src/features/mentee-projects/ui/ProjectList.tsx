@@ -8,6 +8,7 @@ import { useProjects } from "@/features/mentee-projects/hooks/useProjects";
 
 import { TagBadge } from "@/shared/components/ui/badge/TagBadge";
 import { StatePill } from "@/shared/components/ui/badge/StatePill";
+import type { ProjectStatus } from "@/features/mentee-projects/model/project";
 
 const Score = ({ value }: { value?: number }) => {
     if (value == null) {
@@ -39,27 +40,38 @@ const calculateDDay = (dueDate: string): string => {
     return `D+${Math.abs(daysDiff)}`;
 };
 
+type ProjectSection = "ONGOING" | "DONE";
+const toSection = (status?: ProjectStatus): ProjectSection | null => {
+    if (status === "ONGOING") return "ONGOING";
+    if (status === "DONE") return "DONE";
+
+    // BEFORE or undefined는 목록에서 제외
+    return null;
+};
+
 export function ProjectList() {
     const { data: projects, isLoading } = useProjects();
 
     const list = projects ?? [];
-    const ongoingProjects = list.filter((p) => (p.status ?? "ONGOING") === "ONGOING");
-    const doneProjects = list.filter((p) => (p.status ?? "DONE") === "DONE");
+
+    const visible = list.filter((p) => toSection(p.status) !== null);
+    const ongoingProjects = visible.filter((p) => toSection(p.status) === "ONGOING");
+    const doneProjects = visible.filter((p) => toSection(p.status) === "DONE");
 
     const ProjectListSection = ({
         title,
         items,
     }: {
         title: string;
-        items: typeof projects;
+        items: typeof list;
     }) => (
         <div className="mb-8">
             <div className="text-2xl font-bold text-white mb-4">{title}</div>
 
             <List spacing="md">
-                {items && items.length > 0 ? (
+                {items.length > 0 ? (
                     items.map((p) => {
-                        const status = p.status ?? "ONGOING";
+                        const section = toSection(p.status);
 
                         return (
                             <ListRow
@@ -78,7 +90,7 @@ export function ProjectList() {
                                             <Score value={p.score} />
                                         </div>
 
-                                        {status === "ONGOING" ? (
+                                        {section === "ONGOING" ? (
                                             <StatePill
                                                 variant="countdown"
                                                 label={calculateDDay(p.dueDate)}
@@ -92,19 +104,16 @@ export function ProjectList() {
                                     </div>
                                 }
                                 href={"/"}
-                                isActive={status === "ONGOING"}
+                                isActive={section === "ONGOING"}
                             />
                         );
                     })
                 ) : (
                     <div className="w-full py-12 text-center">
-                        <span className="text-sm text-white/60">
-                            항목이 없습니다.
-                        </span>
+                        <span className="text-sm text-white/60">항목이 없습니다.</span>
                     </div>
                 )}
             </List>
-
         </div>
     );
 
