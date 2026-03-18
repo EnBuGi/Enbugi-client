@@ -1,6 +1,5 @@
-"use client";
-
 import { useState, useEffect, useCallback } from "react";
+import { publicFetch, ApiError } from "@/shared/api/client";
 
 interface InviteInfo {
     role: 'MENTOR' | 'MENTEE';
@@ -16,22 +15,16 @@ export function useInvite(token: string | null) {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invites/validate?token=${t}`
+            const data: InviteInfo = await publicFetch(
+                `/api/v1/invites/validate?token=${t}`
             );
             
-            if (response.ok) {
-                const data: InviteInfo = await response.json();
-                setInviteInfo(data);
-                // OAuth flow를 위해 sessionStorage에 토큰 저장
-                sessionStorage.setItem('inviteToken', t);
-                return data;
-            } else {
-                setError("유효하지 않거나 만료된 초대 코드입니다.");
-                return null;
-            }
+            setInviteInfo(data);
+            // OAuth flow를 위해 sessionStorage에 토큰 저장
+            sessionStorage.setItem('inviteToken', t);
+            return data;
         } catch (err) {
-            setError("초대 코드 검증 중 오류가 발생했습니다.");
+            setError(err instanceof ApiError && err.status === 400 ? "유효하지 않거나 만료된 초대 코드입니다." : "초대 코드 검증 중 오류가 발생했습니다.");
             console.error(err);
             return null;
         } finally {

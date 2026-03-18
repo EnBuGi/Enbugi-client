@@ -8,6 +8,8 @@ import { Loader2 } from 'lucide-react';
 
 import { Text } from '@/shared/components/ui/Text';
 
+import { publicFetch, ApiError } from '@/shared/api/client';
+
 function GithubCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -23,42 +25,30 @@ function GithubCallbackContent() {
         return;
       }
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login/github`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ code, state }),
-          },
-        );
+        const result = await publicFetch('/api/v1/auth/login/github', {
+          method: 'POST',
+          body: JSON.stringify({ code, state }),
+        });
 
-        if (response.ok) {
-          const data = await response.json();
-          // RT는 백엔드에서 HttpOnly Cookie로 설정됨 — localStorage에 저장하지 않음
-          localStorage.setItem('accessToken', data.accessToken);
-          router.push('/');
-        } else if (response.status === 404) {
-          const errorData = await response.json();
+        // RT는 백엔드에서 HttpOnly Cookie로 설정됨 — localStorage에 저장하지 않음
+        localStorage.setItem('accessToken', result.accessToken);
+        document.cookie = `accessToken=${result.accessToken}; path=/; max-age=3600; SameSite=Lax`;
+        router.push('/');
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 404) {
           // User not found, redirect to signup
           const inviteToken = sessionStorage.getItem('inviteToken');
           if (inviteToken) {
-            sessionStorage.setItem('githubId', errorData.githubId);
-            sessionStorage.setItem('profileImageUrl', errorData.profileImageUrl);
+            sessionStorage.setItem('githubId', err.data.githubId);
+            sessionStorage.setItem('profileImageUrl', err.data.profileImageUrl);
             router.push(`/signup?token=${inviteToken}&code=${code}`);
           } else {
-            setError(
-              'Account not found. Please use an invite link to sign up.',
-            );
+            setError('Account not found. Please use an invite link to sign up.');
           }
         } else {
-          const errorData = await response.json();
-          setError(errorData.message || 'Failed to authenticate with GitHub');
+          setError(err instanceof Error ? err.message : 'An error occurred during authentication');
+          console.error(err);
         }
-      } catch (err) {
-        setError('An error occurred during authentication');
-        console.error(err);
       }
     };
 

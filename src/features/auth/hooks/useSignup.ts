@@ -1,6 +1,5 @@
-"use client";
-
 import { useState } from "react";
+import { publicFetch } from "@/shared/api/client";
 import { useRouter } from "next/navigation";
 
 interface SignupData {
@@ -21,33 +20,23 @@ export function useSignup() {
         setError(null);
 
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/signup/github`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                }
-            );
+            const result = await publicFetch('/api/v1/auth/signup/github', {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
 
-            if (response.ok) {
-                const result = await response.json();
-                localStorage.setItem('accessToken', result.accessToken);
-                
-                // Cleanup session storage
-                sessionStorage.removeItem('inviteToken');
-                sessionStorage.removeItem('githubId');
-                sessionStorage.removeItem('profileImageUrl');
-                
-                router.push('/');
-                return true;
-            } else {
-                const errorData = await response.json();
-                setError(errorData.message || '회원가입에 실패했습니다.');
-                return false;
-            }
+            localStorage.setItem('accessToken', result.accessToken);
+            document.cookie = `accessToken=${result.accessToken}; path=/; max-age=3600; SameSite=Lax`;
+            
+            // Cleanup session storage
+            sessionStorage.removeItem('inviteToken');
+            sessionStorage.removeItem('githubId');
+            sessionStorage.removeItem('profileImageUrl');
+            
+            router.push('/');
+            return true;
         } catch (err) {
-            setError('회원가입 처리 중 오류가 발생했습니다.');
+            setError(err instanceof Error ? err.message : '회원가입 처리 중 오류가 발생했습니다.');
             console.error(err);
             return false;
         } finally {
