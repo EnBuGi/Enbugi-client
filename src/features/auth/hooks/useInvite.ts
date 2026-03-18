@@ -23,6 +23,8 @@ export function useInvite(token: string | null) {
             if (response.ok) {
                 const data: InviteInfo = await response.json();
                 setInviteInfo(data);
+                // OAuth flow를 위해 sessionStorage에 토큰 저장
+                sessionStorage.setItem('inviteToken', t);
                 return data;
             } else {
                 setError("유효하지 않거나 만료된 초대 코드입니다.");

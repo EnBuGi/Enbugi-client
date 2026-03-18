@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { AuthBackground } from '@/features/auth/ui/AuthBackground';
@@ -15,9 +15,20 @@ import { useInvite } from '@/features/auth/hooks/useInvite';
 function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
-  const code = searchParams.get('code');
+  const [token, setToken] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   
+  useEffect(() => {
+    const t = searchParams.get('token');
+    const c = searchParams.get('code');
+    setToken(t);
+    setCode(c);
+
+    if (t) {
+      sessionStorage.setItem('inviteToken', t);
+    }
+  }, [searchParams]);
+
   const { inviteInfo, isLoading, error } = useInvite(token);
 
   if (isLoading) {
