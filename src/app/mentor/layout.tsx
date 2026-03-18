@@ -13,11 +13,11 @@ import { Gnb } from '@/shared/components/layout/Gnb';
 
 const MENTOR_SECTIONS = [
   {
-    title: 'Problems',
+    title: 'Projects',
     items: [
       {
-        label: 'Problems',
-        href: '/mentor/problems',
+        label: 'Projects',
+        href: '/mentor/projects',
         icon: <BoxesIcon size={18} />,
       },
       { label: 'Q&A', href: '/mentor/qna', icon: <MessageSquare size={18} /> },
