@@ -1,5 +1,5 @@
 import type { MentorProject } from '@/features/mentor-projects/model/project';
-import type { Submission } from '@/features/mentor-projects/model/submission';
+import type { Submission, GlobalSubmission } from '@/features/mentor-projects/model/submission';
 
 export const MOCK_PROJECTS: MentorProject[] = [
   {
@@ -130,4 +130,26 @@ export async function fetchMentorProjects(): Promise<MentorProject[]> {
 export async function fetchMentorSubmissions(projectId: string): Promise<Submission[]> {
   await new Promise((r) => setTimeout(r, 10));
   return MOCK_SUBMISSIONS;
+}
+
+export const MOCK_GLOBAL_SUBMISSIONS: GlobalSubmission[] = [
+  { submissionNo: 1026, submittedAt: '2026-03-18 23:10', gitId: 'dahye-lee', name: '이다혜', problemTitle: 'SignUp Server', status: 'FAIL', memoryKb: 14240, timeMs: 320, language: 'SPRING' },
+  { submissionNo: 1025, submittedAt: '2026-03-18 22:50', gitId: 'hyeoksang-yoo', name: '유혁상', problemTitle: 'SignUp Server', status: 'PASS', memoryKb: 13800, timeMs: 280, language: 'SPRING' },
+  { submissionNo: 1024, submittedAt: '2026-03-18 22:30', gitId: 'junseo-park', name: '박준서', problemTitle: 'SignUp Client', status: 'FAIL', memoryKb: null, timeMs: null, language: 'REACT' },
+  { submissionNo: 1023, submittedAt: '2026-03-18 22:45', gitId: 'geonu-choi', name: '최건우', problemTitle: 'SignUp Server', status: 'PASS', memoryKb: 13520, timeMs: 260, language: 'Java' },
+  { submissionNo: 1022, submittedAt: '2026-03-10 14:00', gitId: 'junho-kim', name: '김준호', problemTitle: 'SignUp Server', status: 'PASS', memoryKb: 13200, timeMs: 245, language: 'Java' },
+  { submissionNo: 1021, submittedAt: '2024-03-09 18:00', gitId: 'bobin-kim', name: '김보빈', problemTitle: 'Tic-Tac-Toe', status: 'PASS', memoryKb: 12900, timeMs: 210, language: 'Java' },
+  { submissionNo: 1020, submittedAt: '2024-03-09 10:30', gitId: 'gildong-hong', name: '홍길동', problemTitle: 'Tic-Tac-Toe', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
+  { submissionNo: 1019, submittedAt: '2024-03-08 22:15', gitId: 'junho-kim', name: '김준호', problemTitle: 'Tic-Tac-Toe', status: 'PASS', memoryKb: 12500, timeMs: 195, language: 'Java' },
+  { submissionNo: 1018, submittedAt: '2024-03-07 14:00', gitId: 'dahye-lee', name: '이다혜', problemTitle: 'Star Pattern', status: 'PASS', memoryKb: 11200, timeMs: 150, language: 'SPRING' },
+  { submissionNo: 1017, submittedAt: '2024-03-06 09:00', gitId: 'hyeoksang-yoo', name: '유혁상', problemTitle: 'Star Pattern', status: 'PASS', memoryKb: 11000, timeMs: 140, language: 'Java' },
+  { submissionNo: 1016, submittedAt: '2024-03-05 19:45', gitId: 'junseo-park', name: '박준서', problemTitle: 'Library', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
+  { submissionNo: 1015, submittedAt: '2024-03-04 13:30', gitId: 'geonu-choi', name: '최건우', problemTitle: 'Library', status: 'PASS', memoryKb: 14800, timeMs: 410, language: 'Java' },
+  { submissionNo: 1014, submittedAt: '2024-03-03 11:00', gitId: 'gildong-hong', name: '홍길동', problemTitle: 'CMD', status: 'PASS', memoryKb: 13100, timeMs: 300, language: 'Java' },
+  { submissionNo: 1013, submittedAt: '2024-03-02 08:55', gitId: 'bobin-kim', name: '김보빈', problemTitle: 'CMD', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
+];
+
+export async function fetchAllSubmissions(): Promise<GlobalSubmission[]> {
+  await new Promise((r) => setTimeout(r, 10));
+  return MOCK_GLOBAL_SUBMISSIONS;
 }
