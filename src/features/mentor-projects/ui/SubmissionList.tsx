@@ -30,21 +30,28 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
 
   const stats = {
     total: submissions.length,
-    submitted: submissions.filter(s => s.status !== '미제출').length,
-    pass: submissions.filter(s => s.status === 'PASS').length,
-    fail: submissions.filter(s => s.status === 'FAIL').length,
+    submitted: submissions.filter(s => s.status !== null).length,
+    pass: submissions.filter(s => s.status === 'COMPLETED' && s.score === 100).length,
+    fail: submissions.filter(s => s.status === 'SYSTEM_ERROR' || (s.status === 'COMPLETED' && s.score < 100)).length,
   };
 
   const filteredSubmissions = submissions.filter(sub => {
-    const matchesSearch = sub.name.includes(search) || sub.gitId.includes(search);
-    const matchesFilter = filterType === 'ALL' || sub.status === filterType;
-    return matchesSearch && matchesFilter;
+    const matchesSearch = sub.name.includes(search) || sub.githubId.includes(search);
+    const isSubmitted = sub.status !== null;
+    const isPass = sub.status === 'COMPLETED' && sub.score === 100;
+    const isFail = sub.status === 'SYSTEM_ERROR' || (sub.status === 'COMPLETED' && sub.score < 100);
+    
+    if (filterType === 'PASS') return matchesSearch && isPass;
+    if (filterType === 'FAIL') return matchesSearch && isFail;
+    if (filterType === '미제출') return matchesSearch && !isSubmitted;
+    return matchesSearch;
   });
 
-  const getStatusBadgeOptions = (status: string) => {
+  const getStatusBadgeOptions = (status: string | null) => {
     switch (status) {
-      case 'PASS': return { intent: 'success' as const, tone: 'soft' as const, text: 'PASS', colorClass: 'text-emerald-400 border-emerald-400/30' };
-      case 'FAIL': return { intent: 'danger' as const, tone: 'soft' as const, text: 'FAIL', colorClass: 'text-red-400 border-red-400/30' };
+      case 'COMPLETED': return { intent: 'success' as const, tone: 'soft' as const, text: 'PASS', colorClass: 'text-emerald-400 border-emerald-400/30' };
+      case 'SYSTEM_ERROR': return { intent: 'danger' as const, tone: 'soft' as const, text: 'FAIL', colorClass: 'text-red-400 border-red-400/30' };
+      case 'PROCESSING': return { intent: 'neutral' as const, tone: 'soft' as const, text: '채점 중', colorClass: 'text-blue-400 border-blue-400/30' };
       default: return { intent: 'neutral' as const, tone: 'soft' as const, text: '미제출', colorClass: 'text-zinc-500 border-white/10' };
     }
   };
@@ -145,11 +152,15 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
               const bgBadge = getStatusBadgeOptions(sub.status);
 
               return (
-                <TableRow key={sub.id} className="group cursor-pointer hover:bg-white/5" onClick={() => router.push(`/mentor/projects/${projectId}/submissions/${sub.id}`)}>
+                <TableRow 
+                  key={sub.userId} 
+                  className="group cursor-pointer hover:bg-white/5" 
+                  onClick={() => router.push(`/mentor/projects/${projectId}/users/${sub.userId}/submissions`)}
+                >
                   <TableCell>
                     <div className="flex flex-col gap-1 pl-4">
                       <span className="font-semibold text-white tracking-wide">{sub.name}</span>
-                      <span className="text-xs text-zinc-500 font-mono">{sub.gitId}</span>
+                      <span className="text-xs text-zinc-500 font-mono">{sub.githubId}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-center">
@@ -172,7 +183,7 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
                     )}
                   </TableCell>
                   <TableCell className="text-center text-zinc-400 text-sm font-mono">
-                    {sub.lastSubmittedAt || '-'}
+                    {sub.lastSubmittedAt ? new Date(sub.lastSubmittedAt).toLocaleString() : '-'}
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-1 text-sm text-zinc-400 group-hover:text-primary transition-colors">

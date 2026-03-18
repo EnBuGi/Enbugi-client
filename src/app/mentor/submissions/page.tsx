@@ -1,9 +1,12 @@
-import React from 'react';
+'use client';
+
 import { AllSubmissionsTable } from '@/features/mentor-projects/ui/AllSubmissionsTable';
-import { MOCK_GLOBAL_SUBMISSIONS } from '@/features/mentor-projects/api/projects';
 import { Text } from '@/shared/components/ui/Text';
+import { useAllSubmissions } from '@/features/mentor-projects/hooks/useSubmissions';
 
 export default function SubmissionsPage() {
+  const { data: submissions, isLoading } = useAllSubmissions();
+
   return (
     <div className="flex flex-col gap-8 w-full max-w-[1200px] mx-auto px-8 py-8">
       {/* 페이지 헤더 */}
@@ -15,7 +18,13 @@ export default function SubmissionsPage() {
       </div>
 
       {/* 테이블 */}
-      <AllSubmissionsTable submissions={MOCK_GLOBAL_SUBMISSIONS} />
+      {isLoading ? (
+        <div className="flex items-center justify-center h-64">
+          <Text className="text-zinc-500">불러오는 중...</Text>
+        </div>
+      ) : (
+        <AllSubmissionsTable submissions={submissions || []} />
+      )}
     </div>
   );
 }
