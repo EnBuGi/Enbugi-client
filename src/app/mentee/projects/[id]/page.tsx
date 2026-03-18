@@ -14,12 +14,18 @@ interface PageProps {
 
 export default function ProjectDetailPage({ params }: PageProps) {
   const { id: projectId } = use(params);
-  const { projectDetail, history, isLoading, error } = useProject(projectId);
+  const { projectDetail, history, isLoading, error, refetch } = useProject(projectId);
 
   if (error) {
     return (
-      <div className="flex h-full items-center justify-center text-white/50">
-        데이터를 불러오는 중 오류가 발생했습니다.
+      <div className="flex flex-col h-full items-center justify-center text-white/50 space-y-4">
+        <div>데이터를 불러오는 중 오류가 발생했습니다.</div>
+        <button 
+          onClick={refetch} 
+          className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-md transition-colors text-white text-sm"
+        >
+          다시 시도
+        </button>
       </div>
     );
   }
