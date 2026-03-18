@@ -1,5 +1,5 @@
-import { Text } from "@/shared/components/ui/Text";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from '@/shared/components/ui/Button';
+import { Text } from '@/shared/components/ui/Text';
 
 export default function Home() {
   return (
@@ -8,7 +8,9 @@ export default function Home() {
       <section className="flex flex-col items-start gap-6 mb-32 max-w-4xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surfaceHighlight border border-white/10">
           <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          <Text variant="label" className="tracking-widest">En# Design System v1.0</Text>
+          <Text variant="label" className="tracking-widest">
+            En# Design System v1.0
+          </Text>
         </div>
 
         <div className="space-y-2">
@@ -18,14 +20,18 @@ export default function Home() {
         </div>
 
         <Text variant="large" className="max-w-xl opacity-80">
-          A high-end design system tailored for modern tech products.
-          Built with precision, deep aesthetics, and maximum performance.
+          A high-end design system tailored for modern tech products. Built with
+          precision, deep aesthetics, and maximum performance.
         </Text>
 
         <div className="flex gap-4 mt-4">
           {/* Replaced native buttons with Button component */}
-          <Button variant="primary" size="lg">Get Started</Button>
-          <Button variant="secondary" size="lg">Documentation</Button>
+          <Button variant="primary" size="lg">
+            Get Started
+          </Button>
+          <Button variant="secondary" size="lg">
+            Documentation
+          </Button>
         </div>
       </section>
 
@@ -34,7 +40,9 @@ export default function Home() {
         {/* Card 1: Typography */}
         <div className="p-8 rounded-3xl bg-surface border border-white/5 hover:border-white/10 transition-colors relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <Text variant="h3" className="mb-4">Typography</Text>
+          <Text variant="h3" className="mb-4">
+            Typography
+          </Text>
           <div className="space-y-4">
             <Text variant="h1">Heading XL</Text>
             <Text variant="h2">Heading LG</Text>
@@ -47,39 +55,55 @@ export default function Home() {
         {/* Card 2: Colors */}
         <div className="p-8 rounded-3xl bg-surface border border-white/5 hover:border-white/10 transition-colors relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <Text variant="h3" className="mb-4">Color Palette</Text>
+          <Text variant="h3" className="mb-4">
+            Color Palette
+          </Text>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <div className="w-full h-12 rounded bg-primary shadow-glow-sm" />
-              <Text variant="tiny" as="p">Primary</Text>
+              <Text variant="tiny" as="p">
+                Primary
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="w-full h-12 rounded bg-surfaceHighlight border border-white/10" />
-              <Text variant="tiny" as="p">Surface</Text>
+              <Text variant="tiny" as="p">
+                Surface
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="w-full h-12 rounded bg-success/20 border border-success/50" />
-              <Text variant="tiny" as="p">Success</Text>
+              <Text variant="tiny" as="p">
+                Success
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="w-full h-12 rounded bg-error/20 border border-error/50" />
-              <Text variant="tiny" as="p">Error</Text>
+              <Text variant="tiny" as="p">
+                Error
+              </Text>
             </div>
           </div>
         </div>
 
         {/* Card 3: Glassmorphism */}
         <div className="p-8 rounded-3xl bg-glass border border-glassBorder backdrop-blur-md relative">
-          <Text variant="h3" className="mb-4">Glassmorphism</Text>
+          <Text variant="h3" className="mb-4">
+            Glassmorphism
+          </Text>
           <Text variant="body" className="mb-6 opacity-80">
             Advanced backdrop filters and border transparency for depth.
           </Text>
 
           <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-4">
-            <Text variant="code" className="block text-center">Standard Glass</Text>
+            <Text variant="code" className="block text-center">
+              Standard Glass
+            </Text>
           </div>
           <div className="p-4 rounded-xl bg-black/40 border border-white/5">
-            <Text variant="code" className="block text-center">Dark Glass</Text>
+            <Text variant="code" className="block text-center">
+              Dark Glass
+            </Text>
           </div>
         </div>
       </div>
@@ -91,7 +115,9 @@ export default function Home() {
         <div className="w-full p-8 rounded-3xl bg-surface border border-white/5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <Text variant="h4" className="text-muted">Variants</Text>
+              <Text variant="h4" className="text-muted">
+                Variants
+              </Text>
               <div className="flex flex-wrap gap-4">
                 <Button variant="primary">Primary</Button>
                 <Button variant="secondary">Secondary</Button>
@@ -102,7 +128,9 @@ export default function Home() {
             </div>
 
             <div className="space-y-4">
-              <Text variant="h4" className="text-muted">Sizes</Text>
+              <Text variant="h4" className="text-muted">
+                Sizes
+              </Text>
               <div className="flex flex-wrap items-center gap-4">
                 <Button size="sm">Small</Button>
                 <Button size="md">Medium</Button>
@@ -111,7 +139,9 @@ export default function Home() {
             </div>
 
             <div className="space-y-4">
-              <Text variant="h4" className="text-muted">States</Text>
+              <Text variant="h4" className="text-muted">
+                States
+              </Text>
               <div className="flex flex-wrap items-center gap-4">
                 <Button isLoading>Loading</Button>
                 <Button disabled>Disabled</Button>
