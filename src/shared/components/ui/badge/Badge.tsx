@@ -119,8 +119,6 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
                     truncate && "max-w-[140px] truncate",
                     className
                 )}
-                    className
-                )}
                 {...props}
             >
                 {hasIcon && iconPosition === "leading" && (
