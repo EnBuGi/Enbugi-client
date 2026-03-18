@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { AuthCard } from "@/features/auth/ui/AuthCard";
+import { Send } from "lucide-react";
+import { Card } from "@/shared/components/ui/Card/Card";
+import { Text } from "@/shared/components/ui/Text";
+import { InputBox } from "@/shared/components/ui/InputBox/InputBox";
+import { Button } from "@/shared/components/ui/Button";
 import { useSubmitSubmission } from "../hooks/useSubmitSubmission";
 
 interface Props {
@@ -15,44 +19,36 @@ export function SubmissionForm({ projectId }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!repoUrl) return;
-
     await submitSubmission(repoUrl);
   };
 
   return (
-    <AuthCard>
-      <div className="p-6">
-        <h2 className="text-xl font-bold text-white mb-4">프로젝트 제출</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-white/80 mb-1">GitHub 저장소 링크</label>
-            <input 
-              type="url" 
-              placeholder="https://github.com/vvineey/project-repo" 
-              className="w-full bg-black/20 border border-white/10 rounded p-3 text-white focus:outline-none focus:border-white/30 transition-colors"
-              value={repoUrl}
-              onChange={(e) => setRepoUrl(e.target.value)}
-              disabled={isSubmitting}
-              required
-            />
-          </div>
+    <Card title="코드 제출">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <InputBox
+          label="Repository URL"
+          type="url"
+          placeholder="https://github.com/username/repo"
+          value={repoUrl}
+          onChange={(e) => setRepoUrl(e.target.value)}
+          disabled={isSubmitting}
+          required
+          icon={<Send size={14} />}
+          error={error || undefined}
+          helperText={success ? "제출이 완료되었습니다. 곧 채점이 시작됩니다." : undefined}
+        />
 
-          {error && (
-            <div className="text-red-400 text-sm mt-1">{error}</div>
-          )}
-          {success && (
-            <div className="text-green-400 text-sm mt-1">제출이 완료되었습니다. 곧 채점이 시작됩니다.</div>
-          )}
-
-          <button 
-            type="submit"
-            disabled={isSubmitting || !repoUrl}
-            className="w-full bg-white/10 hover:bg-white/20 text-white font-medium py-3 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
-          >
-            {isSubmitting ? "제출 중..." : "제출하기"}
-          </button>
-        </form>
-      </div>
-    </AuthCard>
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          isLoading={isSubmitting}
+          disabled={isSubmitting || !repoUrl}
+          className="w-full mt-1"
+        >
+          {isSubmitting ? "제출 중..." : "제출하기"}
+        </Button>
+      </form>
+    </Card>
   );
 }
