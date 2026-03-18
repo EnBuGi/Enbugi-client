@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import 'github-markdown-css/github-markdown-dark.css';
 @import 'tailwindcss';
 
 @theme {
@@ -40,7 +41,7 @@
   --image-gradient-main: linear-gradient(to right, #b93234, #e11d48, #f59e0b);
 }
 
-/* Typography Utilities (Bundled styles) */
+/* Typography Utilities */
 @utility text-display-2xl {
   font-size: 4.5rem;
   line-height: 1;
@@ -116,10 +117,30 @@
 
 /* Base Styles */
 @layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-background text-main font-sans antialiased;
     background-image: radial-gradient(#27272a 1px, transparent 1px);
     background-size: 24px 24px;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  ::selection {
+    background: rgba(185, 50, 52, 0.28);
+    color: #ffffff;
   }
 
   ::-webkit-scrollbar {
@@ -133,5 +154,236 @@
 
   ::-webkit-scrollbar-thumb {
     @apply bg-surfaceHighlight rounded-full hover:bg-tertiary;
+  }
+}
+
+/* Shared Layout Rhythm */
+@layer components {
+  .page-shell {
+    @apply w-full max-w-[1000px] mx-auto px-8 py-8;
+  }
+
+  .form-stack {
+    @apply flex flex-col gap-8;
+  }
+
+  .section-card {
+    @apply rounded-2xl border border-white/10 bg-surface/50 p-6;
+  }
+
+  .field-stack {
+    @apply flex flex-col gap-6;
+  }
+
+  .field-grid-2 {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+
+  .section-title {
+    @apply text-white font-semibold;
+  }
+
+  .input-label {
+    @apply text-zinc-300 text-sm font-medium;
+  }
+}
+
+/* react-md-editor Overrides */
+@layer components {
+  .markdown-editor-shell {
+    @apply overflow-hidden rounded-xl border border-white/10 bg-[#0D0F14];
+  }
+
+  .markdown-editor-shell.error {
+    border-color: rgba(185, 28, 28, 0.45);
+  }
+
+  .markdown-editor-tabbar {
+    @apply flex items-center justify-between border-b border-white/10 bg-white/[0.02] px-3;
+  }
+
+  .markdown-editor-tab {
+    @apply border-b-2 border-transparent px-4 py-2 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-300;
+  }
+
+  .markdown-editor-tab.active {
+    @apply border-primary text-white;
+  }
+
+  .markdown-editor-preview-wrap {
+    @apply min-h-[320px] px-4 py-4;
+  }
+
+  .markdown-editor-empty {
+    @apply text-sm text-zinc-500 italic;
+  }
+
+  .w-md-editor {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+
+  .w-md-editor-toolbar {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 8px 10px !important;
+    min-height: 44px !important;
+  }
+
+  .w-md-editor-toolbar ul {
+    gap: 2px;
+  }
+
+  .w-md-editor-toolbar li>button {
+    color: #a1a1aa !important;
+    border-radius: 6px !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .w-md-editor-toolbar li>button:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .w-md-editor-toolbar-divider {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .w-md-editor-content {
+    background-color: transparent !important;
+  }
+
+  .w-md-editor-input {
+    background-color: transparent !important;
+  }
+
+  .w-md-editor-text,
+  .w-md-editor-text-input,
+  .w-md-editor-text-pre,
+  .w-md-editor-preview {
+    font-size: 14px !important;
+  }
+
+  .w-md-editor-text-input {
+    font-family: 'JetBrains Mono', 'Pretendard', monospace !important;
+    line-height: 1.7 !important;
+    background-color: transparent !important;
+    color: #ffffff !important;
+    padding: 16px !important;
+    caret-color: #ffffff !important;
+  }
+
+  .w-md-editor-text-input::placeholder {
+    color: #52525b !important;
+  }
+
+  .w-md-editor-text-pre>code,
+  .w-md-editor-text-input {
+    min-height: 320px !important;
+  }
+
+  .w-md-editor-text-pre {
+    background-color: transparent !important;
+  }
+
+  .w-md-editor-text-pre>code {
+    font-family: 'JetBrains Mono', 'Pretendard', monospace !important;
+    line-height: 1.7 !important;
+    color: #ffffff !important;
+  }
+
+  .w-md-editor-preview {
+    background-color: transparent !important;
+  }
+
+  .w-md-editor-preview .wmde-markdown {
+    background-color: transparent !important;
+    color: #ffffff !important;
+  }
+
+  .wmde-markdown,
+  .wmde-markdown-var {
+    --color-canvas-default: transparent;
+    --color-fg-default: #ffffff;
+    --color-canvas-subtle: #18181b;
+    --color-border-default: #27272a;
+    --color-accent-fg: #b93234;
+    --color-prettylights-syntax-comment: #71717a;
+    --color-prettylights-syntax-entity-tag: #f4f4f5;
+    --color-prettylights-syntax-string: #d4d4d8;
+  }
+
+  .wmde-markdown {
+    background-color: transparent !important;
+    font-family: 'Inter', 'Pretendard', sans-serif !important;
+    color: #ffffff !important;
+    line-height: 1.75 !important;
+  }
+
+  .wmde-markdown h1,
+  .wmde-markdown h2,
+  .wmde-markdown h3,
+  .wmde-markdown h4,
+  .wmde-markdown h5,
+  .wmde-markdown h6 {
+    font-family: 'Space Grotesk', 'Pretendard', sans-serif !important;
+    color: #ffffff !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .wmde-markdown p,
+  .wmde-markdown li,
+  .wmde-markdown blockquote {
+    color: #d4d4d8 !important;
+  }
+
+  .wmde-markdown code,
+  .wmde-markdown pre,
+  .wmde-markdown tt {
+    font-family: 'JetBrains Mono', 'Pretendard', monospace !important;
+  }
+
+  .wmde-markdown code {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: #f4f4f5 !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 6px !important;
+    padding: 0.2em 0.4em !important;
+  }
+
+  .wmde-markdown pre {
+    background-color: #18181b !important;
+    border: 1px solid #27272a !important;
+    border-radius: 10px !important;
+  }
+
+  .wmde-markdown table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+  }
+
+  .wmde-markdown table th,
+  .wmde-markdown table td {
+    border: 1px solid #27272a !important;
+  }
+
+  .wmde-markdown table tr {
+    background-color: transparent !important;
+    border-top: 1px solid #27272a !important;
+  }
+
+  .wmde-markdown hr {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .wmde-markdown a {
+    color: #d96a6c !important;
+  }
+
+  .wmde-markdown blockquote {
+    border-left-color: #5c191a !important;
   }
 }

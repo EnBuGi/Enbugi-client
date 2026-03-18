@@ -99,7 +99,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       'text-sm text-white',
       'focus:outline-none focus:ring-1 focus:ring-primary',
       isErrorState &&
-        'border-brand-red-500 focus:ring-brand-red-500 bg-red-950/10',
+      'border-brand-red-500 focus:ring-brand-red-500 bg-red-950/10',
       disabled && 'opacity-50 cursor-not-allowed',
       !disabled && !isOpen && 'cursor-pointer hover:border-border-light',
       isOpen && 'border-primary ring-1 ring-primary/30',
@@ -170,38 +170,38 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                 {items.length === 0
                   ? null
                   : items.map((item, index) => (
-                      <button
-                        key={`${item.value}-${index}`}
-                        type="button"
-                        onClick={() => handleSelect(item)}
-                        disabled={item.disabled}
-                        className={cn(
-                          'w-full px-4 py-3',
-                          'text-left text-sm transition-colors',
-                          'border-b border-border/50 last:border-b-0',
-                          'flex items-start justify-between gap-2',
-                          item.disabled
-                            ? 'opacity-50 cursor-not-allowed'
-                            : 'cursor-pointer',
-                          value === item.value
-                            ? 'bg-primary/10 text-white'
-                            : 'text-white hover:bg-surfaceHighlight',
-                        )}
-                        role="option"
-                        aria-selected={value === item.value}
-                      >
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold truncate">
-                            {item.label}
-                          </div>
-                          {item.description && (
-                            <div className="text-xs text-muted mt-1 truncate">
-                              {item.description}
-                            </div>
-                          )}
+                    <button
+                      key={`${item.value}-${index}`}
+                      type="button"
+                      onClick={() => handleSelect(item)}
+                      disabled={item.disabled}
+                      className={cn(
+                        'w-full px-4 py-3',
+                        'text-left text-sm transition-colors',
+                        'border-b border-border/50 last:border-b-0',
+                        'flex items-start justify-between gap-2',
+                        item.disabled
+                          ? 'opacity-50 cursor-not-allowed'
+                          : 'cursor-pointer',
+                        value === item.value
+                          ? 'bg-primary/10 text-white'
+                          : 'text-white hover:bg-surfaceHighlight',
+                      )}
+                      role="option"
+                      aria-selected={value === item.value}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold truncate">
+                          {item.label}
                         </div>
-                      </button>
-                    ))}
+                        {item.description && (
+                          <div className="text-xs text-muted mt-1 truncate">
+                            {item.description}
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
 
                 {isLoading && (
                   <div className="px-4 py-3 text-center text-sm text-muted border-t border-border/50">
@@ -231,7 +231,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         )}
       </div>
     );
-    }
-    );
+  }
+);
 
-    Select.displayName = 'Select';
+Select.displayName = 'Select';
