@@ -36,11 +36,9 @@ function GithubCallbackContent() {
 
         if (response.ok) {
           const data = await response.json();
-          // Assuming the backend returns tokens
+          // RT는 백엔드에서 HttpOnly Cookie로 설정됨 — localStorage에 저장하지 않음
           localStorage.setItem('accessToken', data.accessToken);
-          localStorage.setItem('refreshToken', data.refreshToken);
-
-          router.push('/'); // Redirect to home or dashboard
+          router.push('/');
         } else if (response.status === 404) {
           const errorData = await response.json();
           // User not found, redirect to signup

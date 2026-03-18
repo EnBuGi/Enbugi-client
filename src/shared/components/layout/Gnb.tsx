@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/shared/utils/cn";
+import React from 'react';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { cn } from '@/shared/utils/cn';
 
 export type NavItem = {
   label: string;
@@ -12,28 +14,35 @@ export type NavItem = {
 };
 
 export type GnbProps = {
-  variant?: "header" | "sidebar";
+  variant?: 'header' | 'sidebar';
   items: NavItem[];
   sections?: Array<{ title?: string; items: NavItem[] }>;
   activeHref?: string;
 };
 
-export function Gnb({ variant = "header", items, sections, activeHref }: GnbProps) {
+export function Gnb({
+  variant = 'header',
+  items,
+  sections,
+  activeHref,
+}: GnbProps) {
   const pathname = usePathname();
   const currentPath = activeHref ?? pathname;
-  const isHeader = variant === "header";
+  const isHeader = variant === 'header';
 
   if (isHeader) {
     const hasActive = items.some((item) =>
-      item.href === "/" ? currentPath === "/" : currentPath?.startsWith(item.href)
+      item.href === '/'
+        ? currentPath === '/'
+        : currentPath?.startsWith(item.href),
     );
 
     return (
       <nav className="flex items-center gap-4 pl-4 border-l border-white/10">
         {items.map((item) => {
           const active =
-            item.href === "/"
-              ? currentPath === "/"
+            item.href === '/'
+              ? currentPath === '/'
               : currentPath?.startsWith(item.href);
 
           return (
@@ -41,11 +50,11 @@ export function Gnb({ variant = "header", items, sections, activeHref }: GnbProp
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 relative h-16",
-                hasActive && !active ? "opacity-50" : "",
+                'flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 relative h-16',
+                hasActive && !active ? 'opacity-50' : '',
                 active
-                  ? "text-white hover:bg-white/10 border-b-2 border-primary"
-                  : "text-sub hover:text-white hover:bg-surface/70"
+                  ? 'text-white hover:bg-white/10 border-b-2 border-primary'
+                  : 'text-sub hover:text-white hover:bg-surface/70',
               )}
             >
               {item.label}
@@ -59,13 +68,17 @@ export function Gnb({ variant = "header", items, sections, activeHref }: GnbProp
   // Sidebar variant
   const hasActive = sections
     ? sections.some((section) =>
-      section.items.some((item) =>
-        item.href === "/" ? currentPath === "/" : currentPath?.startsWith(item.href)
+        section.items.some((item) =>
+          item.href === '/'
+            ? currentPath === '/'
+            : currentPath?.startsWith(item.href),
+        ),
       )
-    )
     : items.some((item) =>
-      item.href === "/" ? currentPath === "/" : currentPath?.startsWith(item.href)
-    );
+        item.href === '/'
+          ? currentPath === '/'
+          : currentPath?.startsWith(item.href),
+      );
 
   return (
     <nav className="flex flex-col gap-6 py-4">
@@ -80,8 +93,8 @@ export function Gnb({ variant = "header", items, sections, activeHref }: GnbProp
             <div className="flex flex-col gap-1">
               {section.items.map((item) => {
                 const active =
-                  item.href === "/"
-                    ? currentPath === "/"
+                  item.href === '/'
+                    ? currentPath === '/'
                     : currentPath?.startsWith(item.href);
 
                 return (
@@ -89,11 +102,11 @@ export function Gnb({ variant = "header", items, sections, activeHref }: GnbProp
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-r-md transition-all duration-200 relative",
-                      hasActive && !active ? "opacity-50" : "",
+                      'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-r-md transition-all duration-200 relative',
+                      hasActive && !active ? 'opacity-50' : '',
                       active
-                        ? "text-white border-l-2 border-primary pl-2.5 hover:bg-white/10"
-                        : "text-sub hover:text-white hover:bg-surface/70"
+                        ? 'text-white border-l-2 border-primary pl-2.5 hover:bg-white/10'
+                        : 'text-sub hover:text-white hover:bg-surface/70',
                     )}
                   >
                     {item.icon && (
@@ -112,8 +125,8 @@ export function Gnb({ variant = "header", items, sections, activeHref }: GnbProp
         <div className="flex flex-col gap-1">
           {items.map((item) => {
             const active =
-              item.href === "/"
-                ? currentPath === "/"
+              item.href === '/'
+                ? currentPath === '/'
                 : currentPath?.startsWith(item.href);
 
             return (
@@ -121,11 +134,11 @@ export function Gnb({ variant = "header", items, sections, activeHref }: GnbProp
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-r-md transition-all duration-200 relative",
-                  hasActive && !active ? "opacity-50" : "",
+                  'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-r-md transition-all duration-200 relative',
+                  hasActive && !active ? 'opacity-50' : '',
                   active
-                    ? "text-white border-l-2 border-primary pl-2.5 hover:bg-white/10"
-                    : "text-sub hover:text-white hover:bg-surface/70"
+                    ? 'text-white border-l-2 border-primary pl-2.5 hover:bg-white/10'
+                    : 'text-sub hover:text-white hover:bg-surface/70',
                 )}
               >
                 {item.icon && (

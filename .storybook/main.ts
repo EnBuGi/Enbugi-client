@@ -1,26 +1,21 @@
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
 import type { StorybookConfig } from '@storybook/nextjs-vite';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const config: StorybookConfig = {
-  "stories": [
-    "../src/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  addons: [
+    '@chromatic-com/storybook',
+    '@storybook/addon-vitest',
+    '@storybook/addon-a11y',
+    '@storybook/addon-docs',
+    '@storybook/addon-onboarding',
   ],
-  "addons": [
-    "@chromatic-com/storybook",
-    "@storybook/addon-vitest",
-    "@storybook/addon-a11y",
-    "@storybook/addon-docs",
-    "@storybook/addon-onboarding"
-  ],
-  "framework": "@storybook/nextjs-vite",
-  "staticDirs": [
-    "../public"
-  ],
+  framework: '@storybook/nextjs-vite',
+  staticDirs: ['../public'],
   async viteFinal(config) {
     if (config.resolve) {
       config.resolve.alias = {
@@ -29,6 +24,6 @@ const config: StorybookConfig = {
       };
     }
     return config;
-  }
+  },
 };
 export default config;
