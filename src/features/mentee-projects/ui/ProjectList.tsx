@@ -103,7 +103,7 @@ export function ProjectList() {
                                         <ChevronRight className="h-5 w-5 text-white/35" />
                                     </div>
                                 }
-                                href={"/"}
+                                href={`/mentee/projects/${p.id}`}
                                 isActive={section === "ONGOING"}
                             />
                         );
