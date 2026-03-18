@@ -1,7 +1,8 @@
 import type { 
   ProjectDetail, 
   SubmitResponse, 
-  SubmissionHistory 
+  SubmissionHistory,
+  SubmissionDetail
 } from "../model/project";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
@@ -61,5 +62,35 @@ export const projectApi = {
       throw new Error(errorData.message || "제출 기록을 불러오는데 실패했습니다.");
     }
     return response.json();
-  }
+  },
+
+  // 제출 상세 조회
+  getSubmissionDetail: async (projectId: string, submissionId: string): Promise<SubmissionDetail> => {
+    const response = await fetch(`${API_URL}/api/v1/projects/${projectId}/submissions/${submissionId}`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+      cache: "no-store",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("제출 상세 정보를 불러오는데 실패했습니다.");
+    }
+    return response.json();
+  },
+
+  // 채점 취소
+  cancelSubmission: async (projectId: string, submissionId: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/api/v1/projects/${projectId}/submissions/${submissionId}/cancel`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      cache: "no-store",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "채점 취소에 실패했습니다.");
+    }
+  },
 };

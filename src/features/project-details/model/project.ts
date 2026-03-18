@@ -1,5 +1,5 @@
 export type ProjectType = "SPRING" | "REACT" | "JAVA";
-export type SubmissionStatus = "ENQUEUING" | "QUEUED" | "PROCESSING" | "COMPLETED" | "SYSTEM_ERROR";
+export type SubmissionStatus = "ENQUEUING" | "QUEUED" | "PROCESSING" | "COMPLETED" | "SYSTEM_ERROR" | "CANCELLED";
 
 export interface ScorePolicy {
   // Add specific fields if needed
@@ -27,4 +27,24 @@ export interface SubmissionHistory {
 
 export interface SubmitResponse {
   submissionId: string;
+}
+
+export interface TestDetailResult {
+  methodName: string;
+  status: string;
+  durationMs: number;
+  message: string | null;
+  isHidden: boolean;
+  score: number | null;
+}
+
+export interface SubmissionDetail {
+  submissionId: string;
+  repoUrl: string;
+  status: SubmissionStatus;
+  score: number | null;
+  totalTests: number | null;
+  passedTests: number | null;
+  submittedAt: string;
+  details: TestDetailResult[];
 }
