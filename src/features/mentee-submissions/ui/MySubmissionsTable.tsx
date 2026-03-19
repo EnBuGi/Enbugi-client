@@ -113,7 +113,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="w-full sm:w-[320px]">
           <InputBox
-            placeholder="문제명 검색..."
+            placeholder="프로젝트 제목 검색..."
             icon={<Search size={18} />}
             value={search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
@@ -145,7 +145,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
               <TableHead className="w-[100px] text-center">제출번호</TableHead>
               <TableHead className="w-[150px] text-center">제출 시각</TableHead>
               <TableHead className="w-[115px] text-center">제출 시간</TableHead>
-              <TableHead className="w-[300px]">문제 이름</TableHead>
+              <TableHead className="w-[300px]">프로젝트 제목</TableHead>
               <TableHead className="w-[100px] text-center">결과</TableHead>
               <TableHead className="w-[110px] text-center">메모리</TableHead>
               <TableHead className="w-[90px]  text-center">시간</TableHead>
@@ -247,9 +247,10 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
       </div>
 
       {isModalOpen && selectedSubmission && (
-        <SubmissionDetailModal 
-          onClose={() => setIsModalOpen(false)} 
-          submissionId={selectedSubmission.subId} 
+        <SubmissionDetailModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          submissionId={selectedSubmission.subId}
           projectId={selectedSubmission.projectId}
         />
       )}
