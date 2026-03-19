@@ -248,6 +248,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
 
       {isModalOpen && selectedSubmission && (
         <SubmissionDetailModal 
+          isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)} 
           submissionId={selectedSubmission.subId} 
           projectId={selectedSubmission.projectId}
