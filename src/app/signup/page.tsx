@@ -31,6 +31,9 @@ function SignupContent() {
 
   const { inviteInfo, isLoading, error } = useInvite(token);
 
+  // Check if GitHub information is available (from URL or session)
+  const hasGithubInfo = !!(searchParams.get('githubId') || (typeof window !== 'undefined' && sessionStorage.getItem('githubId')));
+
   if (isLoading) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-black">
@@ -55,7 +58,7 @@ function SignupContent() {
               로그인으로 돌아가기
             </Button>
           </div>
-        ) : !code ? (
+        ) : (!code || !hasGithubInfo) ? (
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <Text variant="body" className="text-muted text-sm">
