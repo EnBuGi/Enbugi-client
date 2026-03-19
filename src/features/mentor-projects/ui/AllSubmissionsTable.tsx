@@ -82,7 +82,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
     const q = search.toLowerCase();
     const matchSearch =
       s.name.includes(q) ||
-      s.gitId.toLowerCase().includes(q) ||
+      s.githubId.toLowerCase().includes(q) ||
       s.problemTitle.toLowerCase().includes(q);
     const matchFilter = filter === 'ALL' || s.status === filter;
     return matchSearch && matchFilter;
@@ -146,12 +146,12 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
           <TableBody>
             {paginated.map((s) => (
               <TableRow
-                key={s.submissionNo}
+                key={s.submissionId}
                 className="group cursor-pointer hover:bg-white/5"
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
-                  #{s.submissionNo}
+                  #{s.submissionId.substring(0, 8)}
                 </TableCell>
 
                 {/* 제출 시간 */}
@@ -168,7 +168,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
 
                 {/* Github Id */}
                 <TableCell>
-                  <span className="font-mono text-zinc-400 text-sm">{s.gitId}</span>
+                  <span className="font-mono text-zinc-400 text-sm">{s.githubId}</span>
                 </TableCell>
 
                 {/* 이름 */}
@@ -188,8 +188,8 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
 
                 {/* 메모리 */}
                 <TableCell className="text-center text-sm text-zinc-400">
-                  {s.memoryKb !== null ? (
-                    <>{s.memoryKb.toLocaleString()} <span className="text-zinc-600 text-xs">KB</span></>
+                  {s.memoryUsage !== null ? (
+                    <>{s.memoryUsage.toLocaleString()} <span className="text-zinc-600 text-xs">KB</span></>
                   ) : (
                     <span className="text-zinc-600">-</span>
                   )}
@@ -197,8 +197,8 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
 
                 {/* 시간 */}
                 <TableCell className="text-center text-sm text-zinc-400">
-                  {s.timeMs !== null ? (
-                    <>{s.timeMs} <span className="text-zinc-600 text-xs">ms</span></>
+                  {s.timeUsage !== null ? (
+                    <>{s.timeUsage} <span className="text-zinc-600 text-xs">ms</span></>
                   ) : (
                     <span className="text-zinc-600">-</span>
                   )}

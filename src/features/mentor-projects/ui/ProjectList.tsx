@@ -88,22 +88,33 @@ export function ProjectList() {
             {(() => {
               const filteredProjects = projects.filter(project => {
                 const matchesSearch = project.title.toLowerCase().includes(search.toLowerCase());
-                const matchesGeneration = !generationFilter || generationFilter === 'ALL' || project.generation.replace('기', '') === generationFilter;
+                const matchesGeneration = !generationFilter || generationFilter === 'ALL' || String(project.generation) === generationFilter;
                 return matchesSearch && matchesGeneration;
               });
+
+              const getProjectStatus = (startDate: string, dueDate: string) => {
+                const now = new Date();
+                const start = new Date(startDate.replace(' ', 'T'));
+                const end = new Date(dueDate.replace(' ', 'T'));
+                if (now < start) return '예정';
+                if (now > end) return '종료';
+                return '진행';
+              };
+
               const pageSize = 8;
               const paginatedProjects = filteredProjects.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
               return paginatedProjects.map((project) => {
-                const getStatusBadgeOptions = (status: string) => {
-                  switch (status) {
+                const status = getProjectStatus(project.startDate, project.dueDate);
+                const getStatusBadgeOptions = (s: string) => {
+                  switch (s) {
                     case '진행': return { intent: 'neutral' as const, tone: 'soft' as const, colorClass: 'text-blue-400 border-blue-400/30' };
                     case '예정': return { intent: 'warning' as const, tone: 'soft' as const };
                     case '종료': return { intent: 'neutral' as const, tone: 'soft' as const };
                     default: return { intent: 'neutral' as const, tone: 'soft' as const };
                   }
                 };
-                const statusBadge = getStatusBadgeOptions(project.status);
+                const statusBadge = getStatusBadgeOptions(status);
 
                 return (
                   <TableRow key={project.id}>
@@ -111,7 +122,7 @@ export function ProjectList() {
                       {project.title}
                     </TableCell>
                     <TableCell className="text-center text-zinc-300">
-                      {project.generation}
+                      {project.generation}기
                     </TableCell>
                     <TableCell className="text-center text-zinc-300 font-medium">
                       {project.type}
@@ -123,15 +134,15 @@ export function ProjectList() {
                         size="sm"
                         className={statusBadge.colorClass}
                       >
-                        {project.status}
+                        {status}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center text-zinc-400 text-sm">
-                      {project.startDate} ~ {project.endDate}
+                      {project.startDate.split('T')[0]} ~ {project.dueDate.split('T')[0]}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center justify-end gap-2 pr-2">
-                        {project.status !== '예정' && (
+                        {status !== '예정' && (
                           <Button
                             variant="secondary"
                             size="sm"
@@ -171,7 +182,7 @@ export function ProjectList() {
         {(() => {
           const filteredProjects = projects.filter(project => {
             const matchesSearch = project.title.toLowerCase().includes(search.toLowerCase());
-            const matchesGeneration = !generationFilter || generationFilter === 'ALL' || project.generation.replace('기', '') === generationFilter;
+            const matchesGeneration = !generationFilter || generationFilter === 'ALL' || String(project.generation) === generationFilter;
             return matchesSearch && matchesGeneration;
           });
           return (

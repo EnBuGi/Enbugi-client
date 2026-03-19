@@ -1,23 +1,59 @@
-export type SubmissionStatus = 'PASS' | 'FAIL' | '미제출';
+export type SubmissionStatus = 'ENQUEUING' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'SYSTEM_ERROR' | 'CANCELLED' | 'PASS' | 'FAIL';
 
+// 프로젝트별 제출 현황 요약 (Mentor Dashboard)
 export interface Submission {
-  id: number;
+  userId: string;
   name: string;
-  gitId: string;
-  status: SubmissionStatus;
-  score: number | null;
+  githubId: string;
+  status: SubmissionStatus | null;
+  score: number;
   lastSubmittedAt: string | null;
 }
 
-// 전체 제출 현황 페이지用 확장 타입
+// 전체 제출 현황 페이지용 확장 타입 (Admin Global History)
 export interface GlobalSubmission {
-  submissionNo: number;    // 제출번호
-  submittedAt: string;     // 제출 시간 (ISO 또는 'YYYY-MM-DD HH:mm')
-  gitId: string;           // Github Id
-  name: string;            // 이름
-  problemTitle: string;    // 문제(프로젝트) 이름
-  status: SubmissionStatus;// 결과
-  memoryKb: number | null; // 메모리 (KB)
-  timeMs: number | null;   // 시간 (ms)
-  language: string | null; // 언어
+  submissionId: string;
+  submittedAt: string;
+  githubId: string;
+  name: string;
+  problemTitle: string;
+  status: SubmissionStatus;
+  memoryUsage: number | null;
+  timeUsage: number | null;
+  language?: string;
+}
+
+// 특정 유저의 프로젝트 제출 이력
+export interface UserProjectSubmission {
+  submissionId: string;
+  status: SubmissionStatus;
+  score: number;
+  memoryUsage: number;
+  timeExecution: number;
+  language: string;
+  submittedAt: string;
+}
+
+// 제출 상세 조회 (Admin Detail)
+export interface TestDetail {
+  methodName: string;
+  status: 'PASS' | 'FAIL' | SubmissionStatus;
+  durationMs: number;
+  message: string | null;
+  isHidden: boolean;
+  score: number;
+}
+
+export interface AdminSubmissionDetail {
+  submissionId: string;
+  userName: string;
+  githubId: string;
+  repoUrl: string;
+  status: SubmissionStatus;
+  score: number;
+  memoryUsage: number | null;
+  timeExecution: number | null;
+  submittedAt: string;
+  sourceCode: string;
+  testDetails: TestDetail[];
 }

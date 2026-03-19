@@ -1,11 +1,13 @@
-export type MentorProjectStatus = '진행' | '예정' | '종료';
+export type ProjectType = 'JAVA' | 'SPRING' | 'REACT';
 
 export interface MentorProject {
   id: string;
   title: string;
-  generation: string;
-  type: string;
-  status: MentorProjectStatus;
+  type: ProjectType;
+  generation: number;
   startDate: string;
-  endDate: string;
+  dueDate: string;
+  description?: string;
+  skeletonUrl?: string;
+  testCodeUrl?: string;
 }

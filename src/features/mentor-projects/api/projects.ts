@@ -1,173 +1,79 @@
+import { fetchWithAuth } from "@/shared/api/client";
 import type { MentorProject } from '@/features/mentor-projects/model/project';
-import type { Submission, GlobalSubmission } from '@/features/mentor-projects/model/submission';
+import type { 
+  Submission, 
+  GlobalSubmission, 
+  AdminSubmissionDetail, 
+  UserProjectSubmission 
+} from '@/features/mentor-projects/model/submission';
 
-export const MOCK_PROJECTS: MentorProject[] = [
-  {
-    id: 'p12',
-    type: 'JAVA',
-    title: 'Star Pattern',
-    generation: '26기',
-    startDate: '2025-08-01',
-    endDate: '2025-08-15',
-    status: '진행',
-  },
-  {
-    id: 'p11',
-    type: 'JAVA',
-    title: 'Tic-Tac-Toe',
-    generation: '26기',
-    startDate: '2025-09-01',
-    endDate: '2025-09-15',
-    status: '예정',
-  },
-  {
-    id: 'p10',
-    type: 'JAVA',
-    title: 'Library',
-    generation: '26기',
-    startDate: '2025-10-01',
-    endDate: '2025-10-20',
-    status: '예정',
-  },
-  {
-    id: 'p9',
-    type: 'JAVA',
-    title: 'CMD',
-    generation: '26기',
-    startDate: '2025-11-01',
-    endDate: '2025-11-15',
-    status: '예정',
-  },
-  {
-    id: 'p8',
-    type: 'REACT',
-    title: 'SignUp Client',
-    generation: '26기',
-    startDate: '2025-12-01',
-    endDate: '2025-12-20',
-    status: '예정',
-  },
-  {
-    id: 'p7',
-    type: 'SPRING',
-    title: 'SignUp Server',
-    generation: '26기',
-    startDate: '2026-02-01',
-    endDate: '2026-03-15',
-    status: '예정',
-  },
-  {
-    id: 'p6',
-    type: 'JAVA',
-    title: 'Star Pattern',
-    generation: '25기',
-    startDate: '2024-08-01',
-    endDate: '2024-08-15',
-    status: '종료',
-  },
-  {
-    id: 'p5',
-    type: 'JAVA',
-    title: 'Tic-Tac-Toe',
-    generation: '25기',
-    startDate: '2024-09-01',
-    endDate: '2024-09-15',
-    status: '종료',
-  },
-  {
-    id: 'p4',
-    type: 'JAVA',
-    title: 'Library',
-    generation: '25기',
-    startDate: '2024-10-01',
-    endDate: '2024-10-20',
-    status: '종료',
-  },
-  {
-    id: 'p3',
-    type: 'JAVA',
-    title: 'CMD',
-    generation: '25기',
-    startDate: '2024-11-01',
-    endDate: '2024-11-15',
-    status: '종료',
-  },
-  {
-    id: 'p2',
-    type: 'REACT',
-    title: 'SignUp Client',
-    generation: '25기',
-    startDate: '2024-12-01',
-    endDate: '2024-12-20',
-    status: '종료',
-  },
-  {
-    id: 'p1',
-    type: 'SPRING',
-    title: 'SignUp Server',
-    generation: '25기',
-    startDate: '2025-02-01',
-    endDate: '2025-03-15',
-    status: '종료',
-  },
-];
-
-export const MOCK_SUBMISSIONS: Submission[] = [
-  { id: 1, name: '김준호', gitId: 'junho-kim', status: 'PASS', score: 100, lastSubmittedAt: '2024-03-10 14:00' },
-  { id: 2, name: '박준서', gitId: 'junseo-park', status: 'FAIL', score: 60, lastSubmittedAt: '2024-03-11 09:30' },
-  { id: 3, name: '최건우', gitId: 'geonu-choi', status: 'PASS', score: 100, lastSubmittedAt: '2024-03-10 16:45' },
-  { id: 4, name: '김보빈', gitId: 'bobin-kim', status: '미제출', score: null, lastSubmittedAt: null },
-  { id: 5, name: '유혁상', gitId: 'hyeoksang-yoo', status: 'PASS', score: 80, lastSubmittedAt: '2024-03-12 11:20' },
-  { id: 6, name: '이다혜', gitId: 'dahye-lee', status: 'FAIL', score: 40, lastSubmittedAt: '2024-03-13 15:10' },
-  { id: 7, name: '홍길동', gitId: 'gildong-hong', status: '미제출', score: null, lastSubmittedAt: null },
-];
-
+// 프로젝트 목록 조회 (Mentor/Admin용)
 export async function fetchMentorProjects(): Promise<MentorProject[]> {
-  await new Promise((r) => setTimeout(r, 10));
-  return MOCK_PROJECTS;
+  return fetchWithAuth('/api/v1/admin/projects', {
+    method: "GET",
+    cache: "no-store",
+  });
 }
 
+// 특정 프로젝트 상세 조회 (Admin용)
+export async function fetchAdminProjectDetail(projectId: string): Promise<MentorProject> {
+  return fetchWithAuth(`/api/v1/admin/projects/${projectId}`, {
+    method: "GET",
+    cache: "no-store",
+  });
+}
+
+// 특정 프로젝트의 제출 현황 요약 조회 (Admin Dashboard)
 export async function fetchMentorSubmissions(projectId: string): Promise<Submission[]> {
-  await new Promise((r) => setTimeout(r, 10));
-  return MOCK_SUBMISSIONS;
+  return fetchWithAuth(`/api/v1/admin/projects/${projectId}/submissions/summary`, {
+    method: "GET",
+    cache: "no-store",
+  });
 }
 
-export const MOCK_GLOBAL_SUBMISSIONS: GlobalSubmission[] =
-  [
-    { submissionNo: 1026, submittedAt: '2026-03-18 23:10', gitId: 'dahye-lee', name: '이다혜', problemTitle: 'SignUp Server', status: 'FAIL', memoryKb: 14240, timeMs: 320, language: 'SPRING' },
-    { submissionNo: 1025, submittedAt: '2026-03-18 22:50', gitId: 'hyeoksang-yoo', name: '유혁상', problemTitle: 'SignUp Server', status: 'PASS', memoryKb: 13800, timeMs: 280, language: 'SPRING' },
-    { submissionNo: 1024, submittedAt: '2026-03-18 22:30', gitId: 'junseo-park', name: '박준서', problemTitle: 'SignUp Client', status: 'FAIL', memoryKb: null, timeMs: null, language: 'REACT' },
-    { submissionNo: 1023, submittedAt: '2026-03-18 22:45', gitId: 'geonu-choi', name: '최건우', problemTitle: 'SignUp Server', status: 'PASS', memoryKb: 13520, timeMs: 260, language: 'Java' },
-    { submissionNo: 1022, submittedAt: '2026-03-10 14:00', gitId: 'junho-kim', name: '김준호', problemTitle: 'SignUp Server', status: 'PASS', memoryKb: 13200, timeMs: 245, language: 'Java' },
+// 특정 유저의 해당 프로젝트 제출 이력 조회
+export async function fetchUserProjectSubmissions(projectId: string, userId: string): Promise<UserProjectSubmission[]> {
+  return fetchWithAuth(`/api/v1/admin/projects/${projectId}/users/${userId}/submissions`, {
+    method: "GET",
+    cache: "no-store",
+  });
+}
 
-    { submissionNo: 1021, submittedAt: '2024-03-09 18:00', gitId: 'bobin-kim', name: '김보빈', problemTitle: 'Tic-Tac-Toe', status: 'PASS', memoryKb: 12900, timeMs: 210, language: 'Java' },
-    { submissionNo: 1020, submittedAt: '2024-03-09 10:30', gitId: 'gildong-hong', name: '홍길동', problemTitle: 'Tic-Tac-Toe', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
-    { submissionNo: 1019, submittedAt: '2024-03-08 22:15', gitId: 'junho-kim', name: '김준호', problemTitle: 'Tic-Tac-Toe', status: 'PASS', memoryKb: 12500, timeMs: 195, language: 'Java' },
-    { submissionNo: 1018, submittedAt: '2024-03-07 14:00', gitId: 'dahye-lee', name: '이다혜', problemTitle: 'Star Pattern', status: 'PASS', memoryKb: 11200, timeMs: 150, language: 'SPRING' },
-    { submissionNo: 1017, submittedAt: '2024-03-06 09:00', gitId: 'hyeoksang-yoo', name: '유혁상', problemTitle: 'Star Pattern', status: 'PASS', memoryKb: 11000, timeMs: 140, language: 'Java' },
-    { submissionNo: 1016, submittedAt: '2024-03-05 19:45', gitId: 'junseo-park', name: '박준서', problemTitle: 'Library', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
-    { submissionNo: 1015, submittedAt: '2024-03-04 13:30', gitId: 'geonu-choi', name: '최건우', problemTitle: 'Library', status: 'PASS', memoryKb: 14800, timeMs: 410, language: 'Java' },
-    { submissionNo: 1014, submittedAt: '2024-03-03 11:00', gitId: 'gildong-hong', name: '홍길동', problemTitle: 'CMD', status: 'PASS', memoryKb: 13100, timeMs: 300, language: 'Java' },
-    { submissionNo: 1013, submittedAt: '2024-03-02 08:55', gitId: 'bobin-kim', name: '김보빈', problemTitle: 'CMD', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
-
-    { submissionNo: 1012, submittedAt: '2024-03-01 21:10', gitId: 'dahye-lee', name: '이다혜', problemTitle: 'Queue System', status: 'FAIL', memoryKb: 15000, timeMs: 350, language: 'SPRING' },
-    { submissionNo: 1011, submittedAt: '2024-03-01 19:40', gitId: 'hyeoksang-yoo', name: '유혁상', problemTitle: 'Queue System', status: 'PASS', memoryKb: 14000, timeMs: 290, language: 'SPRING' },
-    { submissionNo: 1010, submittedAt: '2024-03-01 18:10', gitId: 'junseo-park', name: '박준서', problemTitle: 'Queue Client', status: 'FAIL', memoryKb: null, timeMs: null, language: 'REACT' },
-    { submissionNo: 1009, submittedAt: '2024-03-01 16:50', gitId: 'geonu-choi', name: '최건우', problemTitle: 'Queue System', status: 'PASS', memoryKb: 13600, timeMs: 270, language: 'Java' },
-    { submissionNo: 1008, submittedAt: '2024-03-01 15:20', gitId: 'junho-kim', name: '김준호', problemTitle: 'Queue System', status: 'PASS', memoryKb: 13300, timeMs: 250, language: 'Java' },
-
-    { submissionNo: 1007, submittedAt: '2024-02-28 22:00', gitId: 'bobin-kim', name: '김보빈', problemTitle: 'Graph BFS', status: 'PASS', memoryKb: 12800, timeMs: 200, language: 'Java' },
-    { submissionNo: 1006, submittedAt: '2024-02-28 20:30', gitId: 'gildong-hong', name: '홍길동', problemTitle: 'Graph BFS', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
-    { submissionNo: 1005, submittedAt: '2024-02-28 19:10', gitId: 'junho-kim', name: '김준호', problemTitle: 'Graph BFS', status: 'PASS', memoryKb: 12600, timeMs: 190, language: 'Java' },
-    { submissionNo: 1004, submittedAt: '2024-02-27 17:40', gitId: 'dahye-lee', name: '이다혜', problemTitle: 'DP Basic', status: 'PASS', memoryKb: 11500, timeMs: 160, language: 'SPRING' },
-    { submissionNo: 1003, submittedAt: '2024-02-27 16:00', gitId: 'hyeoksang-yoo', name: '유혁상', problemTitle: 'DP Basic', status: 'PASS', memoryKb: 11300, timeMs: 150, language: 'Java' },
-    { submissionNo: 1002, submittedAt: '2024-02-27 14:20', gitId: 'junseo-park', name: '박준서', problemTitle: 'DP Advanced', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' },
-    { submissionNo: 1001, submittedAt: '2024-02-27 12:10', gitId: 'geonu-choi', name: '최건우', problemTitle: 'DP Advanced', status: 'PASS', memoryKb: 14900, timeMs: 420, language: 'Java' },
-    { submissionNo: 1000, submittedAt: '2024-02-27 10:00', gitId: 'gildong-hong', name: '홍길동', problemTitle: 'Sorting', status: 'PASS', memoryKb: 13000, timeMs: 280, language: 'Java' },
-    { submissionNo: 999, submittedAt: '2024-02-27 08:30', gitId: 'bobin-kim', name: '김보빈', problemTitle: 'Sorting', status: 'FAIL', memoryKb: null, timeMs: null, language: 'Java' }
-  ];
-
+// 전체 제출 이력 조회 (Admin Global History)
 export async function fetchAllSubmissions(): Promise<GlobalSubmission[]> {
-  await new Promise((r) => setTimeout(r, 10));
-  return MOCK_GLOBAL_SUBMISSIONS;
+  return fetchWithAuth('/api/v1/admin/submissions', {
+    method: "GET",
+    cache: "no-store",
+  });
+}
+
+// 제출 상세 조회 (Admin용 - 히든 케이스 포함)
+export async function fetchAdminSubmissionDetail(submissionId: string): Promise<AdminSubmissionDetail> {
+  return fetchWithAuth(`/api/v1/admin/submissions/${submissionId}`, {
+    method: "GET",
+    cache: "no-store",
+  });
+}
+
+// 모든 유저 목록 조회 (Admin)
+export async function fetchAdminUsers(generation?: number): Promise<any[]> {
+  const url = generation 
+    ? `/api/v1/admin/users?generation=${generation}`
+    : `/api/v1/admin/users`;
+    
+  return fetchWithAuth(url, {
+    method: "GET",
+    cache: "no-store",
+  });
+}
+
+// 테스트 코드 파싱
+export async function parseTestCode(file: File): Promise<{ methodNames: string[] }> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return fetchWithAuth('/api/v1/admin/projects/test-code/parse', {
+    method: "POST",
+    body: formData,
+  });
 }
