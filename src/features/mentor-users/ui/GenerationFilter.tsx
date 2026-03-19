@@ -13,7 +13,7 @@ interface GenerationFilterProps {
 export function GenerationFilter({
   value,
   onChange,
-  generations = [11, 12, 13, 14], // Mock data for generations
+  generations = [19, 20, 21, 22, 23, 24, 25, 26], // Mock data for generations
 }: GenerationFilterProps) {
   const items: DropdownItem[] = [
     { label: '전체 기수', value: '' },
