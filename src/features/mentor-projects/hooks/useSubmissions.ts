@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Submission, UserProjectSubmission, AdminSubmissionDetail, GlobalSubmission } from "@/features/mentor-projects/model/submission";
-import { fetchMentorSubmissions, fetchUserProjectSubmissions, fetchAdminSubmissionDetail, fetchAllSubmissions } from "@/features/mentor-projects/api/projects";
+import { mentorProjectApi } from "@/features/mentor-projects/api/projects";
 
 export function useMentorSubmissions(projectId: string) {
     const [data, setData] = useState<Submission[] | undefined>(undefined);
@@ -9,11 +9,13 @@ export function useMentorSubmissions(projectId: string) {
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
-        fetchMentorSubmissions(projectId)
+        mentorProjectApi.getAdminSubmissions(projectId)
             .then((d) => {
                 if (mounted) setData(d);
             })
-            .finally(() => mounted && setIsLoading(false));
+            .finally(() => {
+                if (mounted) setIsLoading(false);
+            });
         return () => {
             mounted = false;
         };
@@ -29,11 +31,13 @@ export function useUserProjectSubmissions(projectId: string, userId: string) {
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
-        fetchUserProjectSubmissions(projectId, userId)
+        mentorProjectApi.getUserProjectSubmissions(projectId, userId)
             .then((d) => {
                 if (mounted) setData(d);
             })
-            .finally(() => mounted && setIsLoading(false));
+            .finally(() => {
+                if (mounted) setIsLoading(false);
+            });
         return () => {
             mounted = false;
         };
@@ -49,11 +53,13 @@ export function useAdminSubmissionDetail(submissionId: string) {
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
-        fetchAdminSubmissionDetail(submissionId)
+        mentorProjectApi.getAdminSubmissionDetail(submissionId)
             .then((d) => {
                 if (mounted) setData(d);
             })
-            .finally(() => mounted && setIsLoading(false));
+            .finally(() => {
+                if (mounted) setIsLoading(false);
+            });
         return () => {
             mounted = false;
         };
@@ -69,11 +75,13 @@ export function useAllSubmissions() {
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
-        fetchAllSubmissions()
+        mentorProjectApi.getAllSubmissions()
             .then((d) => {
                 if (mounted) setData(d);
             })
-            .finally(() => mounted && setIsLoading(false));
+            .finally(() => {
+                if (mounted) setIsLoading(false);
+            });
         return () => {
             mounted = false;
         };
