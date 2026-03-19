@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { TextProps, TextVariant } from '../../types/ui';
+import { cn } from '../../utils/cn';
 
 // Variant Logic: Maps logical variants to Tailwind classes (using system tokens)
 const variantStyles: Record<TextVariant, string> = {
@@ -20,9 +21,27 @@ const variantStyles: Record<TextVariant, string> = {
   small: 'font-sans text-body-sm text-muted',
 
   // Utilities
-  label: 'font-mono text-label uppercase tracking-widest text-muted',
+  label: 'font-mono text-label uppercase tracking-normal text-muted',
   code: 'font-mono text-code bg-surfaceHighlight/50 px-1.5 py-0.5 rounded text-primary border border-white/5',
+  mono: 'font-mono text-body-sm text-current',
   tiny: 'font-mono text-[10px] leading-tight text-muted',
+};
+
+// Helper: Semantic HTML Tag Mapping
+const tagMap: Record<TextVariant, React.ElementType> = {
+  'display-2xl': 'h1',
+  'display-xl': 'h1',
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  label: 'span',
+  code: 'code',
+  small: 'small',
+  tiny: 'span',
+  body: 'p',
+  large: 'p',
+  mono: 'span',
 };
 
 export const Text = <T extends React.ElementType = 'p'>({
@@ -34,49 +53,23 @@ export const Text = <T extends React.ElementType = 'p'>({
   children,
   ...props
 }: TextProps<T> & React.ComponentPropsWithoutRef<T>) => {
-  const Component = as || mapVariantToTag(variant);
+  const Tag = as || tagMap[variant] || 'p';
 
   // Gradient Logic: High-end Tech Vibe
   const gradientClass = gradient
     ? 'bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/50'
     : '';
 
-  const finalClassName = `
-    ${variantStyles[variant]}
-    ${weight ? `font-${weight}` : ''}
-    ${gradientClass}
-    ${className}
-  `.trim();
+  const finalClassName = cn(
+    variantStyles[variant],
+    weight && `font-${weight}`,
+    gradientClass,
+    className,
+  );
 
   return (
-    <Component className={finalClassName} {...props}>
+    <Tag className={finalClassName} {...props}>
       {children}
-    </Component>
+    </Tag>
   );
 };
-
-// Helper: Semantic HTML Tag Mapping
-function mapVariantToTag(variant: TextVariant): React.ElementType {
-  switch (variant) {
-    case 'display-2xl':
-    case 'display-xl':
-    case 'h1':
-      return 'h1';
-    case 'h2':
-      return 'h2';
-    case 'h3':
-      return 'h3';
-    case 'h4':
-      return 'h4';
-    case 'label':
-      return 'span';
-    case 'code':
-      return 'code';
-    case 'small':
-      return 'small';
-    case 'tiny':
-      return 'span';
-    default:
-      return 'p';
-  }
-}

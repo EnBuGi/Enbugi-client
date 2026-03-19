@@ -1,3 +1,4 @@
+import { Button } from '@/shared/components/ui/Button';
 import { Text } from '@/shared/components/ui/Text';
 
 export default function Home() {
@@ -24,12 +25,13 @@ export default function Home() {
         </Text>
 
         <div className="flex gap-4 mt-4">
-          <button className="px-8 py-3 bg-primary hover:bg-primaryHover text-white font-medium rounded-full transition-all shadow-glow hover:shadow-glow-sm">
+          {/* Replaced native buttons with Button component */}
+          <Button variant="primary" size="lg">
             Get Started
-          </button>
-          <button className="px-8 py-3 bg-surfaceHighlight hover:bg-white/10 text-main border border-white/10 font-medium rounded-full transition-all">
+          </Button>
+          <Button variant="secondary" size="lg">
             Documentation
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -105,6 +107,49 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* 3. Buttons Showcase (New) */}
+      <section className="flex flex-col items-start gap-8 mb-32 w-full">
+        <Text variant="h2">Buttons</Text>
+
+        <div className="w-full p-8 rounded-3xl bg-surface border border-white/5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Text variant="h4" className="text-muted">
+                Variants
+              </Text>
+              <div className="flex flex-wrap gap-4">
+                <Button variant="primary">Primary</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="destructive">Destructive</Button>
+                <Button variant="link">Link</Button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Text variant="h4" className="text-muted">
+                Sizes
+              </Text>
+              <div className="flex flex-wrap items-center gap-4">
+                <Button size="sm">Small</Button>
+                <Button size="md">Medium</Button>
+                <Button size="lg">Large</Button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Text variant="h4" className="text-muted">
+                States
+              </Text>
+              <div className="flex flex-wrap items-center gap-4">
+                <Button isLoading>Loading</Button>
+                <Button disabled>Disabled</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
