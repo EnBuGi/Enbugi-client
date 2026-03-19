@@ -139,4 +139,10 @@ export const mentorProjectApi = {
   /** 모든 프로젝트의 모든 제출 내역 조회 (전역 관리용) */
   getAllSubmissions: (): Promise<AdminGlobalSubmissionResponse[]> => 
     fetchWithAuth("/api/v1/admin/submissions"),
+
+  /** 프로젝트 삭제 */
+  deleteProject: (id: string) =>
+    fetchWithAuth(`/api/v1/admin/projects/${id}`, {
+      method: "DELETE",
+    }),
 };

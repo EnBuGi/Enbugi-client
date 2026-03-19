@@ -9,6 +9,8 @@ export function useMentorProjects() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
+    const [isDeleting, setIsDeleting] = useState(false);
+
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
@@ -33,5 +35,19 @@ export function useMentorProjects() {
         };
     }, []);
 
-    return { data, isLoading, error } as const;
+    const deleteProject = async (id: string) => {
+        setIsDeleting(true);
+        try {
+            await mentorProjectApi.deleteProject(id);
+            setData((prev) => prev?.filter((p) => p.id !== id));
+            return true;
+        } catch (err) {
+            console.error("Failed to delete project:", err);
+            return false;
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    return { data, isLoading, error, deleteProject, isDeleting } as const;
 }
