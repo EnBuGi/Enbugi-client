@@ -39,8 +39,7 @@ export function BasicSettings({
           placeholder="기수 선택"
           error={errors.generation}
           items={[
-            { label: '14기', value: '14' },
-            { label: '15기', value: '15' },
+            { label: '26기', value: '26' },
           ]}
         />
 

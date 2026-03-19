@@ -2,12 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { User, fetchUsers, UserRole } from '@/features/mentor-users/api/users';
+import {
+  User,
+  UserRole,
+  fetchUsers,
+  updateUserRole,
+} from '@/features/mentor-users/api/users';
 import { GenerationFilter } from '@/features/mentor-users/ui/GenerationFilter';
 import { InviteCodeButton } from '@/features/mentor-users/ui/InviteCodeButton';
-import { Text } from '@/shared/components/ui/Text';
-import { Select } from '@/shared/components/ui/select/Select';
-import { Pagination } from '@/shared/components/ui/pagination/Pagination';
+
 import {
   Table,
   TableBody,
@@ -16,14 +19,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/shared/components/ui/Table';
+import { Text } from '@/shared/components/ui/Text';
+import { Pagination } from '@/shared/components/ui/pagination/Pagination';
+import { Select } from '@/shared/components/ui/select/Select';
 
 // ── 역할 선택 드롭다운 ──────────────────────────────────────────────────
 function RoleSelect({
   role,
   onChange,
+  disabled,
 }: {
   role: UserRole;
   onChange: (role: UserRole) => void;
+  disabled?: boolean;
 }) {
   const items = [
     { label: '멘토', value: 'MENTOR' },
@@ -36,6 +44,7 @@ function RoleSelect({
         value={role}
         onChange={(val) => onChange(val as UserRole)}
         items={items}
+        disabled={disabled}
         className="h-10 [&>div>button]:h-10 [&>div>button]:py-0 [&>div>button]:items-center"
       />
     </div>
@@ -67,24 +76,31 @@ export function UserList() {
     loadUsers();
   }, []);
 
-  const handleRoleChange = (githubId: string, newRole: UserRole) => {
-    setAllUsers(prev =>
-      prev.map(user =>
-        user.githubId === githubId ? { ...user, role: newRole } : user
-      )
-    );
-    // TODO: 백엔드에 역할 변경 상태 저장 API 연동 필요
+  const handleRoleChange = async (userId: string, newRole: UserRole) => {
+    try {
+      await updateUserRole(userId, newRole);
+      setAllUsers((prev) =>
+        prev.map((user) =>
+          user.id === userId ? { ...user, role: newRole } : user,
+        ),
+      );
+    } catch (error) {
+      console.error('Failed to update user role:', error);
+      alert('역할 변경에 실패했습니다.');
+    }
   };
 
   const displayedUsers =
     generationFilter === ''
       ? allUsers
-      : allUsers.filter((user) => user.generation.toString() === generationFilter);
+      : allUsers.filter(
+        (user) => user.generation.toString() === generationFilter,
+      );
 
   const PAGE_SIZE = 12;
   const paginatedUsers = displayedUsers.slice(
     (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
+    currentPage * PAGE_SIZE,
   );
 
   return (
@@ -92,11 +108,10 @@ export function UserList() {
       {/* Header Section */}
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold text-white mb-4">
-            사용자 관리
-          </h1>
+          <h1 className="text-2xl font-bold text-white mb-4">사용자 관리</h1>
           <Text variant="large" className="text-zinc-400 font-medium">
-            멘토 및 멘티 사용자 정보를 열람하고 권한 수정 및 초대 코드를 발급할 수 있습니다.
+            멘토 및 멘티 사용자 정보를 열람하고 권한 수정 및 초대 코드를 발급할
+            수 있습니다.
           </Text>
         </div>
       </div>
@@ -123,7 +138,7 @@ export function UserList() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[50px] text-center">프로필</TableHead>
-                <TableHead className="w-[100px]">이름 / GITHUB ID</TableHead>
+                <TableHead className="w-[100px]">이름</TableHead>
                 <TableHead className="w-[100px] text-center">기수</TableHead>
                 <TableHead className="w-[100px] text-center">권한</TableHead>
               </TableRow>
@@ -132,7 +147,7 @@ export function UserList() {
             <TableBody>
               {paginatedUsers.map((user) => (
                 <TableRow
-                  key={user.githubId}
+                  key={user.id}
                   className="group hover:bg-white/5 transition-colors"
                 >
                   <TableCell className="text-center p-2">
@@ -142,22 +157,20 @@ export function UserList() {
                         alt={`${user.name} profile`}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${user.githubId}&background=random`;
+                          (e.target as HTMLImageElement).src =
+                            `https://ui-avatars.com/api/?name=${user.githubId}&background=random`;
                         }}
                       />
                     </div>
                   </TableCell>
 
-
                   <TableCell>
                     <div className="flex flex-col gap-1">
-                      <span className="font-semibold text-white">{user.name}</span>
-                      <span className="font-mono text-zinc-500 text-xs">
-                        {user.githubId}
+                      <span className="font-semibold text-white">
+                        {user.name}
                       </span>
                     </div>
                   </TableCell>
-
 
                   <TableCell className="text-center font-mono text-zinc-300">
                     {user.generation}기
@@ -166,16 +179,19 @@ export function UserList() {
                   <TableCell className="text-center p-2">
                     <RoleSelect
                       role={user.role}
-                      onChange={(newRole) => handleRoleChange(user.githubId, newRole)}
+                      onChange={(newRole) => handleRoleChange(user.id, newRole)}
+                      disabled={user.role === 'MENTOR'}
                     />
                   </TableCell>
-
                 </TableRow>
               ))}
 
               {paginatedUsers.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="h-32 text-center text-zinc-500">
+                  <TableCell
+                    colSpan={4}
+                    className="h-32 text-center text-zinc-500"
+                  >
                     해당 기수의 사용자가 없습니다.
                   </TableCell>
                 </TableRow>
