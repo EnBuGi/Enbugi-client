@@ -12,32 +12,31 @@ import {
   AssignmentFormState,
 } from './components/BasicSettings';
 import { GradingSettings } from './components/GradingSettings';
+import { mentorProjectApi, TestCaseDto, ProjectCreateRequest } from '../api/projects';
+import { ProjectType } from '../model/project';
 
-// ────────────────────────────────────────────
-// Confirm Dialog
-// ────────────────────────────────────────────
+// Confirm Dialog Component
 function ConfirmDialog({
   mode,
   onConfirm,
   onCancel,
+  isSubmitting,
 }: {
   mode: 'create' | 'edit';
   onConfirm: () => void;
   onCancel: () => void;
+  isSubmitting: boolean;
 }) {
   const isEdit = mode === 'edit';
   return (
-    /* backdrop */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={onCancel}
     >
-      {/* panel */}
       <div
         className="relative mx-4 w-full max-w-md rounded-2xl border border-white/10 bg-zinc-900 p-8 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* icon */}
         <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-red-900/30">
           <AlertTriangle size={22} className="text-red-400" />
         </div>
@@ -52,7 +51,7 @@ function ConfirmDialog({
         </p>
 
         <div className="flex justify-end gap-3">
-          <Button type="button" variant="secondary" onClick={onCancel}>
+          <Button type="button" variant="secondary" onClick={onCancel} disabled={isSubmitting}>
             취소
           </Button>
           <Button
@@ -60,6 +59,7 @@ function ConfirmDialog({
             variant="destructive"
             className="border-none bg-red-900 font-bold text-white hover:bg-red-800"
             onClick={onConfirm}
+            isLoading={isSubmitting}
           >
             {isEdit ? '수정 완료' : '등록하기'}
           </Button>
@@ -69,14 +69,19 @@ function ConfirmDialog({
   );
 }
 
-// ────────────────────────────────────────────
-// ProjectForm
-// ────────────────────────────────────────────
+// ProjectForm Component
 export function ProjectForm({
   initialData,
+  initialId,
   mode = 'create',
 }: {
-  initialData?: AssignmentFormState;
+  initialData?: AssignmentFormState & { 
+    testCases?: TestCaseDto[], 
+    timeLimit?: number, 
+    memoryLimit?: number,
+    testCodeKey?: string 
+  };
+  initialId?: string;
   mode?: 'create' | 'edit';
 }) {
   const router = useRouter();
@@ -93,15 +98,20 @@ export function ProjectForm({
     }
   );
 
+  const [testCases, setTestCases] = useState<TestCaseDto[]>(initialData?.testCases || []);
+  const [timeLimit, setTimeLimit] = useState<number>(initialData?.timeLimit || 2000);
+  const [memoryLimit, setMemoryLimit] = useState<number>(initialData?.memoryLimit || 256);
+  const [testCodeKey, setTestCodeKey] = useState<string>(initialData?.testCodeKey || '');
+
   const [errors, setErrors] = useState<
     Partial<Record<keyof AssignmentFormState, string>>
   >({});
 
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: keyof AssignmentFormState, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -118,26 +128,62 @@ export function ProjectForm({
     if (!formData.startDate) newErrors.startDate = '시작일을 선택해주세요.';
     if (!formData.endDate) newErrors.endDate = '마감일을 선택해주세요.';
 
+    const totalScore = testCases.reduce((sum, c) => sum + (Number(c.score) || 0), 0);
+    if (testCases.length === 0) {
+      alert('테스트 코드를 업로드하여 테스트 케이스를 생성해주세요.');
+      return false;
+    }
+    if (totalScore !== 100) {
+      alert(`총점이 100점이어야 합니다. (현재: ${totalScore}점)`);
+      return false;
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Step 1: validate → open confirm dialog
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setShowConfirm(true);
   };
 
-  // Step 2: user confirmed → actually submit
-  const handleConfirm = () => {
-    setShowConfirm(false);
-    console.log('Submitted:', formData);
-    router.push('/mentor/projects');
-  };
+  const handleConfirm = async () => {
+    setIsSubmitting(true);
+    try {
+      const payload: ProjectCreateRequest = {
+        title: formData.title,
+        type: formData.type as ProjectType,
+        generation: Number(formData.generation),
+        startDate: formData.startDate,
+        dueDate: formData.endDate,
+        description: formData.description,
+        skeletonUrl: formData.skeletonUrl,
+        testCodeKey: testCodeKey,
+        scorePolicy: {
+          timeLimit,
+          memoryLimit,
+          cases: testCases,
+        },
+      };
 
-  const handleCancel = () => {
-    router.push('/mentor/projects');
+      if (mode === 'create') {
+        await mentorProjectApi.createProject(payload);
+        alert('프로젝트가 성공적으로 등록되었습니다.');
+      } else if (initialId) {
+        await mentorProjectApi.updateProject(initialId, payload);
+        alert('프로젝트가 성공적으로 수정되었습니다.');
+      }
+      
+      router.push('/mentor/projects');
+      router.refresh();
+    } catch (error) {
+      console.error('Failed to submit project:', error);
+      alert('저장 실패: ' + (error instanceof Error ? error.message : '알 수 없는 오류'));
+    } finally {
+      setIsSubmitting(false);
+      setShowConfirm(false);
+    }
   };
 
   return (
@@ -147,6 +193,7 @@ export function ProjectForm({
           mode={mode}
           onConfirm={handleConfirm}
           onCancel={() => setShowConfirm(false)}
+          isSubmitting={isSubmitting}
         />
       )}
 
@@ -177,10 +224,17 @@ export function ProjectForm({
             errors={errors}
           />
 
-          <GradingSettings />
+          <GradingSettings 
+            timeLimit={timeLimit}
+            memoryLimit={memoryLimit}
+            testCases={testCases}
+            onCasesChange={setTestCases}
+            onLimitChange={(field, val) => field === 'timeLimit' ? setTimeLimit(val) : setMemoryLimit(val)}
+            onTestCodeKeyChange={setTestCodeKey}
+          />
 
           <div className="flex items-center justify-between pt-2">
-            <Button type="button" variant="secondary" onClick={handleCancel}>
+            <Button type="button" variant="secondary" onClick={() => router.push('/mentor/projects')} disabled={isSubmitting}>
               취소
             </Button>
 
@@ -188,6 +242,7 @@ export function ProjectForm({
               type="submit"
               variant="destructive"
               className="border-none bg-red-900 px-12 font-bold text-white shadow-md hover:bg-red-800"
+              isLoading={isSubmitting}
             >
               {mode === 'edit' ? '수정 완료' : '최종 등록'}
             </Button>

@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         destination: '/mentee/projects',
         permanent: true,
       },
+      {
+        source: '/',
+        destination: '/mentee/projects',
+        permanent: false,
+      },
     ];
   },
 };

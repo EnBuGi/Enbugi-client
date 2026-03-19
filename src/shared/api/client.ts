@@ -157,12 +157,9 @@ export async function fetchWithAuth(endpoint: string, options: RequestInit = {})
         };
         
         response = await fetch(url, retryConfig);
-
-        if (!response.ok) {
-           throw new ApiError(response.status, "토큰 재발급 후에도 요청이 실패했습니다.");
-        }
+        // Let the retry response fall through to the general error handling below.
       } catch (reissueErr) {
-        // Reissue failed, redirect to login
+        // Reissue itself failed
         console.error("Token reissue failed:", reissueErr);
         handleLogout();
         throw reissueErr;
@@ -171,7 +168,7 @@ export async function fetchWithAuth(endpoint: string, options: RequestInit = {})
 
     if (!response.ok) {
         // If still not ok or other error
-        if (response.status === 401 || response.status === 403) {
+        if (response.status === 401) {
             handleLogout();
         }
         const errorText = await response.text().catch(() => "{}");

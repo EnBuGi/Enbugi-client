@@ -91,7 +91,7 @@ export function BasicSettings({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <InputBox
           label="시작일"
-          type="date"
+          type="datetime-local"
           icon={<Calendar size={18} />}
           value={formData.startDate}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -102,7 +102,7 @@ export function BasicSettings({
 
         <InputBox
           label="마감일"
-          type="date"
+          type="datetime-local"
           icon={<Calendar size={18} />}
           value={formData.endDate}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
