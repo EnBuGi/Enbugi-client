@@ -13,7 +13,7 @@ import {
   TableBody,
   TableCell,
 } from '@/shared/components/ui/Table';
-import { AdminSubmissionDetailModal } from './components/AdminSubmissionDetailModal';
+import { SubmissionDetailModal } from '@/features/project-details/ui/SubmissionDetailModal';
 
 import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-projects/model/submission';
 
@@ -31,7 +31,7 @@ function timeAgo(dateStr: string): string {
 
 // ── 결과 배지 ────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: SubmissionStatus }) {
-  if (status === 'PASS') {
+  if (status === 'PASS' || status === 'COMPLETED') { // Backend might return COMPLETED
     return (
       <Badge
         intent="success"
@@ -43,7 +43,7 @@ function StatusBadge({ status }: { status: SubmissionStatus }) {
       </Badge>
     );
   }
-  if (status === 'FAIL') {
+  if (status === 'FAIL' || status === 'SYSTEM_ERROR') {
     return (
       <Badge
         intent="danger"
@@ -55,7 +55,16 @@ function StatusBadge({ status }: { status: SubmissionStatus }) {
       </Badge>
     );
   }
-  return null;
+  return (
+    <Badge
+      intent="neutral"
+      tone="soft"
+      size="sm"
+      className="text-zinc-500 border-white/10 font-bold tracking-wider px-3"
+    >
+      {status || 'PENDING'}
+    </Badge>
+  );
 }
 
 
@@ -64,15 +73,15 @@ const FILTER_OPTIONS = ['ALL', 'PASS', 'FAIL'] as const;
 type FilterOption = typeof FILTER_OPTIONS[number];
 
 // ── 메인 컴포넌트 ─────────────────────────────────────────────────────
-interface AllSubmissionsTableProps {
+interface MySubmissionsTableProps {
   submissions: GlobalSubmission[];
 }
 
-export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
+export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterOption>('ALL');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<{ subId: string; projectId: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   React.useEffect(() => {
@@ -81,11 +90,9 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
 
   const filtered = submissions.filter((s) => {
     const q = search.toLowerCase();
-    const matchSearch =
-      s.name.toLowerCase().includes(q) ||
-      s.githubId.toLowerCase().includes(q) ||
-      s.problemTitle.toLowerCase().includes(q);
-    const matchFilter = filter === 'ALL' || s.status === filter;
+    const matchSearch = s.problemTitle.toLowerCase().includes(q);
+    const sStatus = (s.status === 'PASS' || s.status === 'COMPLETED') ? 'PASS' : (s.status === 'FAIL' || s.status === 'SYSTEM_ERROR') ? 'FAIL' : 'PENDING';
+    const matchFilter = filter === 'ALL' || sStatus === filter;
     return matchSearch && matchFilter;
   });
 
@@ -95,8 +102,8 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
     currentPage * PAGE_SIZE
   );
 
-  const handleRowClick = (submissionId: string) => {
-    setSelectedSubId(submissionId);
+  const handleRowClick = (submissionId: string, projectId: string) => {
+    setSelectedSubmission({ subId: submissionId, projectId });
     setIsModalOpen(true);
   };
 
@@ -106,7 +113,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="w-full sm:w-[320px]">
           <InputBox
-            placeholder="이름, 문제명 검색..."
+            placeholder="문제명 검색..."
             icon={<Search size={18} />}
             value={search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
@@ -138,7 +145,6 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
               <TableHead className="w-[100px] text-center">제출번호</TableHead>
               <TableHead className="w-[150px] text-center">제출 시각</TableHead>
               <TableHead className="w-[115px] text-center">제출 시간</TableHead>
-              <TableHead className="w-[100px]">이름</TableHead>
               <TableHead className="w-[300px]">문제 이름</TableHead>
               <TableHead className="w-[100px] text-center">결과</TableHead>
               <TableHead className="w-[110px] text-center">메모리</TableHead>
@@ -153,7 +159,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
               <TableRow
                 key={s.submissionId}
                 className="group cursor-pointer hover:bg-white/5"
-                onClick={() => handleRowClick(s.submissionId)}
+                onClick={() => handleRowClick(s.submissionId, s.projectId)}
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
@@ -169,12 +175,6 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
                 {/* 제출한 시간 (상대) */}
                 <TableCell className="text-center text-xs text-zinc-500">
                   {timeAgo(s.submittedAt)}
-                </TableCell>
-
-
-                {/* 이름 */}
-                <TableCell>
-                  <span className="font-semibold text-white">{s.name}</span>
                 </TableCell>
 
                 {/* 문제 이름 */}
@@ -227,7 +227,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
 
             {paginated.length === 0 && (
               <TableRow>
-                <TableCell colSpan={10} className="h-32 text-center text-zinc-500">
+                <TableCell colSpan={9} className="h-32 text-center text-zinc-500">
                   검색 결과가 없습니다.
                 </TableCell>
               </TableRow>
@@ -246,11 +246,13 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
         />
       </div>
 
-      <AdminSubmissionDetailModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        submissionId={selectedSubId} 
-      />
+      {isModalOpen && selectedSubmission && (
+        <SubmissionDetailModal 
+          onClose={() => setIsModalOpen(false)} 
+          submissionId={selectedSubmission.subId} 
+          projectId={selectedSubmission.projectId}
+        />
+      )}
     </div>
   );
 }

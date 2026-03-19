@@ -28,7 +28,6 @@ export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewP
             </div>
             <div>
                 <Text variant="large" className="font-bold">{detail.userName}</Text>
-                <Text variant="small" className="text-sub">@{detail.githubId}</Text>
             </div>
         </div>
         <div className="flex gap-10 items-center">

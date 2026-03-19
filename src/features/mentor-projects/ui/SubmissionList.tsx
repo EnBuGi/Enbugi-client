@@ -32,14 +32,14 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
     total: submissions.length,
     submitted: submissions.filter(s => s.status !== null).length,
     pass: submissions.filter(s => s.status === 'COMPLETED' && s.score === 100).length,
-    fail: submissions.filter(s => s.status === 'SYSTEM_ERROR' || (s.status === 'COMPLETED' && s.score < 100)).length,
+    fail: submissions.filter(s => s.status === 'SYSTEM_ERROR' || (s.status === 'COMPLETED' && s.score !== null && s.score < 100)).length,
   };
 
   const filteredSubmissions = submissions.filter(sub => {
     const matchesSearch = sub.name.includes(search) || sub.githubId.includes(search);
     const isSubmitted = sub.status !== null;
     const isPass = sub.status === 'COMPLETED' && sub.score === 100;
-    const isFail = sub.status === 'SYSTEM_ERROR' || (sub.status === 'COMPLETED' && sub.score < 100);
+    const isFail = sub.status === 'SYSTEM_ERROR' || (sub.status === 'COMPLETED' && sub.score !== null && sub.score < 100);
     
     if (filterType === 'PASS') return matchesSearch && isPass;
     if (filterType === 'FAIL') return matchesSearch && isFail;
@@ -112,7 +112,7 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
         <div className="w-full sm:w-[320px]">
           <InputBox
-            placeholder="이름 또는 Github Id 검색..."
+            placeholder="이름 검색..."
             icon={<Search size={18} />}
             value={search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
@@ -140,7 +140,7 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[300px]">이름 / Github Id</TableHead>
+              <TableHead className="w-[300px]">이름</TableHead>
               <TableHead className="w-[120px] text-center">상태</TableHead>
               <TableHead className="w-[150px] text-center">최고 점수</TableHead>
               <TableHead className="w-[250px] text-center">마지막 제출 시각</TableHead>
@@ -160,7 +160,6 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
                   <TableCell>
                     <div className="flex flex-col gap-1 pl-4">
                       <span className="font-semibold text-white tracking-wide">{sub.name}</span>
-                      <span className="text-xs text-zinc-500 font-mono">{sub.githubId}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-center">

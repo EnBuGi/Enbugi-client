@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BoxesIcon, Grid3X3, MessageSquare } from 'lucide-react';
+import { BoxesIcon, CheckSquare2, Grid3X3, MessageSquare } from 'lucide-react';
 
 import { AppShell } from '@/shared/components/layout/AppShell';
 import { Gnb } from '@/shared/components/layout/Gnb';
@@ -9,8 +9,7 @@ import { AuthGuard } from '@/shared/components/AuthGuard';
 
 const MENTEE_NAV = [
   { label: 'Projects', href: '/mentee/projects', icon: <BoxesIcon size={18} /> },
-  { label: 'Problems', href: '/problems', icon: <Grid3X3 size={18} /> },
-  { label: 'Q&A', href: '/qna', icon: <MessageSquare size={18} /> },
+  { label: 'My Submissions', href: '/mentee/submissions', icon: <CheckSquare2 size={18} /> },
 ];
 
 export default function MenteeLayout({
