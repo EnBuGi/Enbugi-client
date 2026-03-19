@@ -6,7 +6,7 @@ export interface Submission {
   name: string;
   githubId: string;
   status: SubmissionStatus | null;
-  score: number;
+  score: number | null;
   lastSubmittedAt: string | null;
 }
 
@@ -18,6 +18,7 @@ export interface GlobalSubmission {
   name: string;
   problemTitle: string;
   status: SubmissionStatus;
+  score: number | null;
   memoryUsage: number | null;
   timeUsage: number | null;
   language?: string;
@@ -27,9 +28,9 @@ export interface GlobalSubmission {
 export interface UserProjectSubmission {
   submissionId: string;
   status: SubmissionStatus;
-  score: number;
-  memoryUsage: number;
-  timeExecution: number;
+  score: number | null;
+  memoryUsage: number | null;
+  timeExecution: number | null;
   language: string;
   submittedAt: string;
 }
@@ -38,10 +39,10 @@ export interface UserProjectSubmission {
 export interface TestDetail {
   methodName: string;
   status: 'PASS' | 'FAIL' | SubmissionStatus;
-  durationMs: number;
+  durationMs: number | null;
   message: string | null;
   isHidden: boolean;
-  score: number;
+  score: number | null;
 }
 
 export interface AdminSubmissionDetail {
@@ -50,7 +51,7 @@ export interface AdminSubmissionDetail {
   githubId: string;
   repoUrl: string;
   status: SubmissionStatus;
-  score: number;
+  score: number | null;
   memoryUsage: number | null;
   timeExecution: number | null;
   submittedAt: string;
