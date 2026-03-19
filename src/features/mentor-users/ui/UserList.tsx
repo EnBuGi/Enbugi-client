@@ -11,6 +11,7 @@ import {
 import { GenerationFilter } from '@/features/mentor-users/ui/GenerationFilter';
 import { InviteCodeButton } from '@/features/mentor-users/ui/InviteCodeButton';
 
+import { ConfirmModal } from '@/shared/components/ui/ConfirmModal';
 import {
   Table,
   TableBody,
@@ -57,6 +58,12 @@ export function UserList() {
   const [generationFilter, setGenerationFilter] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [pendingRoleChange, setPendingRoleChange] = useState<{
+    userId: string;
+    newRole: UserRole;
+  } | null>(null);
+
   useEffect(() => {
     setCurrentPage(1);
   }, [generationFilter]);
@@ -76,7 +83,7 @@ export function UserList() {
     loadUsers();
   }, []);
 
-  const handleRoleChange = async (userId: string, newRole: UserRole) => {
+  const executeRoleChange = async (userId: string, newRole: UserRole) => {
     try {
       await updateUserRole(userId, newRole);
       setAllUsers((prev) =>
@@ -87,6 +94,25 @@ export function UserList() {
     } catch (error) {
       console.error('Failed to update user role:', error);
       alert('역할 변경에 실패했습니다.');
+    } finally {
+      setIsConfirmModalOpen(false);
+      setPendingRoleChange(null);
+    }
+  };
+
+  const handleRoleChange = async (userId: string, newRole: UserRole) => {
+    const user = allUsers.find((u) => u.id === userId);
+    if (user?.role === 'MENTEE' && newRole === 'MENTOR') {
+      setPendingRoleChange({ userId, newRole });
+      setIsConfirmModalOpen(true);
+      return;
+    }
+    await executeRoleChange(userId, newRole);
+  };
+
+  const handleConfirmRoleChange = () => {
+    if (pendingRoleChange) {
+      executeRoleChange(pendingRoleChange.userId, pendingRoleChange.newRole);
     }
   };
 
@@ -94,8 +120,8 @@ export function UserList() {
     generationFilter === ''
       ? allUsers
       : allUsers.filter(
-        (user) => user.generation.toString() === generationFilter,
-      );
+          (user) => user.generation.toString() === generationFilter,
+        );
 
   const PAGE_SIZE = 12;
   const paginatedUsers = displayedUsers.slice(
@@ -209,6 +235,15 @@ export function UserList() {
           onPageChange={setCurrentPage}
         />
       </div>
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleConfirmRoleChange}
+        title="권한 변경 확인"
+        message="멘티에서 멘토 권한 변경 시 멘토로 변경하면 멘티로 변경할 수 없습니다. 정말 권한을 변경하시겠습니까?"
+        confirmLabel="변경하기"
+        isDanger={true}
+      />
     </div>
   );
 }
