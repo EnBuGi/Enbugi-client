@@ -47,6 +47,7 @@ export interface AdminProjectSubmissionSummaryResponse {
 
 export interface AdminGlobalSubmissionResponse {
   submissionId: string;
+  projectId: string;
   name: string;
   problemTitle: string;
   status: SubmissionStatus;
