@@ -37,9 +37,15 @@ function GithubCallbackContent() {
           // User not found, redirect to signup
           const inviteToken = sessionStorage.getItem('inviteToken');
           if (inviteToken) {
-            sessionStorage.setItem('githubId', err.data.githubId);
-            sessionStorage.setItem('profileImageUrl', err.data.profileImageUrl);
-            router.push(`/signup?token=${inviteToken}&code=${code}`);
+            const githubId = err.data.githubId;
+            const profileImageUrl = err.data.profileImageUrl;
+
+            sessionStorage.setItem('githubId', githubId);
+            sessionStorage.setItem('profileImageUrl', profileImageUrl);
+
+            // Pass via query params for better reliability
+            const signupUrl = `/signup?token=${inviteToken}&code=${code}&githubId=${githubId}&profileImageUrl=${encodeURIComponent(profileImageUrl)}`;
+            router.push(signupUrl);
           } else {
             setError('Account not found. Please use an invite link to sign up.');
           }

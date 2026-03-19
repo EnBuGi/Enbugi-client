@@ -5,6 +5,7 @@ import { InputBox } from "@/shared/components/ui/InputBox/InputBox";
 import { Button } from "@/shared/components/ui/Button";
 import { Text } from "@/shared/components/ui/Text";
 import { Select } from "@/shared/components/ui/select/Select";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, User, GraduationCap } from "lucide-react";
 import { useSignup } from "../hooks/useSignup";
 
@@ -18,6 +19,7 @@ interface RegisterFormProps {
 }
 
 export const RegisterForm = ({ inviteInfo, token, code }: RegisterFormProps) => {
+    const searchParams = useSearchParams();
     const { signup, isSubmitting, error: signupError } = useSignup();
     const [name, setName] = useState('');
     const [generation, setGeneration] = useState<number | null>(
@@ -35,8 +37,9 @@ export const RegisterForm = ({ inviteInfo, token, code }: RegisterFormProps) => 
         e.preventDefault();
         if (!name || generation === null) return;
 
-        const githubId = sessionStorage.getItem('githubId');
-        const profileImageUrl = sessionStorage.getItem('profileImageUrl');
+        // Try to get from search params first, then fallback to session storage
+        const githubId = searchParams.get('githubId') || sessionStorage.getItem('githubId');
+        const profileImageUrl = searchParams.get('profileImageUrl') || sessionStorage.getItem('profileImageUrl');
 
         if (!githubId || !profileImageUrl) {
             setLocalError('GitHub 사용자 정보가 부족합니다. 다시 시도해 주세요.');
