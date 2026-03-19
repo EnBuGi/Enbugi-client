@@ -29,13 +29,13 @@ export default async function EditMentorProjectPage({
     title: project.title,
     description: project.description || '',
     skeletonUrl: project.skeletonUrl || '',
-    startDate: project.startDate.split('T')[0],
-    endDate: project.dueDate.split('T')[0],
+    startDate: project.startDate, // Keep full ISO format for datetime-local
+    endDate: project.dueDate,     // Keep full ISO format for datetime-local
     
-    // Add grading policy data
-    timeLimit: project.timeLimit,
-    memoryLimit: project.memoryLimit,
-    testCases: project.testCases || [],
+    // Add grading policy data from scorePolicy object
+    timeLimit: project.scorePolicy?.timeLimit,
+    memoryLimit: project.scorePolicy?.memoryLimit,
+    testCases: project.scorePolicy?.cases || [],
     testCodeKey: project.testCodeKey || ''
   };
 

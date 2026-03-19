@@ -60,6 +60,18 @@ export function GradingSettings({
     onCasesChange(testCases.filter((_, i) => i !== index));
   };
 
+  const distributeScores = () => {
+    if (testCases.length === 0) return;
+    const baseScore = Math.floor(100 / testCases.length);
+    const remainder = 100 % testCases.length;
+    
+    const newCases = testCases.map((tc, idx) => ({
+      ...tc,
+      score: idx < remainder ? baseScore + 1 : baseScore
+    }));
+    onCasesChange(newCases);
+  };
+
   const totalScore = testCases.reduce((sum, c) => sum + (Number(c.score) || 0), 0);
 
   return (
@@ -68,11 +80,21 @@ export function GradingSettings({
         <Text variant="label" className="text-xl font-bold text-white">
           채점 설정
         </Text>
-        <div className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-1 border border-white/10">
-          <Text variant="small" className="text-zinc-400">총점</Text>
-          <Text variant="large" className={`font-bold ${totalScore === 100 ? 'text-green-400' : 'text-amber-400'}`}>
-            {totalScore} / 100
-          </Text>
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-xs text-zinc-500 hover:text-white"
+            onClick={distributeScores}
+          >
+            균등 배분
+          </Button>
+          <div className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-1 border border-white/10">
+            <Text variant="small" className="text-zinc-400">총점</Text>
+            <Text variant="large" className={`font-bold ${totalScore === 100 ? 'text-green-400' : 'text-amber-400'}`}>
+              {totalScore} / 100
+            </Text>
+          </div>
         </div>
       </div>
 
@@ -160,11 +182,16 @@ export function GradingSettings({
                   <div className="flex items-center gap-3">
                     <div className="w-24">
                       <InputBox
-                        type="number"
-                        placeholder="점수"
-                        value={tc.score}
-                        onChange={(e) => updateTestCase(idx, 'score', Number(e.target.value))}
-                        className="text-right h-10"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        placeholder="0"
+                        value={tc.score === 0 ? '' : tc.score}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^0-9]/g, '');
+                          updateTestCase(idx, 'score', val === '' ? 0 : parseInt(val, 10));
+                        }}
+                        className="text-right h-10 w-24"
                       />
                     </div>
                     <button

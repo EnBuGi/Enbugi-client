@@ -59,7 +59,7 @@ function ConfirmDialog({
             variant="destructive"
             className="border-none bg-red-900 font-bold text-white hover:bg-red-800"
             onClick={onConfirm}
-            loading={isSubmitting}
+            isLoading={isSubmitting}
           >
             {isEdit ? '수정 완료' : '등록하기'}
           </Button>
