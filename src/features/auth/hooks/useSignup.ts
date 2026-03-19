@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { publicFetch } from "@/shared/api/client";
+import { publicFetch, setAccessToken } from "@/shared/api/client";
 import { useRouter } from "next/navigation";
 
 interface SignupData {
@@ -25,8 +25,7 @@ export function useSignup() {
                 body: JSON.stringify(data),
             });
 
-            localStorage.setItem('accessToken', result.accessToken);
-            document.cookie = `accessToken=${result.accessToken}; path=/; max-age=3600; SameSite=Lax`;
+            setAccessToken(result.accessToken);
             
             // Cleanup session storage
             sessionStorage.removeItem('inviteToken');

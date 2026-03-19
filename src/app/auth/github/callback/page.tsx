@@ -8,7 +8,7 @@ import { Loader2 } from 'lucide-react';
 
 import { Text } from '@/shared/components/ui/Text';
 
-import { publicFetch, ApiError } from '@/shared/api/client';
+import { publicFetch, ApiError, setAccessToken } from '@/shared/api/client';
 
 function GithubCallbackContent() {
   const router = useRouter();
@@ -30,8 +30,7 @@ function GithubCallbackContent() {
           body: JSON.stringify({ code, state }),
         });
 
-        localStorage.setItem('accessToken', result.accessToken);
-        document.cookie = `accessToken=${result.accessToken}; path=/; max-age=3600; SameSite=Lax`;
+        setAccessToken(result.accessToken);
         router.push('/mentee/projects');
       } catch (err) {
         if (err instanceof ApiError && err.status === 404) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { publicFetch } from "@/shared/api/client";
 
 export function useGithubLogin() {
     const [isLoading, setIsLoading] = useState(false);
@@ -11,15 +12,10 @@ export function useGithubLogin() {
         setError(null);
         try {
             const redirectUri = `${window.location.origin}/auth/github/callback`;
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || ''}/api/v1/auth/login/github/url?redirectUri=${encodeURIComponent(redirectUri)}`
+            const url = await publicFetch(
+                `/api/v1/auth/login/github/url?redirectUri=${encodeURIComponent(redirectUri)}`
             );
-            
-            if (!response.ok) {
-                throw new Error("Failed to fetch login URL");
-            }
-            
-            return await response.text();
+            return url;
         } catch (err) {
             const message = err instanceof Error ? err.message : "GitHub 로그인 URL을 가져오는 데 실패했습니다.";
             setError(message);
