@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { Ban } from "lucide-react";
-import { Card } from "@/shared/components/ui/Card/Card";
-import { Text } from "@/shared/components/ui/Text";
-import { Badge, type BadgeIntent } from "@/shared/components/ui/badge/Badge";
-import { Button } from "@/shared/components/ui/Button";
+import { Card } from "../../../shared/components/ui/Card/Card";
+import { Text } from "../../../shared/components/ui/Text";
+import { Button } from "../../../shared/components/ui/Button";
+import { SubmissionStatusBadge } from "../../../shared/components/ui/submission/SubmissionStatusBadge";
 import { projectApi } from "../api/project";
 import { SubmissionDetailModal } from "./SubmissionDetailModal";
 import type { SubmissionHistory } from "../model/project";
@@ -16,15 +16,6 @@ interface Props {
   isLoading: boolean;
   onRefetch: () => void;
 }
-
-const statusConfig: Record<string, { intent: BadgeIntent; label: string }> = {
-  COMPLETED: { intent: "success", label: "채점완료" },
-  PROCESSING: { intent: "neutral", label: "진행중" },
-  ENQUEUING: { intent: "warning", label: "대기중" },
-  QUEUED: { intent: "warning", label: "대기중" },
-  SYSTEM_ERROR: { intent: "danger", label: "에러" },
-  CANCELLED: { intent: "neutral", label: "취소됨" },
-};
 
 const inProgressStatuses = ["ENQUEUING", "QUEUED", "PROCESSING"];
 
@@ -61,7 +52,6 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
         ) : (
           <div className="flex flex-col gap-2">
             {history.map((item) => {
-              const config = statusConfig[item.status] ?? statusConfig.SYSTEM_ERROR;
               const isInProgress = inProgressStatuses.includes(item.status);
 
               return (
@@ -72,9 +62,7 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
                 >
                   {/* Left: status + date */}
                   <div className="flex items-center gap-2 min-w-0">
-                    <Badge intent={config.intent} tone="soft" size="sm" shape="pill">
-                      {config.label}
-                    </Badge>
+                    <SubmissionStatusBadge status={item.status} />
                     <Text variant="tiny" className="!text-[var(--color-muted)] shrink-0">
                       {new Date(item.submittedAt).toLocaleString("ko-KR", {
                         year: "numeric",
@@ -82,6 +70,7 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
                         day: "2-digit",
                         hour: "2-digit",
                         minute: "2-digit",
+                        second: "2-digit"
                       })}
                     </Text>
                   </div>
@@ -116,13 +105,13 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
       </Card>
 
       {/* Detail Modal */}
-      {selectedSubmissionId && (
-        <SubmissionDetailModal
-          projectId={projectId}
-          submissionId={selectedSubmissionId}
-          onClose={() => setSelectedSubmissionId(null)}
-        />
-      )}
+      <SubmissionDetailModal
+        projectId={projectId}
+        submissionId={selectedSubmissionId ?? ""}
+        isOpen={!!selectedSubmissionId}
+        onClose={() => setSelectedSubmissionId(null)}
+      />
+
     </>
   );
 }

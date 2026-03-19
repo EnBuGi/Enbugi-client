@@ -22,10 +22,10 @@ export function Header({ centerSlot, rightSlot }: HeaderProps) {
         {/* Left: Logo + Nav */}
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-3 shrink-0">
-            <div className="grid h-9 w-9 place-items-center rounded-md border border-white/10 bg-surface shadow-sm ring-1 ring-white/5">
-              <span className="text-sm font-bold">E</span>
+            <div className="flex h-9 w-9 items-center justify-center overflow-hidden">
+              <img src="/favicon.svg" alt="Logo" className="w-full h-full object-contain" />
             </div>
-            <div className="font-display font-bold text-main">EN# OJ</div>
+            <div className="font-display font-bold text-main">En#</div>
           </Link>
 
           {/* Center: (mentee) header nav slot */}

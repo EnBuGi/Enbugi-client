@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { adminInvitesApi } from '../api/invites';
 import { InviteRequest, InviteResponse, Role, CreatedInviteCode } from '../model/invite';
 
-const INVITE_URL_BASE = `${typeof window !== 'undefined' ? window.location.origin : ''}/signup`;
+const INVITE_URL_BASE = `${process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '')}/signup`;
 
 /**
  * 초대코드 생성 관리
@@ -17,26 +17,21 @@ export function useAdminInvites() {
     setError(null);
 
     try {
-      /**
-       * TODO: 백엔드 API 연동 필요
-       * 현재는 UI 수정을 위해 로컬에서 랜덤하게 발급된 상태를 반환합니다.
-       */
-      // API 호출 시뮬레이션
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      const randomToken = Math.random().toString(36).substring(2, 10).toUpperCase();
-      const generation = 26; // 26기로 고정
+      const response = await adminInvitesApi.createInviteCode({
+        role,
+        durationInMillis,
+      });
 
       const createdAt = new Date();
       const expiresAt = new Date(createdAt.getTime() + durationInMillis);
 
       const newCode: CreatedInviteCode = {
-        token: randomToken,
-        role: role,
-        generation: generation,
+        token: response.token,
+        role: response.role,
+        generation: response.generation,
         createdAt,
         expiresAt,
-        inviteUrl: `${INVITE_URL_BASE}?token=${encodeURIComponent(randomToken)}&code=${generation}`,
+        inviteUrl: `${INVITE_URL_BASE}?token=${encodeURIComponent(response.token)}&code=${response.generation}`,
       };
 
       setCreatedCode(newCode);

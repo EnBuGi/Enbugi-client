@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "@/shared/api/client";
+import { fetchWithAuth } from "../../../shared/api/client";
 import type { 
   ProjectDetail, 
   SubmitResponse, 

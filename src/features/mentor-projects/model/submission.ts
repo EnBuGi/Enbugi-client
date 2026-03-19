@@ -1,4 +1,5 @@
-export type SubmissionStatus = 'ENQUEUING' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'SYSTEM_ERROR' | 'CANCELLED' | 'PASS' | 'FAIL';
+import { SubmissionStatus } from "../../../shared/model/submission";
+export type { SubmissionStatus };
 
 // 프로젝트별 제출 현황 요약 (Mentor Dashboard)
 export interface Submission {
@@ -6,18 +7,20 @@ export interface Submission {
   name: string;
   githubId: string;
   status: SubmissionStatus | null;
-  score: number;
+  score: number | null;
   lastSubmittedAt: string | null;
 }
 
 // 전체 제출 현황 페이지용 확장 타입 (Admin Global History)
 export interface GlobalSubmission {
   submissionId: string;
+  projectId: string;
   submittedAt: string;
   githubId: string;
   name: string;
   problemTitle: string;
   status: SubmissionStatus;
+  score: number | null;
   memoryUsage: number | null;
   timeUsage: number | null;
   language?: string;
@@ -27,9 +30,9 @@ export interface GlobalSubmission {
 export interface UserProjectSubmission {
   submissionId: string;
   status: SubmissionStatus;
-  score: number;
-  memoryUsage: number;
-  timeExecution: number;
+  score: number | null;
+  memoryUsage: number | null;
+  timeExecution: number | null;
   language: string;
   submittedAt: string;
 }
@@ -38,10 +41,10 @@ export interface UserProjectSubmission {
 export interface TestDetail {
   methodName: string;
   status: 'PASS' | 'FAIL' | SubmissionStatus;
-  durationMs: number;
+  durationMs: number | null;
   message: string | null;
   isHidden: boolean;
-  score: number;
+  score: number | null;
 }
 
 export interface AdminSubmissionDetail {
@@ -50,7 +53,7 @@ export interface AdminSubmissionDetail {
   githubId: string;
   repoUrl: string;
   status: SubmissionStatus;
-  score: number;
+  score: number | null;
   memoryUsage: number | null;
   timeExecution: number | null;
   submittedAt: string;

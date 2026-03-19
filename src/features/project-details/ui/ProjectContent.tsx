@@ -2,6 +2,7 @@
 
 import React from "react";
 import type { ProjectDetail } from "../model/project";
+import { ScoringList } from "./ScoringList";
 
 interface Props {
   projectDetail: ProjectDetail | null;
@@ -11,7 +12,7 @@ interface Props {
 export function ProjectContent({ projectDetail, isLoading }: Props) {
   if (isLoading || !projectDetail) {
     return (
-      <div className="animate-pulse space-y-4">
+      <div className="animate-pulse space-y-4 p-6 bg-white/5 border border-white/10 rounded-xl">
         <div className="h-8 bg-white/10 rounded w-1/3"></div>
         <div className="h-4 bg-white/10 rounded w-full"></div>
         <div className="h-4 bg-white/10 rounded w-5/6"></div>
@@ -37,7 +38,7 @@ export function ProjectContent({ projectDetail, isLoading }: Props) {
   };
 
   return (
-    <div className="text-white/80 p-6 bg-white/5 border border-white/10 rounded-xl backdrop-blur-md h-full overflow-y-auto">
+    <div className="text-white/80 p-6 bg-white/5 border border-white/10 rounded-xl backdrop-blur-md h-full overflow-y-auto scrollbar-hide">
       <h1 className="text-3xl font-bold mb-4 text-white">{projectDetail.title}</h1>
       <div className="flex gap-2 mb-8 text-sm text-white/50 border-b border-white/10 pb-4">
         <span className="bg-white/10 px-2 py-1 rounded text-white">{projectDetail.type}</span>
@@ -45,7 +46,14 @@ export function ProjectContent({ projectDetail, isLoading }: Props) {
       </div>
       
       <div className="prose prose-invert max-w-none">
-        {renderMarkdown(projectDetail.description)}
+        <div className="mb-10">
+          {renderMarkdown(projectDetail.description)}
+        </div>
+
+        {/* Scoring Distribution Section */}
+        <div className="mb-10">
+          <ScoringList scorePolicy={projectDetail.scorePolicy} />
+        </div>
 
         <div className="mt-8 p-4 bg-black/20 rounded-lg border border-white/5">
           <h3 className="text-sm font-semibold text-white/50 mb-2 uppercase tracking-wider">프로젝트 스켈레톤 저장소</h3>
@@ -62,3 +70,4 @@ export function ProjectContent({ projectDetail, isLoading }: Props) {
     </div>
   );
 }
+

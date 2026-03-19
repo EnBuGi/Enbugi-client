@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Submission, UserProjectSubmission, AdminSubmissionDetail, GlobalSubmission } from "@/features/mentor-projects/model/submission";
+import type { Submission, UserProjectSubmission, AdminSubmissionDetail, GlobalSubmission } from "../model/submission";
 import { mentorProjectApi } from "@/features/mentor-projects/api/projects";
 
 export function useMentorSubmissions(projectId: string) {
