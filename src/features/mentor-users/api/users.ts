@@ -24,3 +24,7 @@ export async function updateUserRole(
     body: JSON.stringify({ role }),
   });
 }
+
+export async function fetchMyProfile(): Promise<User> {
+  return await fetchWithAuth('/api/v1/users/me');
+}

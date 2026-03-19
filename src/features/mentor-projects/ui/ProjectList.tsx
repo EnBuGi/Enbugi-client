@@ -20,13 +20,34 @@ import { Text } from '@/shared/components/ui/Text';
 import { Pagination } from '@/shared/components/ui/pagination/Pagination';
 import { useRouter } from 'next/navigation';
 import { useMentorProjects } from '@/features/mentor-projects/hooks/useProjects';
+import { ConfirmModal } from '@/shared/components/ui/ConfirmModal';
+import type { MentorProject } from '@/features/mentor-projects/model/project';
 
 export function ProjectList() {
   const router = useRouter();
-  const { data: projects = [], isLoading } = useMentorProjects();
+  const { data: projects = [], isLoading, deleteProject } = useMentorProjects();
   const [search, setSearch] = useState('');
   const [generationFilter, setGenerationFilter] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Deletion state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<MentorProject | null>(null);
+
+  const handleDeleteClick = (project: MentorProject) => {
+    setProjectToDelete(project);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (projectToDelete) {
+      const success = await deleteProject(projectToDelete.id);
+      if (success) {
+        setIsDeleteModalOpen(false);
+        setProjectToDelete(null);
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -165,6 +186,7 @@ export function ProjectList() {
                           size="icon"
                           className="text-red-400 hover:text-red-300 hover:bg-red-950/30"
                           aria-label="Delete"
+                          onClick={() => handleDeleteClick(project)}
                         >
                           <Trash2 size={16} />
                         </Button>
@@ -195,6 +217,17 @@ export function ProjectList() {
           );
         })()}
       </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="프로젝트 삭제"
+        message={`"${projectToDelete?.title}" 프로젝트를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없으며 모든 제출 내역이 사라집니다.`}
+        confirmLabel="삭제"
+        cancelLabel="취소"
+        isDanger={true}
+      />
     </div>
   );
 }
