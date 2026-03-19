@@ -33,7 +33,7 @@ export function useSignup() {
             sessionStorage.removeItem('githubId');
             sessionStorage.removeItem('profileImageUrl');
             
-            router.push('/');
+            router.push('/mentee/projects');
             return true;
         } catch (err) {
             setError(err instanceof Error ? err.message : '회원가입 처리 중 오류가 발생했습니다.');

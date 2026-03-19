@@ -30,10 +30,9 @@ function GithubCallbackContent() {
           body: JSON.stringify({ code, state }),
         });
 
-        // RT는 백엔드에서 HttpOnly Cookie로 설정됨 — localStorage에 저장하지 않음
         localStorage.setItem('accessToken', result.accessToken);
         document.cookie = `accessToken=${result.accessToken}; path=/; max-age=3600; SameSite=Lax`;
-        router.push('/');
+        router.push('/mentee/projects');
       } catch (err) {
         if (err instanceof ApiError && err.status === 404) {
           // User not found, redirect to signup
