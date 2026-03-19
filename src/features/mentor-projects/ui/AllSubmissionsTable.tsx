@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import { Search, ChevronRight } from 'lucide-react';
 
@@ -15,6 +13,7 @@ import {
   TableBody,
   TableCell,
 } from '@/shared/components/ui/Table';
+import { AdminSubmissionDetailModal } from './components/AdminSubmissionDetailModal';
 
 import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-projects/model/submission';
 
@@ -38,7 +37,7 @@ function StatusBadge({ status }: { status: SubmissionStatus }) {
         intent="success"
         tone="soft"
         size="sm"
-        className="text-emerald-400 border-emerald-400/30 font-bold tracking-wider px-3 text-emerald-400 border-emerald-400/30"
+        className="text-emerald-400 border-emerald-400/30 font-bold tracking-wider px-3"
       >
         PASS
       </Badge>
@@ -50,7 +49,7 @@ function StatusBadge({ status }: { status: SubmissionStatus }) {
         intent="danger"
         tone="soft"
         size="sm"
-        className="text-red-400 border-red-400/30 font-bold tracking-wider px-3 text-red-400 border-red-400/30"
+        className="text-red-400 border-red-400/30 font-bold tracking-wider px-3"
       >
         FAIL
       </Badge>
@@ -73,6 +72,8 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterOption>('ALL');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   React.useEffect(() => {
     setCurrentPage(1);
@@ -81,7 +82,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
   const filtered = submissions.filter((s) => {
     const q = search.toLowerCase();
     const matchSearch =
-      s.name.includes(q) ||
+      s.name.toLowerCase().includes(q) ||
       s.githubId.toLowerCase().includes(q) ||
       s.problemTitle.toLowerCase().includes(q);
     const matchFilter = filter === 'ALL' || s.status === filter;
@@ -93,6 +94,11 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
   );
+
+  const handleRowClick = (submissionId: string) => {
+    setSelectedSubId(submissionId);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -148,6 +154,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
               <TableRow
                 key={s.submissionId}
                 className="group cursor-pointer hover:bg-white/5"
+                onClick={() => handleRowClick(s.submissionId)}
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
@@ -244,6 +251,12 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
           onPageChange={setCurrentPage}
         />
       </div>
+
+      <AdminSubmissionDetailModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        submissionId={selectedSubId} 
+      />
     </div>
   );
 }
