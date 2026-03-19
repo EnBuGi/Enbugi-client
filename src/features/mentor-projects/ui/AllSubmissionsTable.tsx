@@ -106,7 +106,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="w-full sm:w-[320px]">
           <InputBox
-            placeholder="이름, Github ID, 문제명 검색..."
+            placeholder="이름, 문제명 검색..."
             icon={<Search size={18} />}
             value={search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
@@ -135,12 +135,11 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]  text-center">제출번호</TableHead>
+              <TableHead className="w-[100px] text-center">제출번호</TableHead>
               <TableHead className="w-[150px] text-center">제출 시각</TableHead>
               <TableHead className="w-[115px] text-center">제출 시간</TableHead>
-              <TableHead className="w-[130px]">Github ID</TableHead>
               <TableHead className="w-[100px]">이름</TableHead>
-              <TableHead className="w-[200px]">문제 이름</TableHead>
+              <TableHead className="w-[300px]">문제 이름</TableHead>
               <TableHead className="w-[100px] text-center">결과</TableHead>
               <TableHead className="w-[110px] text-center">메모리</TableHead>
               <TableHead className="w-[90px]  text-center">시간</TableHead>
@@ -150,7 +149,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
           </TableHeader>
 
           <TableBody>
-            {paginated.map((s) => (
+            {paginated.map((s, index) => (
               <TableRow
                 key={s.submissionId}
                 className="group cursor-pointer hover:bg-white/5"
@@ -158,7 +157,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
-                  #{s.submissionId.substring(0, 8)}
+                  {(currentPage - 1) * PAGE_SIZE + index}
                 </TableCell>
 
                 {/* 제출 시간 */}
@@ -172,11 +171,6 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
                   {timeAgo(s.submittedAt)}
                 </TableCell>
 
-
-                {/* Github Id */}
-                <TableCell>
-                  <span className="font-mono text-zinc-400 text-sm">{s.githubId}</span>
-                </TableCell>
 
                 {/* 이름 */}
                 <TableCell>
@@ -233,7 +227,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
 
             {paginated.length === 0 && (
               <TableRow>
-                <TableCell colSpan={11} className="h-32 text-center text-zinc-500">
+                <TableCell colSpan={10} className="h-32 text-center text-zinc-500">
                   검색 결과가 없습니다.
                 </TableCell>
               </TableRow>
