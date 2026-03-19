@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Modal } from '@/shared/components/ui/Modal';
+import { Text } from '@/shared/components/ui/Text';
+import { cn } from '@/shared/utils/cn';
+import { Activity, CheckCircle2, Clock, Database, ExternalLink, Loader2, XCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { AdminSubmissionDetailResponse, mentorProjectApi } from '../../api/projects';
 import { SubmissionStatusBadge } from './SubmissionStatusBadge';
-import { Text } from '@/shared/components/ui/Text';
-import { Loader2, ExternalLink, ChevronDown, ChevronRight, Activity, Clock, Database, CheckCircle2, XCircle } from 'lucide-react';
-import { cn } from '@/shared/utils/cn';
 
 interface AdminSubmissionDetailModalProps {
   isOpen: boolean;
@@ -26,9 +26,8 @@ export function AdminSubmissionDetailModal({ isOpen, onClose, submissionId }: Ad
           setIsLoading(true);
           const data = await mentorProjectApi.getAdminSubmissionDetail(submissionId);
           setDetail(data);
-        } catch (err: any) {
-          console.error('Failed to fetch submission detail:', err);
-          setError(err.message || '제출 정보를 불러오는 중 오류가 발생했습니다.');
+        } catch (err) {
+          setError('제출 정보를 불러오는 중 오류가 발생했습니다.');
         } finally {
           setIsLoading(false);
         }

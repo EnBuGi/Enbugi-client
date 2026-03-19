@@ -132,7 +132,7 @@ export function SubmissionDetailModal({ projectId, submissionId, isOpen, onClose
                           )}
                           <div>
                             <Text className={cn("font-bold", test.isHidden ? "text-white/40 italic" : "text-white/90")}>
-                              {test.methodName}
+                              {test.isHidden ? "Hidden Test Case" : test.methodName}
                             </Text>
                             {test.isHidden && (
                               <span className="text-[10px] bg-amber-500/10 text-amber-500 px-1.5 py-0.5 rounded ml-2 border border-amber-500/20">Hidden</span>

@@ -65,7 +65,7 @@ export const ScoringList = ({ scorePolicy }: Props) => {
                       "font-bold text-base tracking-tight",
                       test.isHidden ? "text-white/40 italic" : "text-white/90"
                     )}>
-                      {test.name}
+                      {test.isHidden ? "Hidden Test Case" : test.name}
                     </Text>
                     {test.isHidden && (
                       <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-full border border-amber-500/20 font-bold uppercase tracking-tighter">
