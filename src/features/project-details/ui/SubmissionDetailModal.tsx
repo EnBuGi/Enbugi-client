@@ -8,6 +8,7 @@ import { Button } from "../../../shared/components/ui/Button";
 import { projectApi } from "../api/project";
 import type { SubmissionDetail, TestDetailResult } from "../model/project";
 import { cn } from "../../../shared/utils/cn";
+import { SubmissionStatusBadge } from "../../../shared/components/ui/submission/SubmissionStatusBadge";
 
 interface Props {
   projectId: string;
@@ -65,14 +66,7 @@ export function SubmissionDetailModal({ projectId, submissionId, isOpen, onClose
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard 
               label="상태" 
-              value={
-                <Text className={cn(
-                  "font-bold",
-                  detail.status === "COMPLETED" ? "text-emerald-400" : "text-amber-400"
-                )}>
-                  {detail.status === "COMPLETED" ? "검증 완료" : "채점 중"}
-                </Text>
-              }
+              value={<SubmissionStatusBadge status={detail.status} />}
               icon={<Activity size={16} className="text-primary" />}
             />
             <StatCard 
