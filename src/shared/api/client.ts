@@ -59,7 +59,7 @@ async function getAccessToken(): Promise<string | null> {
 /**
  * Helper to set the access token on the client side only.
  */
-function setAccessToken(token: string) {
+export function setAccessToken(token: string) {
   if (typeof window !== "undefined") {
     localStorage.setItem("accessToken", token);
     // Set cookie for Next.js Server Components to read. Valid for 1 hour.
@@ -67,127 +67,135 @@ function setAccessToken(token: string) {
   }
 }
 
+// Singleton promise for token reissuance to handle concurrent 401/403 errors
+let refreshPromise: Promise<string> | null = null;
+
 /**
  * Refreshes the access token using the refresh_token cookie.
  * @returns {Promise<string>} The new access token
  */
 export async function reissueToken(): Promise<string> {
-  const serverCookies = await getServerCookies();
-  
-  const response = await fetch(`${API_URL}/api/v1/auth/token/reissue`, {
-    method: "POST",
-    headers: {
-      ...(serverCookies ? { "Cookie": serverCookies } : {}),
-    },
-    credentials: "include", // Important to send/receive refresh_token cookie for client-side
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text().catch(() => "no-body");
-    const msg = `토큰 재발급에 실패했습니다. (Status: ${response.status}, Body: ${errorText})`;
-    console.error(`[reissueToken] ${msg}, hasCookies=${!!serverCookies}`);
-    throw new ApiError(response.status, msg);
+  // If a refresh is already in progress, return the existing promise
+  if (refreshPromise) {
+    return refreshPromise;
   }
 
-  const data = await response.json();
-  if (data.accessToken) {
-    setAccessToken(data.accessToken);
-    return data.accessToken;
-  }
-  
-  throw new Error("응답에 액세스 토큰이 포함되어 있지 않습니다.");
+  refreshPromise = (async () => {
+    try {
+      const serverCookies = await getServerCookies();
+      
+      const response = await fetch(`${API_URL}/api/v1/auth/token/reissue`, {
+        method: "POST",
+        headers: {
+          ...(serverCookies ? { "Cookie": serverCookies } : {}),
+        },
+        credentials: "include", // Important to send/receive refresh_token cookie for client-side
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "no-body");
+        const msg = `토큰 재발급에 실패했습니다. (Status: ${response.status}, Body: ${errorText})`;
+        console.error(`[reissueToken] ${msg}, hasCookies=${!!serverCookies}`);
+        throw new ApiError(response.status, msg);
+      }
+
+      const data = await response.json();
+      if (data.accessToken) {
+        setAccessToken(data.accessToken);
+        return data.accessToken;
+      }
+      
+      throw new Error("응답에 액세스 토큰이 포함되어 있지 않습니다.");
+    } finally {
+      // Clear the promise after completion (success or failure)
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
 }
 
 /**
  * A wrapper around the native fetch API that handles:
  * 1. Automatic Authorization header attachment
- * 2. 403 error interception for token reissue
+ * 2. 401/403 error interception for token reissue
  * 3. Automatic retry after reissue
  * 4. Redirection to login on persistent failure
  */
 export async function fetchWithAuth(endpoint: string, options: RequestInit = {}): Promise<any> {
-  const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint}`;
-  const serverCookies = await getServerCookies();
-  const token = await getAccessToken();
+    const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint}`;
+    const serverCookies = await getServerCookies();
+    const token = await getAccessToken();
 
-  const getHeaders = () => {
-    const headers: Record<string, string> = {
-      ...(token ? { "Authorization": `Bearer ${token}` } : {}),
-      ...(serverCookies ? { "Cookie": serverCookies } : {}),
-      ...(options.headers as Record<string, string> || {}),
+    const getHeaders = (currentToken: string | null) => {
+        const headers: Record<string, string> = {
+            ...(currentToken ? { "Authorization": `Bearer ${currentToken}` } : {}),
+            ...(serverCookies ? { "Cookie": serverCookies } : {}),
+            ...(options.headers as Record<string, string> || {}),
+        };
+
+        if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
+            headers["Content-Type"] = "application/json";
+        }
+
+        return headers;
     };
 
-    // Only set Content-Type to application/json if it's not FormData and not already set
-    if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
-      headers["Content-Type"] = "application/json";
-    }
+    const config: RequestInit = {
+        ...options,
+        headers: getHeaders(token),
+        credentials: "include",
+    };
 
-    return headers;
-  };
-
-  const config: RequestInit = {
-    ...options,
-    headers: getHeaders(),
-    credentials: "include", // Ensure cookies are sent (needed for refresh flow)
-  };
-
-  try {
-    let response = await fetch(url, config);
-
-    // If 401/403 (Unauthorized/Forbidden/Token Expired), attempt to reissue
-    if (response.status === 401 || response.status === 403) {
-      if (typeof window === "undefined") {
-        // We are on the server. Do NOT attempt to reissue because Server Components 
-        // cannot send the new refresh_token Set-Cookie header back to the browser.
-        // This causes the browser's refresh_token to become out of sync with the backend.
-        console.error("Server-side token expired. Need client-side reissue. Endpoint:", endpoint);
-        throw new ApiError(response.status, "서버 렌더링 중 토큰이 만료되었습니다. 클라이언트에서 재발급이 필요합니다.");
-      }
-
-      try {
-        const newAccessToken = await reissueToken();
-        
-        // Retry original request with new token
-        const retryConfig: RequestInit = {
-          ...config,
-          headers: {
-            ...config.headers,
-            "Authorization": `Bearer ${newAccessToken}`,
-          },
-        };
-        
-        response = await fetch(url, retryConfig);
-        // Let the retry response fall through to the general error handling below.
-      } catch (reissueErr) {
-        // Reissue itself failed
-        console.error("Token reissue failed:", reissueErr);
-        handleLogout();
-        throw reissueErr;
-      }
-    }
-
-    if (!response.ok) {
-        // If still not ok or other error
-        if (response.status === 401) {
-            handleLogout();
-        }
-        const errorText = await response.text().catch(() => "{}");
-        const errorData = (() => {
-           try { return JSON.parse(errorText); } catch { return {}; }
-        })();
-        throw new ApiError(response.status, errorData.message || "API 요청 중 오류가 발생했습니다.", errorData);
-    }
-
-    const resText = await response.text().catch(() => "{}");
     try {
-      return JSON.parse(resText);
-    } catch {
-      return {};
+        let response = await fetch(url, config);
+
+        if (response.status === 401 || response.status === 403) {
+            if (typeof window === "undefined") {
+                console.error("Server-side token expired. Need client-side reissue. Endpoint:", endpoint);
+                throw new ApiError(response.status, "서버 렌더링 중 토큰이 만료되었습니다. 클라이언트에서 재발급이 필요합니다.");
+            }
+
+            try {
+                // Use the singleton refreshPromise
+                const newAccessToken = await reissueToken();
+
+                // Retry original request with new token
+                const retryConfig: RequestInit = {
+                    ...config,
+                    headers: getHeaders(newAccessToken),
+                };
+
+                response = await fetch(url, retryConfig);
+            } catch (reissueErr) {
+                console.error("Token reissue failed:", reissueErr);
+                handleLogout();
+                throw reissueErr;
+            }
+        }
+
+        if (!response.ok) {
+            // If still not ok or other error
+            if (response.status === 401) {
+                handleLogout();
+            }
+            const errorText = await response.text().catch(() => "{}");
+            const errorData = (() => {
+                try { return JSON.parse(errorText); } catch { return {}; }
+            })();
+            throw new ApiError(response.status, errorData.message || "API 요청 중 오류가 발생했습니다.", errorData);
+        }
+
+        const resText = await response.text().catch(() => "{}");
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            try { return JSON.parse(resText); } catch { return {}; }
+        }
+        return resText;
+    } catch (error) {
+        if (error instanceof ApiError) throw error;
+        throw new Error(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
     }
-  } catch (error) {
-    if (error instanceof ApiError) throw error;
-    throw new Error(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
-  }
 }
 
 /**
@@ -198,7 +206,7 @@ export async function publicFetch(endpoint: string, options: RequestInit = {}): 
   const config: RequestInit = {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(!(options.body instanceof FormData) ? { "Content-Type": "application/json" } : {}),
       ...(options.headers || {}),
     },
     credentials: 'include',
@@ -207,11 +215,19 @@ export async function publicFetch(endpoint: string, options: RequestInit = {}): 
   const response = await fetch(url, config);
   
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
+    const errorText = await response.text().catch(() => "{}");
+    const errorData = (() => {
+        try { return JSON.parse(errorText); } catch { return {}; }
+    })();
     throw new ApiError(response.status, errorData.message || 'API 요청 중 오류가 발생했습니다.', errorData);
   }
 
-  return await response.json();
+  const resText = await response.text().catch(() => "{}");
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    try { return JSON.parse(resText); } catch { return {}; }
+  }
+  return resText;
 }
 
 /**
