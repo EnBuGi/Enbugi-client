@@ -1,9 +1,17 @@
 export type ProjectType = "SPRING" | "REACT" | "JAVA";
 export type SubmissionStatus = "ENQUEUING" | "QUEUED" | "PROCESSING" | "COMPLETED" | "SYSTEM_ERROR" | "CANCELLED";
 
+export interface TestCase {
+  id: string | null;
+  name: string;
+  score: number;
+  isHidden: boolean;
+}
+
 export interface ScorePolicy {
-  // Add specific fields if needed
-  [key: string]: any;
+  timeLimit: number;
+  memoryLimit: number;
+  cases: TestCase[];
 }
 
 export interface ProjectDetail {

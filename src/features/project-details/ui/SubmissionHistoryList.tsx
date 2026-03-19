@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { Ban } from "lucide-react";
-import { Card } from "@/shared/components/ui/Card/Card";
-import { Text } from "@/shared/components/ui/Text";
-import { Badge, type BadgeIntent } from "@/shared/components/ui/badge/Badge";
-import { Button } from "@/shared/components/ui/Button";
+import { Card } from "../../../shared/components/ui/Card/Card";
+import { Text } from "../../../shared/components/ui/Text";
+import { Badge, type BadgeIntent } from "../../../shared/components/ui/badge/Badge";
+import { Button } from "../../../shared/components/ui/Button";
 import { projectApi } from "../api/project";
 import { SubmissionDetailModal } from "./SubmissionDetailModal";
 import type { SubmissionHistory } from "../model/project";
@@ -116,13 +116,13 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
       </Card>
 
       {/* Detail Modal */}
-      {selectedSubmissionId && (
-        <SubmissionDetailModal
-          projectId={projectId}
-          submissionId={selectedSubmissionId}
-          onClose={() => setSelectedSubmissionId(null)}
-        />
-      )}
+      <SubmissionDetailModal
+        projectId={projectId}
+        submissionId={selectedSubmissionId ?? ""}
+        isOpen={!!selectedSubmissionId}
+        onClose={() => setSelectedSubmissionId(null)}
+      />
+
     </>
   );
 }
