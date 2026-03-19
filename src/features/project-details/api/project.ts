@@ -5,7 +5,7 @@ import type {
   SubmissionDetail
 } from "../model/project";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 const getAuthHeaders = () => {
   const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
