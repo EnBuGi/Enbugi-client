@@ -6,6 +6,7 @@ import { Search, ChevronRight } from 'lucide-react';
 import { Text } from '@/shared/components/ui/Text';
 import { InputBox } from '@/shared/components/ui/InputBox/InputBox';
 import { Badge } from '@/shared/components/ui/badge/Badge';
+import { Pagination } from '@/shared/components/ui/pagination/Pagination';
 import {
   Table,
   TableHeader,
@@ -71,6 +72,11 @@ interface AllSubmissionsTableProps {
 export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterOption>('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [search, filter]);
 
   const filtered = submissions.filter((s) => {
     const q = search.toLowerCase();
@@ -81,6 +87,12 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
     const matchFilter = filter === 'ALL' || s.status === filter;
     return matchSearch && matchFilter;
   });
+
+  const PAGE_SIZE = 15;
+  const paginated = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
   return (
     <div className="flex flex-col gap-6">
@@ -132,7 +144,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
           </TableHeader>
 
           <TableBody>
-            {filtered.map((s) => (
+            {paginated.map((s) => (
               <TableRow
                 key={s.submissionNo}
                 className="group cursor-pointer hover:bg-white/5"
@@ -212,7 +224,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
               </TableRow>
             ))}
 
-            {filtered.length === 0 && (
+            {paginated.length === 0 && (
               <TableRow>
                 <TableCell colSpan={11} className="h-32 text-center text-zinc-500">
                   검색 결과가 없습니다.
@@ -223,10 +235,15 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
         </Table>
       </div>
 
-      {/* 총 건수 */}
-      <Text variant="tiny" className="text-zinc-600 text-right">
-        총 {filtered.length}건
-      </Text>
+      {/* 총 건수 및 페이지네이션 */}
+      <div className="flex justify-center mt-4 pt-4">
+        <Pagination
+          total={filtered.length}
+          currentPage={currentPage}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }
