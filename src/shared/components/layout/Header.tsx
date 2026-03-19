@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { LogOut, Sun, User } from 'lucide-react';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 type HeaderProps = {
   centerSlot?: React.ReactNode;
@@ -15,6 +16,7 @@ type HeaderProps = {
 export function Header({ centerSlot, rightSlot }: HeaderProps) {
   const pathname = usePathname();
   const isMentor = pathname?.startsWith('/mentor');
+  const { logout } = useAuth();
 
   return (
     <header className="relative z-20 border-b border-white/5 bg-background">
@@ -78,6 +80,7 @@ export function Header({ centerSlot, rightSlot }: HeaderProps) {
             type="button"
             className="p-2 text-sub hover:text-white transition rounded-md hover:bg-surface/50"
             aria-label="Logout"
+            onClick={logout}
           >
             <LogOut size={18} />
           </button>
