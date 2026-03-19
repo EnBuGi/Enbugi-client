@@ -31,15 +31,15 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
   const stats = {
     total: submissions.length,
     submitted: submissions.filter(s => s.status !== null).length,
-    pass: submissions.filter(s => s.status === 'COMPLETED' && s.score === 100).length,
-    fail: submissions.filter(s => s.status === 'SYSTEM_ERROR' || (s.status === 'COMPLETED' && s.score < 100)).length,
+    pass: submissions.filter(s => s.status === 'COMPLETED' && s.score !== null && s.score === 100).length,
+    fail: submissions.filter(s => s.status === 'SYSTEM_ERROR' || (s.status === 'COMPLETED' && s.score !== null && s.score < 100)).length,
   };
 
   const filteredSubmissions = submissions.filter(sub => {
     const matchesSearch = sub.name.includes(search) || sub.githubId.includes(search);
     const isSubmitted = sub.status !== null;
-    const isPass = sub.status === 'COMPLETED' && sub.score === 100;
-    const isFail = sub.status === 'SYSTEM_ERROR' || (sub.status === 'COMPLETED' && sub.score < 100);
+    const isPass = sub.status === 'COMPLETED' && sub.score !== null && sub.score === 100;
+    const isFail = sub.status === 'SYSTEM_ERROR' || (sub.status === 'COMPLETED' && sub.score !== null && sub.score < 100);
     
     if (filterType === 'PASS') return matchesSearch && isPass;
     if (filterType === 'FAIL') return matchesSearch && isFail;

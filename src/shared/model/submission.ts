@@ -9,4 +9,6 @@ export type SubmissionStatus =
   | "FAILURE" 
   | "ERROR" 
   | "SYSTEM_ERROR" 
-  | "CANCELLED";
+  | "CANCELLED"
+  | "PASS"
+  | "FAIL";

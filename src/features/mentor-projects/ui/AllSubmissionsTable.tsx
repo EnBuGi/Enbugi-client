@@ -15,7 +15,7 @@ import {
 } from '@/shared/components/ui/Table';
 import { AdminSubmissionDetailModal } from './components/AdminSubmissionDetailModal';
 
-import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-projects/model/submission';
+import type { GlobalSubmission, SubmissionStatus } from "../model/submission";
 
 // ── 상대 시간 변환 ────────────────────────────────────────────────────
 function timeAgo(dateStr: string): string {

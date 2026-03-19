@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, Circle, Lock } from "lucide-react";
+import { Clock, Database, Lock, CheckCircle2 } from "lucide-react";
 import type { ScorePolicy } from "../model/project";
 import { Text } from "../../../shared/components/ui/Text";
 import { cn } from "../../../shared/utils/cn";

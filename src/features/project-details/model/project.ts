@@ -1,5 +1,6 @@
 export type ProjectType = "SPRING" | "REACT" | "JAVA";
-export type SubmissionStatus = "ENQUEUING" | "QUEUED" | "PROCESSING" | "COMPLETED" | "SYSTEM_ERROR" | "CANCELLED";
+import { SubmissionStatus } from "../../../shared/model/submission";
+export type { SubmissionStatus };
 
 export interface TestCase {
   id: string | null;

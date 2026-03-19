@@ -21,6 +21,8 @@ const statusMap: Record<SubmissionStatus, { intent: BadgeIntent; tone: BadgeTone
   ERROR: { intent: 'danger', tone: 'outline', label: '에러' },
   SYSTEM_ERROR: { intent: 'danger', tone: 'outline', label: '시스템 에러' },
   CANCELLED: { intent: 'neutral', tone: 'outline', label: '취소됨' },
+  PASS: { intent: 'success', tone: 'soft', label: '통과' },
+  FAIL: { intent: 'danger', tone: 'soft', label: '실패' },
 };
 
 export function SubmissionStatusBadge({ status, className }: SubmissionStatusBadgeProps) {
