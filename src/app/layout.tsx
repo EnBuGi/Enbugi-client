@@ -15,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'EN# OJ',
+  title: 'En#',
   description: 'En# Online Judge',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

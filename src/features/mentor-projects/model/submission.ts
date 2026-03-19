@@ -14,6 +14,7 @@ export interface Submission {
 // 전체 제출 현황 페이지용 확장 타입 (Admin Global History)
 export interface GlobalSubmission {
   submissionId: string;
+  projectId: string;
   submittedAt: string;
   githubId: string;
   name: string;

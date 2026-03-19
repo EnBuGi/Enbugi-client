@@ -20,7 +20,6 @@ const MENTOR_SECTIONS = [
         href: '/mentor/projects',
         icon: <BoxesIcon size={18} />,
       },
-      { label: 'Q&A', href: '/mentor/qna', icon: <MessageSquare size={18} /> },
       {
         label: 'Submissions',
         href: '/mentor/submissions',
@@ -32,11 +31,6 @@ const MENTOR_SECTIONS = [
     title: 'Users',
     items: [
       { label: 'Users', href: '/mentor/users', icon: <Users size={18} /> },
-      {
-        label: 'Settings / Roles',
-        href: '/mentor/settings',
-        icon: <Settings size={18} />,
-      },
     ],
   },
 ];
