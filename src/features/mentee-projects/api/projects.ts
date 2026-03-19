@@ -1,64 +1,47 @@
-import type { Project } from "@/features/mentee-projects/model/project";
-
-export const projects: Project[] = [
-    {
-        id: "p1",
-        type: "SPRING",
-        title: "SignUp Server",
-        startDate: "2026-02-01",
-        dueDate: "2026-03-18",
-        score: 100,
-        status: "ONGOING",
-    },
-    {
-        id: "p2",
-        type: "REACT",
-        title: "SignUp Client",
-        startDate: "2026-02-01",
-        dueDate: "2026-03-25",
-        score: 95,
-        status: "ONGOING",
-    },
-    {
-        id: "p3",
-        type: "JAVA",
-        title: "CMD",
-        startDate: "2025-11-01",
-        dueDate: "2025-11-15",
-        score: 90,
-        status: "DONE",
-    },
-    {
-        id: "p4",
-        type: "JAVA",
-        title: "Library",
-        startDate: "2025-10-01",
-        dueDate: "2025-10-20",
-        score: 100,
-        status: "DONE",
-    },
-    {
-        id: "p5",
-        type: "JAVA",
-        title: "Tic-Tac-Toe",
-        startDate: "2025-09-01",
-        dueDate: "2025-09-15",
-        score: 85,
-        status: "DONE",
-    },
-    {
-        id: "p6",
-        type: "JAVA",
-        title: "Star Pattern",
-        startDate: "2025-08-01",
-        dueDate: "2025-08-15",
-        score: 78,
-        status: "DONE",
-    },
-];
+import type { Project, ProjectStatus } from "@/features/mentee-projects/model/project";
 
 export async function fetchProjects(): Promise<Project[]> {
+    const accessToken = localStorage.getItem('accessToken');
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
-    await new Promise((r) => setTimeout(r, 10));
-    return projects;
+    try {
+        const response = await fetch(`${apiUrl}/api/v1/projects`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch projects');
+        }
+
+        const data = await response.json();
+        const now = new Date();
+
+        return data.map((item: any) => {
+            const startDate = new Date(item.startDate);
+            const dueDate = new Date(item.dueDate);
+            
+            let status: ProjectStatus = "BEFORE";
+            if (now >= startDate && now <= dueDate) {
+                status = "ONGOING";
+            } else if (now > dueDate) {
+                status = "DONE";
+            }
+
+            return {
+                id: item.id,
+                type: item.type,
+                title: item.title,
+                startDate: item.startDate.split('T')[0],
+                dueDate: item.dueDate.split('T')[0],
+                status: status,
+                score: undefined, // Score is not provided in list view
+            };
+        });
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        return [];
+    }
 }
