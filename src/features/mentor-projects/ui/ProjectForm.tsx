@@ -242,7 +242,7 @@ export function ProjectForm({
               type="submit"
               variant="destructive"
               className="border-none bg-red-900 px-12 font-bold text-white shadow-md hover:bg-red-800"
-              disabled={isSubmitting}
+              isLoading={isSubmitting}
             >
               {mode === 'edit' ? '수정 완료' : '최종 등록'}
             </Button>
