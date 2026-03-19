@@ -88,7 +88,7 @@ export function ProjectForm({
 
   const [formData, setFormData] = useState<AssignmentFormState>(
     initialData || {
-      generation: '',
+      generation: '26',
       type: '',
       title: '',
       description: '',
