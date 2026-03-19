@@ -32,7 +32,8 @@ export interface TestCodeParseResponse {
   testCodeKey: string;
 }
 
-export type SubmissionStatus = 'PENDING' | 'RUNNING' | 'SUCCESS' | 'FAILURE' | 'CANCELLED' | 'ERROR';
+import { SubmissionStatus } from "../../../shared/model/submission";
+export type { SubmissionStatus };
 
 export interface AdminProjectSubmissionSummaryResponse {
   userId: string;

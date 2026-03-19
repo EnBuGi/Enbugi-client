@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useAdminSubmissionDetail } from '@/features/mentor-projects/hooks/useAdminSubmissionDetail';
-import { AdminSubmissionDetailView } from '@/features/mentor-projects/ui/components/AdminSubmissionDetailView';
-import { Text } from '@/shared/components/ui/Text';
-import { Button } from '@/shared/components/ui/Button';
+import { useAdminSubmissionDetail } from "../../../../features/mentor-projects/hooks/useAdminSubmissionDetail";
+import { AdminSubmissionDetailView } from "../../../../features/mentor-projects/ui/components/AdminSubmissionDetailView";
+import { Text } from "../../../../shared/components/ui/Text";
+import { Button } from "../../../../shared/components/ui/Button";
 import { Loader2, ArrowLeft } from 'lucide-react';
 
 export default function MentorSubmissionDetailPage() {
@@ -25,7 +25,7 @@ export default function MentorSubmissionDetailPage() {
     return (
       <div className="p-8 text-center flex flex-col items-center gap-4">
         <Text variant="large" className="text-rose-400">{error || '제출 내용을 찾을 수 없습니다.'}</Text>
-        <Button onClick={() => router.back()} variant="outline">
+        <Button onClick={() => router.back()} variant="secondary">
           뒤로 가기
         </Button>
       </div>

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { X } from 'lucide-react';
-import { cn } from '@/shared/utils/cn';
+import { cn } from '../../utils/cn';
 import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
 

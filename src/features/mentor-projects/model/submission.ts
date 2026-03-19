@@ -1,4 +1,5 @@
-export type SubmissionStatus = 'ENQUEUING' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'SYSTEM_ERROR' | 'CANCELLED' | 'PASS' | 'FAIL';
+import { SubmissionStatus } from "../../../shared/model/submission";
+export type { SubmissionStatus };
 
 // 프로젝트별 제출 현황 요약 (Mentor Dashboard)
 export interface Submission {

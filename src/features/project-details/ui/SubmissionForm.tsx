@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { Send } from "lucide-react";
-import { Card } from "@/shared/components/ui/Card/Card";
-import { Text } from "@/shared/components/ui/Text";
-import { InputBox } from "@/shared/components/ui/InputBox/InputBox";
-import { Button } from "@/shared/components/ui/Button";
+import { Card } from "../../../shared/components/ui/Card/Card";
+import { Text } from "../../../shared/components/ui/Text";
+import { InputBox } from "../../../shared/components/ui/InputBox/InputBox";
+import { Button } from "../../../shared/components/ui/Button";
 import { useSubmitSubmission } from "../hooks/useSubmitSubmission";
 
 interface Props {
