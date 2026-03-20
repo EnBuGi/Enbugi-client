@@ -45,7 +45,7 @@ export function ProjectSubmissionStatusTable({ submissions, projectId }: Project
             </TableRow>
           </TableHeader>
           <TableBody>
-            {submissions.length === 0 ? (
+            {!submissions || submissions.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="h-32 text-center text-sub">
                   제출 내역이 없습니다.

@@ -45,7 +45,7 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
             <div className="h-12 bg-white/10 rounded w-full" />
             <div className="h-12 bg-white/10 rounded w-full" />
           </div>
-        ) : history.length === 0 ? (
+        ) : !history || history.length === 0 ? (
           <Text variant="small" className="text-center py-6 block !text-[var(--color-muted)]">
             제출된 프로젝트가 없습니다.
           </Text>

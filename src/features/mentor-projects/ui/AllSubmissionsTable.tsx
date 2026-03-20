@@ -184,7 +184,7 @@ export function AllSubmissionsTable({
               </TableRow>
             ))}
 
-            {submissions.length === 0 && (
+            {(!submissions || submissions.length === 0) && (
               <TableRow>
                 <TableCell colSpan={10} className="h-32 text-center text-zinc-500">
                   검색 결과가 없습니다.

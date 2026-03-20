@@ -103,12 +103,12 @@ export function AdminSubmissionDetailModal({ isOpen, onClose, submissionId }: Ad
             <div className="flex items-center justify-between">
               <Text variant="h4" className="font-bold">테스트 상세 결과</Text>
               <Text variant="small" className="text-sub">
-                총 {detail.testDetails.length}개 케이스
+                총 {detail.testDetails?.length || 0}개 케이스
               </Text>
             </div>
 
             <div className="space-y-3">
-              {detail.testDetails.map((test, idx) => (
+              {detail.testDetails?.map((test, idx) => (
                 <div key={idx} className="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
                   <div className="p-4 flex items-center justify-between">
                      <div className="flex items-center gap-3">
