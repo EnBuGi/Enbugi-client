@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { mentorProjectApi, AdminUserProjectSubmissionResponse } from '@/features/mentor-projects/api/projects';
 import { 
@@ -16,6 +16,7 @@ import { Text } from '@/shared/components/ui/Text';
 import { Button } from '@/shared/components/ui/Button';
 import { SubmissionStatusBadge } from '@/features/mentor-projects/ui/components/SubmissionStatusBadge';
 import { AdminSubmissionDetailModal } from '@/features/mentor-projects/ui/components/AdminSubmissionDetailModal';
+import { Pagination } from '@/shared/components/ui/pagination/Pagination';
 import { Loader2, ArrowLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 
@@ -26,24 +27,32 @@ export default function UserProjectSubmissionsPage() {
   const [submissions, setSubmissions] = useState<AdminUserProjectSubmissionResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const fetchSubmissions = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const data = await mentorProjectApi.getUserProjectSubmissions(projectId, userId, {
+        page: currentPage - 1,
+        size: pageSize
+      });
+      setSubmissions(data.content);
+      setTotalElements(data.totalElements);
+    } catch (err) {
+      setError('제출 이력을 불러오는 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [projectId, userId, currentPage]);
+
   useEffect(() => {
-    const fetchSubmissions = async () => {
-      try {
-        setIsLoading(true);
-        const data = await mentorProjectApi.getUserProjectSubmissions(projectId, userId);
-        setSubmissions(data);
-      } catch (err) {
-        setError('제출 이력을 불러오는 중 오류가 발생했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchSubmissions();
-  }, [projectId, userId]);
+  }, [fetchSubmissions]);
 
   const handleRowClick = (submissionId: string) => {
     setSelectedSubId(submissionId);
@@ -118,6 +127,17 @@ export default function UserProjectSubmissionsPage() {
           </TableBody>
         </Table>
       </Card>
+
+      {totalElements > 0 && (
+        <div className="flex justify-center mt-6">
+          <Pagination
+            total={totalElements}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
 
       <AdminSubmissionDetailModal 
         isOpen={isModalOpen} 

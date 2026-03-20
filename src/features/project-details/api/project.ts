@@ -1,4 +1,5 @@
 import { fetchWithAuth } from "../../../shared/api/client";
+import { PageResponse, PageableParams } from "../../../shared/api/types";
 import type { 
   ProjectDetail, 
   SubmitResponse, 
@@ -25,8 +26,16 @@ export const projectApi = {
   },
 
   // 채점 기록 조회
-  getSubmissionHistory: async (projectId: string): Promise<SubmissionHistory[]> => {
-    return fetchWithAuth(`/api/v1/projects/${projectId}/submissions`, {
+  getSubmissionHistory: async (projectId: string, params?: PageableParams): Promise<PageResponse<SubmissionHistory>> => {
+    const query = new URLSearchParams();
+    if (params?.page !== undefined) query.append("page", params.page.toString());
+    if (params?.size !== undefined) query.append("size", params.size.toString());
+    if (params?.sort) params.sort.forEach(s => query.append("sort", s));
+    
+    const queryString = query.toString();
+    const url = `/api/v1/projects/${projectId}/submissions${queryString ? `?${queryString}` : ""}`;
+
+    return fetchWithAuth(url, {
       method: "GET",
       cache: "no-store",
     });

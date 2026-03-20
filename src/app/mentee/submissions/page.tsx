@@ -5,7 +5,13 @@ import { Text } from '@/shared/components/ui/Text';
 import { useMySubmissions } from '@/features/mentee-submissions/hooks/useMySubmissions';
 
 export default function MySubmissionsPage() {
-  const { data: submissions, isLoading } = useMySubmissions();
+  const { 
+    data, 
+    isLoading, 
+    page, 
+    setPage, 
+    size 
+  } = useMySubmissions(0, 15);
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-[1200px] mx-auto px-8 py-8">
@@ -18,12 +24,17 @@ export default function MySubmissionsPage() {
       </div>
 
       {/* 테이블 */}
-      {isLoading ? (
+      {isLoading && !data ? (
         <div className="flex items-center justify-center h-64">
           <Text className="text-zinc-500">불러오는 중...</Text>
         </div>
       ) : (
-        <MySubmissionsTable submissions={submissions || []} />
+        <MySubmissionsTable 
+          data={data} 
+          page={page} 
+          onPageChange={setPage} 
+          pageSize={size} 
+        />
       )}
     </div>
   );

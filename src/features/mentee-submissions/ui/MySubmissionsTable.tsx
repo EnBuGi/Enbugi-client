@@ -14,6 +14,7 @@ import {
   TableCell,
 } from '@/shared/components/ui/Table';
 import { SubmissionDetailModal } from '@/features/project-details/ui/SubmissionDetailModal';
+import { PageResponse } from '@/shared/api/types';
 
 import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-projects/model/submission';
 
@@ -74,34 +75,30 @@ type FilterOption = typeof FILTER_OPTIONS[number];
 
 // ── 메인 컴포넌트 ─────────────────────────────────────────────────────
 interface MySubmissionsTableProps {
-  submissions: GlobalSubmission[];
+  data?: PageResponse<GlobalSubmission>;
+  page: number;
+  onPageChange: (page: number) => void;
+  pageSize: number;
 }
 
-export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
+export function MySubmissionsTable({ 
+  data, 
+  page, 
+  onPageChange, 
+  pageSize 
+}: MySubmissionsTableProps) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterOption>('ALL');
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedSubmission, setSelectedSubmission] = useState<{ subId: string; projectId: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [search, filter]);
+  const submissions = data?.content || [];
+  const totalElements = data?.totalElements || 0;
 
-  const filtered = submissions.filter((s) => {
-    const q = search.toLowerCase();
-    const matchSearch = s.problemTitle.toLowerCase().includes(q);
-    const sStatus = (s.status === 'PASS' || s.status === 'COMPLETED') ? 'PASS' : (s.status === 'FAIL' || s.status === 'SYSTEM_ERROR') ? 'FAIL' : 'PENDING';
-    const matchFilter = filter === 'ALL' || sStatus === filter;
-    return matchSearch && matchFilter;
-  });
-
-  const PAGE_SIZE = 15;
-  const paginated = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
-
+  // NOTE: Server-side filtering is not implemented in the backend yet for this endpoint, 
+  // but we should at least handle the pagination correctly.
+  // For now, we use the server-side pagination data.
+  
   const handleRowClick = (submissionId: string, projectId: string) => {
     setSelectedSubmission({ subId: submissionId, projectId });
     setIsModalOpen(true);
@@ -113,7 +110,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="w-full sm:w-[320px]">
           <InputBox
-            placeholder="문제명 검색..."
+            placeholder="프로젝트 제목 검색..."
             icon={<Search size={18} />}
             value={search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
@@ -145,7 +142,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
               <TableHead className="w-[100px] text-center">제출번호</TableHead>
               <TableHead className="w-[150px] text-center">제출 시각</TableHead>
               <TableHead className="w-[115px] text-center">제출 시간</TableHead>
-              <TableHead className="w-[300px]">문제 이름</TableHead>
+              <TableHead className="w-[300px]">프로젝트 제목</TableHead>
               <TableHead className="w-[100px] text-center">결과</TableHead>
               <TableHead className="w-[110px] text-center">메모리</TableHead>
               <TableHead className="w-[90px]  text-center">시간</TableHead>
@@ -155,7 +152,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
           </TableHeader>
 
           <TableBody>
-            {paginated.map((s, index) => (
+            {submissions.map((s, index) => (
               <TableRow
                 key={s.submissionId}
                 className="group cursor-pointer hover:bg-white/5"
@@ -163,7 +160,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
-                  {(currentPage - 1) * PAGE_SIZE + index}
+                  {page * pageSize + index + 1}
                 </TableCell>
 
                 {/* 제출 시간 */}
@@ -225,7 +222,7 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
               </TableRow>
             ))}
 
-            {paginated.length === 0 && (
+            {submissions.length === 0 && (
               <TableRow>
                 <TableCell colSpan={9} className="h-32 text-center text-zinc-500">
                   검색 결과가 없습니다.
@@ -239,18 +236,18 @@ export function MySubmissionsTable({ submissions }: MySubmissionsTableProps) {
       {/* 총 건수 및 페이지네이션 */}
       <div className="flex justify-center mt-4 pt-4">
         <Pagination
-          total={filtered.length}
-          currentPage={currentPage}
-          pageSize={PAGE_SIZE}
-          onPageChange={setCurrentPage}
+          total={totalElements}
+          currentPage={page + 1}
+          pageSize={pageSize}
+          onPageChange={(p) => onPageChange(p - 1)}
         />
       </div>
 
       {isModalOpen && selectedSubmission && (
-        <SubmissionDetailModal 
+        <SubmissionDetailModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)} 
-          submissionId={selectedSubmission.subId} 
+          onClose={() => setIsModalOpen(false)}
+          submissionId={selectedSubmission.subId}
           projectId={selectedSubmission.projectId}
         />
       )}
