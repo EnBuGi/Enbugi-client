@@ -3,7 +3,8 @@ import { Search, ChevronRight } from 'lucide-react';
 
 import { Text } from '@/shared/components/ui/Text';
 import { InputBox } from '@/shared/components/ui/InputBox/InputBox';
-import { Badge } from '@/shared/components/ui/badge/Badge';
+import { Badge, type BadgeIntent, type BadgeTone } from '@/shared/components/ui/badge/Badge';
+import { formatDate, timeAgo } from '@/shared/utils/date';
 import { Pagination } from '@/shared/components/ui/pagination/Pagination';
 import {
   Table,
@@ -18,52 +19,35 @@ import { PageResponse } from '@/shared/api/types';
 
 import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-projects/model/submission';
 
-// ── 상대 시간 변환 ────────────────────────────────────────────────────
-function timeAgo(dateStr: string): string {
-  const past = new Date(dateStr.replace(' ', 'T'));
-  const now = new Date();
-  const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
-
-  if (diff < 60) return `${diff}초 전`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
-  return `${Math.floor(diff / 86400)}일 전`;
-}
 
 // ── 결과 배지 ────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: SubmissionStatus }) {
-  if (status === 'PASS' || status === 'COMPLETED') { // Backend might return COMPLETED
-    return (
-      <Badge
-        intent="success"
-        tone="soft"
-        size="sm"
-        className="text-emerald-400 border-emerald-400/30 font-bold tracking-wider px-3"
-      >
-        PASS
-      </Badge>
-    );
-  }
-  if (status === 'FAIL' || status === 'SYSTEM_ERROR') {
-    return (
-      <Badge
-        intent="danger"
-        tone="soft"
-        size="sm"
-        className="text-red-400 border-red-400/30 font-bold tracking-wider px-3"
-      >
-        FAIL
-      </Badge>
-    );
-  }
+  const statusMap: Record<SubmissionStatus, { intent: BadgeIntent; tone: BadgeTone; label: string }> = {
+    PENDING: { intent: 'neutral', tone: 'soft', label: '대기 중' },
+    ENQUEUING: { intent: 'neutral', tone: 'soft', label: '대기 중' },
+    QUEUED: { intent: 'neutral', tone: 'soft', label: '대기 중' },
+    RUNNING: { intent: 'warning', tone: 'soft', label: '채점 중' },
+    PROCESSING: { intent: 'warning', tone: 'soft', label: '채점 중' },
+    SUCCESS: { intent: 'success', tone: 'soft', label: '성공' },
+    COMPLETED: { intent: 'success', tone: 'soft', label: '성공' },
+    FAILURE: { intent: 'danger', tone: 'soft', label: '실패' },
+    ERROR: { intent: 'danger', tone: 'soft', label: '에러' },
+    SYSTEM_ERROR: { intent: 'danger', tone: 'soft', label: '시스템 에러' },
+    CANCELLED: { intent: 'neutral', tone: 'soft', label: '취소됨' },
+    PASS: { intent: 'success', tone: 'soft', label: 'PASS' },
+    FAIL: { intent: 'danger', tone: 'soft', label: 'FAIL' },
+  };
+
+  const config = statusMap[status] || statusMap.PENDING;
+
   return (
     <Badge
-      intent="neutral"
-      tone="soft"
+      intent={config.intent}
+      tone={config.tone}
       size="sm"
-      className="text-zinc-500 border-white/10 font-bold tracking-wider px-3"
+      className="font-bold tracking-wider px-3"
     >
-      {status || 'PENDING'}
+      {config.label}
     </Badge>
   );
 }
@@ -164,8 +148,8 @@ export function MySubmissionsTable({
                 </TableCell>
 
                 {/* 제출 시간 */}
-                <TableCell className="text-center font-mono text-zinc-400 text-xs">
-                  {s.submittedAt}
+                <TableCell className="text-center font-mono text-zinc-400 text-xs text-nowrap">
+                  {formatDate(s.submittedAt)}
                 </TableCell>
 
 
