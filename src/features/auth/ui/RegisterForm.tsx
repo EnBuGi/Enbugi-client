@@ -28,7 +28,7 @@ export const RegisterForm = ({ inviteInfo, token, code }: RegisterFormProps) => 
     const [localError, setLocalError] = useState<string | null>(null);
 
     const currentYearGen = new Date().getFullYear() - 2000;
-    const generationOptions = Array.from({ length: currentYearGen - 1 }, (_, i) => ({
+    const generationOptions = Array.from({ length: currentYearGen }, (_, i) => ({
         label: `${i + 1}기`,
         value: (i + 1).toString(),
     })).reverse();

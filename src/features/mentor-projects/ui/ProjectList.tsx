@@ -79,8 +79,9 @@ export function ProjectList() {
               placeholder="전체 기수"
               items={[
                 { label: '전체 기수', value: 'ALL' },
-                { label: '25기', value: '25' },
                 { label: '26기', value: '26' },
+                { label: '25기', value: '25' },
+                { label: '24기', value: '24' },
               ]}
               value={generationFilter}
               onChange={(val) => setGenerationFilter(String(val))}
