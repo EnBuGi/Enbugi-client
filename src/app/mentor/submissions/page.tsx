@@ -1,11 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import { AllSubmissionsTable } from '@/features/mentor-projects/ui/AllSubmissionsTable';
 import { Text } from '@/shared/components/ui/Text';
 import { useAllSubmissions } from '@/features/mentor-projects/hooks/useSubmissions';
 
 export default function SubmissionsPage() {
-  const { data: submissions, isLoading } = useAllSubmissions();
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
+  const { data: submissions, totalElements, isLoading } = useAllSubmissions(currentPage - 1, pageSize);
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-[1200px] mx-auto px-8 py-8">
@@ -23,7 +26,13 @@ export default function SubmissionsPage() {
           <Text className="text-zinc-500">불러오는 중...</Text>
         </div>
       ) : (
-        <AllSubmissionsTable submissions={submissions || []} />
+        <AllSubmissionsTable 
+          submissions={submissions || []} 
+          totalElements={totalElements}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+        />
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 import { fetchWithAuth } from "@/shared/api/client";
 import { ProjectType } from "../model/project";
+import { PageResponse, PageableParams } from "@/shared/api/types";
 
 export interface TestCaseDto {
   id?: string;
@@ -131,16 +132,30 @@ export const mentorProjectApi = {
     fetchWithAuth(`/api/v1/admin/projects/${projectId}/submissions/summary`),
 
   /** 특정 유저의 프로젝트 제출 현황 조회 (관리자용) */
-  getUserProjectSubmissions: (projectId: string, userId: string): Promise<AdminUserProjectSubmissionResponse[]> =>
-    fetchWithAuth(`/api/v1/admin/projects/${projectId}/users/${userId}/submissions`),
+  getUserProjectSubmissions: (projectId: string, userId: string, params?: PageableParams): Promise<PageResponse<AdminUserProjectSubmissionResponse>> => {
+    const searchParams = new URLSearchParams();
+    if (params?.page !== undefined) searchParams.append("page", params.page.toString());
+    if (params?.size !== undefined) searchParams.append("size", params.size.toString());
+    
+    const queryString = searchParams.toString();
+    const endpoint = `/api/v1/admin/projects/${projectId}/users/${userId}/submissions${queryString ? `?${queryString}` : ""}`;
+    return fetchWithAuth(endpoint);
+  },
 
   /** 제출 상세 조회 (관리자용) */
   getAdminSubmissionDetail: (submissionId: string): Promise<AdminSubmissionDetailResponse> =>
     fetchWithAuth(`/api/v1/admin/submissions/${submissionId}`),
 
   /** 모든 프로젝트의 모든 제출 내역 조회 (전역 관리용) */
-  getAllSubmissions: (): Promise<AdminGlobalSubmissionResponse[]> => 
-    fetchWithAuth("/api/v1/admin/submissions"),
+  getAllSubmissions: (params?: PageableParams): Promise<PageResponse<AdminGlobalSubmissionResponse>> => {
+    const searchParams = new URLSearchParams();
+    if (params?.page !== undefined) searchParams.append("page", params.page.toString());
+    if (params?.size !== undefined) searchParams.append("size", params.size.toString());
+
+    const queryString = searchParams.toString();
+    const endpoint = `/api/v1/admin/submissions${queryString ? `?${queryString}` : ""}`;
+    return fetchWithAuth(endpoint);
+  },
 
   /** 프로젝트 삭제 */
   deleteProject: (id: string) =>

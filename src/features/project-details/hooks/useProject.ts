@@ -17,10 +17,10 @@ export function useProject(projectId: string) {
     try {
       const [pData, hData] = await Promise.all([
         projectApi.getProjectDetail(projectId),
-        projectApi.getSubmissionHistory(projectId)
+        projectApi.getSubmissionHistory(projectId, { size: 100 }) // Fetch last 100 for side list
       ]);
       setProjectDetail(pData);
-      setHistory(hData);
+      setHistory(hData.content);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Failed to load project data"));
     } finally {

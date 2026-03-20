@@ -66,34 +66,21 @@ type FilterOption = typeof FILTER_OPTIONS[number];
 // ── 메인 컴포넌트 ─────────────────────────────────────────────────────
 interface AllSubmissionsTableProps {
   submissions: GlobalSubmission[];
+  totalElements: number;
+  currentPage: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
 }
 
-export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
-  const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<FilterOption>('ALL');
-  const [currentPage, setCurrentPage] = useState(1);
+export function AllSubmissionsTable({ 
+  submissions, 
+  totalElements, 
+  currentPage, 
+  pageSize, 
+  onPageChange 
+}: AllSubmissionsTableProps) {
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [search, filter]);
-
-  const filtered = submissions.filter((s) => {
-    const q = search.toLowerCase();
-    const matchSearch =
-      s.name.toLowerCase().includes(q) ||
-      s.githubId.toLowerCase().includes(q) ||
-      s.problemTitle.toLowerCase().includes(q);
-    const matchFilter = filter === 'ALL' || s.status === filter;
-    return matchSearch && matchFilter;
-  });
-
-  const PAGE_SIZE = 15;
-  const paginated = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
 
   const handleRowClick = (submissionId: string) => {
     setSelectedSubId(submissionId);
@@ -102,34 +89,6 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* ── 필터 바 ── */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="w-full sm:w-[320px]">
-          <InputBox
-            placeholder="이름, 프로젝트 제목 검색..."
-            icon={<Search size={18} />}
-            value={search}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <div className="flex p-1 bg-surface ring-1 ring-white/10 rounded-lg">
-          {FILTER_OPTIONS.map((opt) => (
-            <button
-              key={opt}
-              type="button"
-              onClick={() => setFilter(opt)}
-              className={`px-5 py-1.5 rounded-md text-sm font-semibold transition-all ${filter === opt
-                ? 'bg-red-950 text-red-400 shadow-sm'
-                : 'text-zinc-400 hover:text-white hover:bg-white/5'
-                }`}
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* ── 테이블 ── */}
       <div className="rounded-xl border border-white/10 bg-surface/50 overflow-hidden">
         <Table>
@@ -149,7 +108,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
           </TableHeader>
 
           <TableBody>
-            {paginated.map((s, index) => (
+            {submissions.map((s, index) => (
               <TableRow
                 key={s.submissionId}
                 className="group cursor-pointer hover:bg-white/5"
@@ -157,7 +116,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
-                  {(currentPage - 1) * PAGE_SIZE + index}
+                  {totalElements - ((currentPage - 1) * pageSize + index)}
                 </TableCell>
 
                 {/* 제출 시간 */}
@@ -225,7 +184,7 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
               </TableRow>
             ))}
 
-            {paginated.length === 0 && (
+            {submissions.length === 0 && (
               <TableRow>
                 <TableCell colSpan={10} className="h-32 text-center text-zinc-500">
                   검색 결과가 없습니다.
@@ -239,10 +198,10 @@ export function AllSubmissionsTable({ submissions }: AllSubmissionsTableProps) {
       {/* 총 건수 및 페이지네이션 */}
       <div className="flex justify-center mt-4 pt-4">
         <Pagination
-          total={filtered.length}
+          total={totalElements}
           currentPage={currentPage}
-          pageSize={PAGE_SIZE}
-          onPageChange={setCurrentPage}
+          pageSize={pageSize}
+          onPageChange={onPageChange}
         />
       </div>
 

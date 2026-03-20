@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { GlobalSubmission } from "@/features/mentor-projects/model/submission";
 import { menteeSubmissionApi } from "../api/submissions";
+import { PageResponse } from "@/shared/api/types";
 
-export function useMySubmissions() {
-  const [data, setData] = useState<GlobalSubmission[] | undefined>(undefined);
+export function useMySubmissions(initialPage = 0, initialSize = 10) {
+  const [data, setData] = useState<PageResponse<GlobalSubmission> | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(initialPage);
+  const [size, setSize] = useState(initialSize);
 
   useEffect(() => {
     let mounted = true;
     setIsLoading(true);
-    menteeSubmissionApi.getMySubmissions()
+    menteeSubmissionApi.getMySubmissions({ page, size })
       .then((d) => {
         if (mounted) setData(d);
       })
@@ -19,7 +22,14 @@ export function useMySubmissions() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [page, size]);
 
-  return { data, isLoading } as const;
+  return { 
+    data, 
+    isLoading, 
+    page, 
+    setPage, 
+    size, 
+    setSize 
+  } as const;
 }

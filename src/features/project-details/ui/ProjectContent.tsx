@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { ProjectDetail } from "../model/project";
 import { ScoringList } from "./ScoringList";
 
@@ -20,23 +21,6 @@ export function ProjectContent({ projectDetail, isLoading }: Props) {
     );
   }
 
-  const renderMarkdown = (text: string) => {
-    return text.split("\n\n").map((paragraph, index) => {
-      const boldFormatted = paragraph.split(/(\*\*.*?\*\*)/).map((part, i) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          return <strong key={i} className="font-bold text-white">{part.slice(2, -2)}</strong>;
-        }
-        return part;
-      });
-
-      return (
-        <p key={index} className="mb-4 leading-relaxed whitespace-pre-wrap">
-          {boldFormatted}
-        </p>
-      );
-    });
-  };
-
   return (
     <div className="text-white/80 p-6 bg-white/5 border border-white/10 rounded-xl backdrop-blur-md h-full overflow-y-auto scrollbar-hide">
       <h1 className="text-3xl font-bold mb-4 text-white">{projectDetail.title}</h1>
@@ -46,8 +30,10 @@ export function ProjectContent({ projectDetail, isLoading }: Props) {
       </div>
       
       <div className="prose prose-invert max-w-none">
-        <div className="mb-10">
-          {renderMarkdown(projectDetail.description)}
+        <div className="mb-10 markdown-body !bg-transparent !text-zinc-200">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {projectDetail.description}
+          </ReactMarkdown>
         </div>
 
         {/* Scoring Distribution Section */}

@@ -24,16 +24,20 @@ export function useMentorSubmissions(projectId: string) {
     return { data, isLoading } as const;
 }
 
-export function useUserProjectSubmissions(projectId: string, userId: string) {
+export function useUserProjectSubmissions(projectId: string, userId: string, page: number = 0, size: number = 10) {
     const [data, setData] = useState<UserProjectSubmission[] | undefined>(undefined);
+    const [totalElements, setTotalElements] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
-        mentorProjectApi.getUserProjectSubmissions(projectId, userId)
-            .then((d) => {
-                if (mounted) setData(d);
+        mentorProjectApi.getUserProjectSubmissions(projectId, userId, { page, size })
+            .then((res) => {
+                if (mounted) {
+                    setData(res.content);
+                    setTotalElements(res.totalElements);
+                }
             })
             .finally(() => {
                 if (mounted) setIsLoading(false);
@@ -41,9 +45,9 @@ export function useUserProjectSubmissions(projectId: string, userId: string) {
         return () => {
             mounted = false;
         };
-    }, [projectId, userId]);
+    }, [projectId, userId, page, size]);
 
-    return { data, isLoading } as const;
+    return { data, totalElements, isLoading } as const;
 }
 
 export function useAdminSubmissionDetail(submissionId: string) {
@@ -68,16 +72,20 @@ export function useAdminSubmissionDetail(submissionId: string) {
     return { data, isLoading } as const;
 }
 
-export function useAllSubmissions() {
+export function useAllSubmissions(page: number = 0, size: number = 10) {
     const [data, setData] = useState<GlobalSubmission[] | undefined>(undefined);
+    const [totalElements, setTotalElements] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
-        mentorProjectApi.getAllSubmissions()
-            .then((d) => {
-                if (mounted) setData(d);
+        mentorProjectApi.getAllSubmissions({ page, size })
+            .then((res) => {
+                if (mounted) {
+                    setData(res.content);
+                    setTotalElements(res.totalElements);
+                }
             })
             .finally(() => {
                 if (mounted) setIsLoading(false);
@@ -85,7 +93,7 @@ export function useAllSubmissions() {
         return () => {
             mounted = false;
         };
-    }, []);
+    }, [page, size]);
 
-    return { data, isLoading } as const;
+    return { data, totalElements, isLoading } as const;
 }
