@@ -3,6 +3,7 @@
 import React, { use } from "react";
 import { useProject } from "../../../../features/project-details/hooks/useProject";
 import { ProjectContent } from "../../../../features/project-details/ui/ProjectContent";
+import { ScoringList } from "../../../../features/project-details/ui/ScoringList";
 import { SubmissionForm } from "../../../../features/project-details/ui/SubmissionForm";
 import { SubmissionHistoryList } from "../../../../features/project-details/ui/SubmissionHistoryList";
 
@@ -41,7 +42,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="container mx-auto max-w-[1400px] h-[calc(100vh-80px)] overflow-hidden py-6 flex flex-col gap-4">
+    <div className="container mx-auto max-w-[1400px] py-6 flex flex-col gap-4">
       {/* Top Header: Back Button */}
       <div className="flex items-center px-2">
         <Link href="/mentee/projects">
@@ -56,14 +57,17 @@ export default function ProjectDetailPage({ params }: PageProps) {
         </Link>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 h-full flex-1 overflow-hidden">
-        {/* Left Side: Project Description (60%) */}
-        <div className="lg:w-[60%] h-full overflow-y-auto pr-2 scrollbar-hide">
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left Side: Project Description & Scoring (70%) */}
+        <div className="lg:w-[70%] flex flex-col gap-6 pr-2">
           <ProjectContent projectDetail={projectDetail} isLoading={isLoading} />
+          {projectDetail && !isLoading && (
+            <ScoringList scorePolicy={projectDetail.scorePolicy} />
+          )}
         </div>
 
-        {/* Right Side: Submission & History (40%) */}
-        <div className="lg:w-[40%] flex flex-col gap-6 h-full overflow-y-auto pr-2 scrollbar-hide">
+        {/* Right Side: Submission & History (30%) */}
+        <div className="lg:w-[30%] flex flex-col gap-6 pr-2">
           <SubmissionForm projectId={projectId} />
           <SubmissionHistoryList projectId={projectId} history={history} isLoading={isLoading} onRefetch={refetch} />
         </div>
