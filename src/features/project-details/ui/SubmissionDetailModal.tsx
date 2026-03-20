@@ -114,12 +114,12 @@ export function SubmissionDetailModal({ projectId, submissionId, isOpen, onClose
             <div className="flex items-center justify-between">
               <Text variant="h4" className="font-bold">테스트 상세 결과</Text>
               <Text variant="small" className="text-sub">
-                총 {detail.details.length}개 케이스
+                총 {detail.details?.length || 0}개 케이스
               </Text>
             </div>
 
             <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-hide">
-              {detail.details.map((test, idx) => {
+              {detail.details?.map((test, idx) => {
                 const isPassed = test.status === "PASSED";
                 return (
                   <div key={idx} className="bg-white/5 rounded-xl border border-white/5 overflow-hidden">

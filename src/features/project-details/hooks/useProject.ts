@@ -20,7 +20,7 @@ export function useProject(projectId: string) {
         projectApi.getSubmissionHistory(projectId, { size: 100 }) // Fetch last 100 for side list
       ]);
       setProjectDetail(pData);
-      setHistory(hData.content);
+      setHistory(hData?.content || []);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Failed to load project data"));
     } finally {
