@@ -10,4 +10,5 @@ export interface MentorProject {
   description?: string;
   skeletonUrl?: string;
   testCodeKey?: string;
+  testCodeUrl?: string;
 }

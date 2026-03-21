@@ -30,6 +30,7 @@ export interface ProjectCreateRequest {
 export interface TestCodeParseResponse {
   methodNames: string[];
   testCodeKey: string;
+  testCodeUrl: string;
 }
 
 import { SubmissionStatus } from "../../../shared/model/submission";
