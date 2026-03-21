@@ -15,6 +15,7 @@ import {
 } from '@/shared/components/ui/Table';
 import { SubmissionDetailModal } from '@/features/project-details/ui/SubmissionDetailModal';
 import { PageResponse } from '@/shared/api/types';
+import { formatDateTime } from '@/shared/utils/date';
 
 import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-projects/model/submission';
 
@@ -165,7 +166,7 @@ export function MySubmissionsTable({
 
                 {/* 제출 시간 */}
                 <TableCell className="text-center font-mono text-zinc-400 text-xs">
-                  {s.submittedAt}
+                  {formatDateTime(s.submittedAt)}
                 </TableCell>
 
 
