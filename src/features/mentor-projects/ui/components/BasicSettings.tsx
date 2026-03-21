@@ -40,6 +40,8 @@ export function BasicSettings({
           error={errors.generation}
           items={[
             { label: '26기', value: '26' },
+            { label: '25기', value: '25' },
+            { label: '24기', value: '24' },
           ]}
         />
 
