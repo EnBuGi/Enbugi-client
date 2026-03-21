@@ -82,6 +82,7 @@ export function GradingSettings({
         </Text>
         <div className="flex items-center gap-3">
           <Button 
+            type="button"
             variant="ghost" 
             size="sm" 
             className="text-xs text-zinc-500 hover:text-white"
