@@ -107,11 +107,13 @@ export function ProjectList() {
           </TableHeader>
           <TableBody>
             {(() => {
-              const filteredProjects = projects.filter(project => {
-                const matchesSearch = project.title.toLowerCase().includes(search.toLowerCase());
-                const matchesGeneration = !generationFilter || generationFilter === 'ALL' || String(project.generation) === generationFilter;
-                return matchesSearch && matchesGeneration;
-              });
+              const filteredProjects = (projects || [])
+                .filter(project => {
+                  const title = project.title || '';
+                  const matchesSearch = title.toLowerCase().includes(search.toLowerCase());
+                  const matchesGeneration = !generationFilter || generationFilter === 'ALL' || String(project.generation) === generationFilter;
+                  return matchesSearch && matchesGeneration;
+                });
 
               const getProjectStatus = (startDate: string, dueDate: string) => {
                 const now = new Date();
