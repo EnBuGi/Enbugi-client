@@ -14,6 +14,7 @@ import {
   TableCell,
 } from '@/shared/components/ui/Table';
 import { AdminSubmissionDetailModal } from './components/AdminSubmissionDetailModal';
+import { formatDateTime } from '@/shared/utils/date';
 
 import type { GlobalSubmission, SubmissionStatus } from "../model/submission";
 
@@ -121,7 +122,7 @@ export function AllSubmissionsTable({
 
                 {/* 제출 시간 */}
                 <TableCell className="text-center font-mono text-zinc-400 text-xs">
-                  {s.submittedAt}
+                  {formatDateTime(s.submittedAt)}
                 </TableCell>
 
 
