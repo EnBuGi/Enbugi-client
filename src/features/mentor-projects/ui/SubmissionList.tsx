@@ -35,8 +35,11 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
     fail: submissions.filter(s => s.status === 'SYSTEM_ERROR' || (s.status === 'COMPLETED' && s.score !== null && s.score < 100)).length,
   };
 
-  const filteredSubmissions = submissions.filter(sub => {
-    const matchesSearch = sub.name.includes(search) || sub.githubId.includes(search);
+  const filteredSubmissions = (submissions || []).filter(sub => {
+    const name = sub.name || '';
+    const githubId = sub.githubId || '';
+    const matchesSearch = name.includes(search) || githubId.includes(search);
+    
     const isSubmitted = sub.status !== null;
     const isPass = sub.status === 'COMPLETED' && sub.score !== null && sub.score === 100;
     const isFail = sub.status === 'SYSTEM_ERROR' || (sub.status === 'COMPLETED' && sub.score !== null && sub.score < 100);
@@ -45,6 +48,10 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
     if (filterType === 'FAIL') return matchesSearch && isFail;
     if (filterType === '미제출') return matchesSearch && !isSubmitted;
     return matchesSearch;
+  }).sort((a, b) => {
+    const dateA = a.lastSubmittedAt || '';
+    const dateB = b.lastSubmittedAt || '';
+    return dateB.localeCompare(dateA);
   });
 
   const getStatusBadgeOptions = (status: string | null) => {

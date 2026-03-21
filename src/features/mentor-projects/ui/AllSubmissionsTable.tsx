@@ -20,7 +20,9 @@ import type { GlobalSubmission, SubmissionStatus } from "../model/submission";
 
 // ── 상대 시간 변환 ────────────────────────────────────────────────────
 function timeAgo(dateStr: string): string {
+  if (!dateStr || typeof dateStr !== 'string') return '-';
   const past = new Date(dateStr.replace(' ', 'T'));
+  if (isNaN(past.getTime())) return '-';
   const now = new Date();
   const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
 
