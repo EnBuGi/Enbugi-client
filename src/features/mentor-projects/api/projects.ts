@@ -23,7 +23,6 @@ export interface ProjectCreateRequest {
   dueDate: string;
   description?: string;
   skeletonUrl?: string;
-  testCodeUrl?: string;
   testCodeKey?: string;
   scorePolicy: ScorePolicyDto;
 }
