@@ -21,7 +21,9 @@ import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-proje
 
 // ── 상대 시간 변환 ────────────────────────────────────────────────────
 function timeAgo(dateStr: string): string {
+  if (!dateStr || typeof dateStr !== 'string') return '-';
   const past = new Date(dateStr.replace(' ', 'T'));
+  if (isNaN(past.getTime())) return '-';
   const now = new Date();
   const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
 
@@ -161,7 +163,7 @@ export function MySubmissionsTable({
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
-                  {page * pageSize + index + 1}
+                  {totalElements - (page * pageSize + index)}
                 </TableCell>
 
                 {/* 제출 시간 */}
