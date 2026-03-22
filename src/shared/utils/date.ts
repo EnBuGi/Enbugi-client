@@ -1,30 +1,30 @@
-/**
- * ISO 형식의 날짜 문자열을 yyyy-mm-dd hh:mm:ss 형식으로 변환합니다.
- * @param dateStr ISO 형식의 날짜 문자열 (예: 2026-03-20T13:43:52.057142)
- * @returns 포맷팅된 날짜 문자열
- */
-export const formatDateTime = (dateStr: string | null | undefined): string => {
-  if (!dateStr) return '-';
+export const formatDate = (dateStr: string) => {
+  if (!dateStr) return '';
+  // Convert standard SQL/ISO format with space to 'T' for better browser compatibility (Safari)
+  const d = new Date(dateStr.replace(' ', 'T'));
+  if (isNaN(d.getTime())) return dateStr;
   
-  try {
-    // 2026-03-20T13:43:52.057142 형식을 처리하기 위해 T가 없는 경우 대비
-    const ISOStr = dateStr.includes('T') ? dateStr : dateStr.replace(' ', 'T');
-    const date = new Date(ISOStr);
-    
-    if (isNaN(date.getTime())) return dateStr;
-
-    const pad = (n: number) => n.toString().padStart(2, '0');
-
-    const year = date.getFullYear();
-    const month = pad(date.getMonth() + 1);
-    const day = pad(date.getDate());
-    const hours = pad(date.getHours());
-    const minutes = pad(date.getMinutes());
-    const seconds = pad(date.getSeconds());
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  } catch (error) {
-    console.error('Failed to format date:', error);
-    return dateStr;
-  }
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  const year = d.getFullYear();
+  const month = pad(d.getMonth() + 1);
+  const day = pad(d.getDate());
+  const hours = pad(d.getHours());
+  const minutes = pad(d.getMinutes());
+  const seconds = pad(d.getSeconds());
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
+
+export function timeAgo(dateStr: string): string {
+  if (!dateStr) return '';
+  const past = new Date(dateStr.replace(' ', 'T'));
+  if (isNaN(past.getTime())) return dateStr;
+  
+  const now = new Date();
+  const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
+
+  if (diff < 60) return `${diff}초 전`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+  return `${Math.floor(diff / 86400)}일 전`;
+}

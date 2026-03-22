@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { X, RotateCcw, CheckCircle2, XCircle, Activity, Clock, Database, ExternalLink, Loader2 } from "lucide-react";
 import { Modal } from "../../../shared/components/ui/Modal";
+import { formatDate } from "@/shared/utils/date";
 import { Text } from "../../../shared/components/ui/Text";
 import { Button } from "../../../shared/components/ui/Button";
 import { projectApi } from "../api/project";
@@ -86,7 +87,7 @@ export function SubmissionDetailModal({ projectId, submissionId, isOpen, onClose
             />
             <StatCard 
               label="제출일" 
-              value={new Date(detail.submittedAt).toLocaleDateString()}
+              value={formatDate(detail.submittedAt)}
               icon={<Clock size={16} className="text-amber-400" />}
             />
           </div>

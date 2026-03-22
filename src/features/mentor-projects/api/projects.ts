@@ -23,7 +23,6 @@ export interface ProjectCreateRequest {
   dueDate: string;
   description?: string;
   skeletonUrl?: string;
-  testCodeUrl?: string;
   testCodeKey?: string;
   scorePolicy: ScorePolicyDto;
 }
@@ -31,6 +30,7 @@ export interface ProjectCreateRequest {
 export interface TestCodeParseResponse {
   methodNames: string[];
   testCodeKey: string;
+  testCodeUrl: string;
 }
 
 import { SubmissionStatus } from "../../../shared/model/submission";
