@@ -128,7 +128,7 @@ export function MySubmissionsTable({
               <TableHead className="w-[100px] text-center">결과</TableHead>
               <TableHead className="w-[110px] text-center">메모리</TableHead>
               <TableHead className="w-[90px]  text-center">시간</TableHead>
-              <TableHead className="w-[110px] text-center">언어</TableHead>
+              <TableHead className="w-[110px] text-center">유형</TableHead>
               <TableHead className="w-[100px] text-center">상세보기</TableHead>
             </TableRow>
           </TableHeader>
@@ -184,15 +184,11 @@ export function MySubmissionsTable({
                   )}
                 </TableCell>
 
-                {/* 언어 */}
+                {/* 유형 */}
                 <TableCell className="text-center">
-                  {s.language ? (
-                    <span className="text-zinc-400 text-sm font-mono">
-                      {s.language}
-                    </span>
-                  ) : (
-                    <span className="text-zinc-600">-</span>
-                  )}
+                  <span className="text-zinc-400 text-sm font-mono">
+                    {s.projectType}
+                  </span>
                 </TableCell>
 
                 {/* 상세보기 */}
