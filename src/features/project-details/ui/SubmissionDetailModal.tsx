@@ -76,10 +76,11 @@ export function SubmissionDetailModal({ projectId, submissionId, isOpen, onClose
               icon={<CheckCircle2 size={16} className="text-emerald-400" />}
               highlight={detail.score === 100}
             />
-            {/* Note: In mentee API, duration is not explicitly in top level sometimes, but available in details. 
-                Using the first test's duration or similar if needed, or just showing score for now.
-                Actually, Mentee SubmissionDetail has score, totalTests, passedTests. 
-            */}
+            <StatCard 
+              label="유형" 
+              value={detail.projectType}
+              icon={<Database size={16} className="text-blue-400" />}
+            />
             <StatCard 
               label="패스 여부" 
               value={`${detail.passedTests ?? 0} / ${detail.totalTests ?? 0}`}

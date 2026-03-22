@@ -51,6 +51,7 @@ export interface AdminGlobalSubmissionResponse {
   projectId: string;
   name: string;
   problemTitle: string;
+  projectType: string;
   status: SubmissionStatus;
   score: number | null;
   submittedAt: string;
@@ -77,6 +78,7 @@ export interface AdminSubmissionDetailResponse {
   score: number | null;
   memoryUsage: number | null;
   timeExecution: number | null;
+  projectType: string;
   submittedAt: string;
   sourceCode: string;
   testDetails: TestDetailResponse[];
@@ -88,7 +90,7 @@ export interface AdminUserProjectSubmissionResponse {
   score: number | null;
   memoryUsage: number | null;
   timeExecution: number | null;
-  language: string;
+  projectType: string;
   submittedAt: string;
 }
 
