@@ -97,7 +97,7 @@ export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewP
                                 <SubmissionStatusBadge status={test.status} className="h-7 text-[11px]" />
                             </TableCell>
                             <TableCell>
-                                <Text variant="small" className={cn("font-medium", test.status === 'SUCCESS' ? "text-emerald-400" : "text-white")}>
+                                <Text variant="small" className={cn("font-medium", test.status === 'COMPLETED' ? "text-emerald-400" : "text-white")}>
                                     {test.score}점
                                 </Text>
                             </TableCell>

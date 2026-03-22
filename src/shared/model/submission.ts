@@ -4,11 +4,11 @@ export type SubmissionStatus =
   | "QUEUED" 
   | "RUNNING" 
   | "PROCESSING" 
-  | "SUCCESS" 
   | "COMPLETED" 
-  | "FAILURE" 
-  | "ERROR" 
+  | "WRONG_ANSWER"
   | "SYSTEM_ERROR" 
   | "CANCELLED"
-  | "PASS"
-  | "FAIL";
+  | "COMPILE_ERROR"
+  | "RUNTIME_ERROR"
+  | "TIME_LIMIT_EXCEEDED"
+  | "MEMORY_LIMIT_EXCEEDED";

@@ -112,7 +112,7 @@ export function AdminSubmissionDetailModal({ isOpen, onClose, submissionId }: Ad
                 <div key={idx} className="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
                   <div className="p-4 flex items-center justify-between">
                      <div className="flex items-center gap-3">
-                        {test.status === 'SUCCESS' ? (
+                        {test.status === 'COMPLETED' ? (
                           <CheckCircle2 size={18} className="text-emerald-400" />
                         ) : (
                           <XCircle size={18} className="text-rose-400" />
