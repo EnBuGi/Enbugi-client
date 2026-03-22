@@ -40,7 +40,7 @@ export interface UserProjectSubmission {
 // 제출 상세 조회 (Admin Detail)
 export interface TestDetail {
   methodName: string;
-  status: 'PASS' | 'FAIL' | SubmissionStatus;
+  status: SubmissionStatus;
   durationMs: number | null;
   message: string | null;
   isHidden: boolean;

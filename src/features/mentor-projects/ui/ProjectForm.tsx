@@ -79,7 +79,8 @@ export function ProjectForm({
     testCases?: TestCaseDto[], 
     timeLimit?: number, 
     memoryLimit?: number,
-    testCodeKey?: string 
+    testCodeKey?: string,
+    testCodeUrl?: string
   };
   initialId?: string;
   mode?: 'create' | 'edit';
@@ -102,6 +103,7 @@ export function ProjectForm({
   const [timeLimit, setTimeLimit] = useState<number>(initialData?.timeLimit || 2000);
   const [memoryLimit, setMemoryLimit] = useState<number>(initialData?.memoryLimit || 256);
   const [testCodeKey, setTestCodeKey] = useState<string>(initialData?.testCodeKey || '');
+  const [testCodeUrl, setTestCodeUrl] = useState<string>(initialData?.testCodeUrl || '');
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof AssignmentFormState, string>>
@@ -231,6 +233,8 @@ export function ProjectForm({
             onCasesChange={setTestCases}
             onLimitChange={(field, val) => field === 'timeLimit' ? setTimeLimit(val) : setMemoryLimit(val)}
             onTestCodeKeyChange={setTestCodeKey}
+            testCodeUrl={testCodeUrl}
+            onTestCodeUrlChange={setTestCodeUrl}
           />
 
           <div className="flex items-center justify-between pt-2">

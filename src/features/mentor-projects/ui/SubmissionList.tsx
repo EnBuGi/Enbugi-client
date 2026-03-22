@@ -32,7 +32,7 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
     total: submissions.length,
     submitted: submissions.filter(s => s.status !== null).length,
     pass: submissions.filter(s => s.status === 'COMPLETED' && s.score !== null && s.score === 100).length,
-    fail: submissions.filter(s => s.status === 'SYSTEM_ERROR' || (s.status === 'COMPLETED' && s.score !== null && s.score < 100)).length,
+    fail: submissions.filter(s => s.status !== null && (s.status !== 'COMPLETED' || (s.score !== null && s.score < 100)) && !['PENDING', 'ENQUEUING', 'QUEUED', 'RUNNING', 'PROCESSING'].includes(s.status)).length,
   };
 
   const filteredSubmissions = (submissions || []).filter(sub => {
@@ -42,7 +42,7 @@ export function SubmissionList({ projectId, projectTitle }: { projectId: string;
     
     const isSubmitted = sub.status !== null;
     const isPass = sub.status === 'COMPLETED' && sub.score !== null && sub.score === 100;
-    const isFail = sub.status === 'SYSTEM_ERROR' || (sub.status === 'COMPLETED' && sub.score !== null && sub.score < 100);
+    const isFail = sub.status !== null && (sub.status !== 'COMPLETED' || (sub.score !== null && sub.score < 100)) && !['PENDING', 'ENQUEUING', 'QUEUED', 'RUNNING', 'PROCESSING'].includes(sub.status);
     
     if (filterType === 'PASS') return matchesSearch && isPass;
     if (filterType === 'FAIL') return matchesSearch && isFail;

@@ -9,5 +9,6 @@ export interface MentorProject {
   dueDate: string;
   description?: string;
   skeletonUrl?: string;
+  testCodeKey?: string;
   testCodeUrl?: string;
 }

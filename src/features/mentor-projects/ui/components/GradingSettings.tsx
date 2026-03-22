@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Upload, X, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, X, CheckCircle2, AlertCircle, Download, FileArchive } from 'lucide-react';
 import { Text } from '@/shared/components/ui/Text';
 import { Button } from '@/shared/components/ui/Button';
 import { InputBox } from '@/shared/components/ui/InputBox/InputBox';
@@ -14,6 +14,8 @@ interface GradingSettingsProps {
   onCasesChange: (cases: TestCaseDto[]) => void;
   onLimitChange: (field: 'timeLimit' | 'memoryLimit', value: number) => void;
   onTestCodeKeyChange: (key: string) => void;
+  testCodeUrl?: string;
+  onTestCodeUrlChange: (url: string) => void;
 }
 
 export function GradingSettings({
@@ -23,6 +25,8 @@ export function GradingSettings({
   onCasesChange,
   onLimitChange,
   onTestCodeKeyChange,
+  testCodeUrl,
+  onTestCodeUrlChange,
 }: GradingSettingsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isParsing, setIsParsing] = React.useState(false);
@@ -41,6 +45,7 @@ export function GradingSettings({
       }));
       onCasesChange(newCases);
       onTestCodeKeyChange(response.testCodeKey);
+      onTestCodeUrlChange(response.testCodeUrl);
     } catch (error) {
       console.error('Failed to parse test code:', error);
       alert('테스트 코드 파싱에 실패했습니다. 올바른 .zip 파일인지 확인해주세요.');
@@ -196,6 +201,7 @@ export function GradingSettings({
                       />
                     </div>
                     <button
+                      type="button"
                       onClick={() => removeTestCase(idx)}
                       className="p-2 text-zinc-500 hover:text-red-400 transition-colors"
                     >
@@ -206,8 +212,9 @@ export function GradingSettings({
               ))}
             </div>
 
-            <div className="flex justify-center mt-2">
+            <div className="flex items-center justify-center gap-4 mt-2">
               <Button
+                type="button"
                 variant="secondary"
                 size="sm"
                 className="text-xs border-white/10"
@@ -215,6 +222,18 @@ export function GradingSettings({
               >
                 다른 파일로 대체하기
               </Button>
+              {testCodeUrl && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs text-blue-400 hover:text-blue-300 gap-2"
+                  onClick={() => window.open(testCodeUrl, '_blank')}
+                >
+                  <Download size={14} />
+                  현재 테스트 코드 다운로드
+                </Button>
+              )}
             </div>
           </div>
         )}

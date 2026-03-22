@@ -36,7 +36,8 @@ export default async function EditMentorProjectPage({
     timeLimit: project.scorePolicy?.timeLimit,
     memoryLimit: project.scorePolicy?.memoryLimit,
     testCases: project.scorePolicy?.cases || [],
-    testCodeKey: project.testCodeKey || ''
+    testCodeKey: project.testCodeKey || '',
+    testCodeUrl: project.testCodeUrl || ''
   };
 
   return (

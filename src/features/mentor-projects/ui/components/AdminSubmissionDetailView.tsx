@@ -12,6 +12,7 @@ import {
 import { AdminSubmissionDetailResponse } from '../../api/projects';
 import { SubmissionStatusBadge } from './SubmissionStatusBadge';
 import { cn } from '@/shared/utils/cn';
+import { formatDate } from '@/shared/utils/date';
 
 interface AdminSubmissionDetailViewProps {
   detail: AdminSubmissionDetailResponse;
@@ -51,7 +52,7 @@ export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewP
             <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <Text variant="small" className="text-sub">제출 시간</Text>
-                    <Text variant="small">{new Date(detail.submittedAt).toLocaleString()}</Text>
+                    <Text variant="small">{formatDate(detail.submittedAt)}</Text>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <Text variant="small" className="text-sub">메모리 사용량</Text>
@@ -96,7 +97,7 @@ export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewP
                                 <SubmissionStatusBadge status={test.status} className="h-7 text-[11px]" />
                             </TableCell>
                             <TableCell>
-                                <Text variant="small" className={cn("font-medium", test.status === 'SUCCESS' ? "text-emerald-400" : "text-white")}>
+                                <Text variant="small" className={cn("font-medium", test.status === 'COMPLETED' ? "text-emerald-400" : "text-white")}>
                                     {test.score}점
                                 </Text>
                             </TableCell>

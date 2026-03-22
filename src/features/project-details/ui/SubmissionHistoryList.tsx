@@ -6,6 +6,7 @@ import { Card } from "../../../shared/components/ui/Card/Card";
 import { Text } from "../../../shared/components/ui/Text";
 import { Button } from "../../../shared/components/ui/Button";
 import { SubmissionStatusBadge } from "../../../shared/components/ui/submission/SubmissionStatusBadge";
+import { formatDate } from "@/shared/utils/date";
 import { projectApi } from "../api/project";
 import { SubmissionDetailModal } from "./SubmissionDetailModal";
 import type { SubmissionHistory } from "../model/project";
@@ -64,14 +65,7 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
                   <div className="flex items-center gap-2 min-w-0">
                     <SubmissionStatusBadge status={item.status} />
                     <Text variant="tiny" className="!text-[var(--color-muted)] shrink-0">
-                      {new Date(item.submittedAt).toLocaleString("ko-KR", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit"
-                      })}
+                      {formatDate(item.submittedAt)}
                     </Text>
                   </div>
 
