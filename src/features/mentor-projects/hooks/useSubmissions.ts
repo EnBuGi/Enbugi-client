@@ -9,7 +9,7 @@ export function useMentorSubmissions(projectId: string) {
     useEffect(() => {
         let mounted = true;
         setIsLoading(true);
-        mentorProjectApi.getAdminSubmissions(projectId)
+        mentorProjectApi.getProjectSubmissionSummary(projectId)
             .then((d) => {
                 if (mounted) setData(d);
             })

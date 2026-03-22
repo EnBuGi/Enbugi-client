@@ -1,24 +1,22 @@
+import { ChevronRight, Search } from 'lucide-react';
 import React, { useState } from 'react';
-import { Search, ChevronRight } from 'lucide-react';
 
-import { Text } from '@/shared/components/ui/Text';
-import { InputBox } from '@/shared/components/ui/InputBox/InputBox';
+import { SubmissionDetailModal } from '@/features/project-details/ui/SubmissionDetailModal';
+import { PageResponse } from '@/shared/api/types';
 import { Badge, type BadgeIntent, type BadgeTone } from '@/shared/components/ui/badge/Badge';
-import { formatDate, timeAgo } from '@/shared/utils/date';
+import { InputBox } from '@/shared/components/ui/InputBox/InputBox';
 import { Pagination } from '@/shared/components/ui/pagination/Pagination';
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/shared/components/ui/Table';
-import { SubmissionDetailModal } from '@/features/project-details/ui/SubmissionDetailModal';
-import { PageResponse } from '@/shared/api/types';
+import { formatDate, timeAgo } from '@/shared/utils/date';
 
 import type { GlobalSubmission, SubmissionStatus } from '@/features/mentor-projects/model/submission';
-
 
 // ── 결과 배지 ────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: SubmissionStatus }) {
@@ -144,7 +142,7 @@ export function MySubmissionsTable({
               >
                 {/* 제출번호 */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
-                  {page * pageSize + index + 1}
+                  {totalElements - (page * pageSize + index)}
                 </TableCell>
 
                 {/* 제출 시간 */}

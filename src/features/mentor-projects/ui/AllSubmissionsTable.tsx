@@ -18,7 +18,6 @@ import { AdminSubmissionDetailModal } from './components/AdminSubmissionDetailMo
 
 import type { GlobalSubmission, SubmissionStatus } from "../model/submission";
 
-
 // ── 결과 배지 ────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: SubmissionStatus }) {
   const statusMap: Record<SubmissionStatus, { intent: BadgeIntent; tone: BadgeTone; label: string }> = {

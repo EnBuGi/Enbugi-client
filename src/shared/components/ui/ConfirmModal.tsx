@@ -63,8 +63,8 @@ export function ConfirmModal({
               variant={isDanger ? 'destructive' : 'primary'}
               className={`font-bold ${
                 isDanger
-                  ? 'bg-red-700 hover:bg-red-600'
-                  : 'bg-primary hover:bg-primary-hover'
+                  ? 'bg-red-700 hover:bg-red-600 text-white'
+                  : 'bg-primary hover:bg-primary-hover text-white'
               } border-none px-6`}
               onClick={onConfirm}
             >
