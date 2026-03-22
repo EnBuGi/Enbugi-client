@@ -21,9 +21,9 @@ export interface GlobalSubmission {
   problemTitle: string;
   status: SubmissionStatus;
   score: number | null;
+  projectType: string;
   memoryUsage: number | null;
   timeUsage: number | null;
-  language?: string;
 }
 
 // 특정 유저의 프로젝트 제출 이력
@@ -31,9 +31,9 @@ export interface UserProjectSubmission {
   submissionId: string;
   status: SubmissionStatus;
   score: number | null;
+  projectType: string;
   memoryUsage: number | null;
   timeExecution: number | null;
-  language: string;
   submittedAt: string;
 }
 

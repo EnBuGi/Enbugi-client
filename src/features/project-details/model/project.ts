@@ -31,6 +31,7 @@ export interface SubmissionHistory {
   repoUrl: string;
   status: SubmissionStatus;
   score: number;
+  projectType: string;
   submittedAt: string;
 }
 
@@ -55,5 +56,6 @@ export interface SubmissionDetail {
   totalTests: number | null;
   passedTests: number | null;
   submittedAt: string;
+  projectType: string;
   details: TestDetailResult[];
 }
