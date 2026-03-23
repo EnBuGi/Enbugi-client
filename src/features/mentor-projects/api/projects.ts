@@ -25,6 +25,7 @@ export interface ProjectCreateRequest {
   skeletonUrl?: string;
   testCodeKey?: string;
   scorePolicy: ScorePolicyDto;
+  canSubmit: boolean;
 }
 
 export interface TestCodeParseResponse {

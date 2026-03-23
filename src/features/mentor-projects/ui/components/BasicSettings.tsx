@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Text } from '@/shared/components/ui/Text';
 import { Calendar } from 'lucide-react';
 import { InputBox } from '@/shared/components/ui/InputBox/InputBox';
 import { Select } from '@/shared/components/ui/select/Select';
@@ -15,6 +16,7 @@ export type AssignmentFormState = {
   skeletonUrl: string;
   startDate: string;
   endDate: string;
+  canSubmit: boolean;
 };
 
 type BasicSettingsProps = {
@@ -111,6 +113,21 @@ export function BasicSettings({
           }
           error={errors.endDate}
         />
+      </div>
+
+      {/* Submission Enabled Toggle */}
+      <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-zinc-900/50 p-4">
+        <input
+          type="checkbox"
+          id="canSubmit"
+          checked={formData.canSubmit ?? true}
+          onChange={(e) => onChange('canSubmit', e.target.checked as any)}
+          className="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 accent-primary focus:ring-primary focus:ring-offset-zinc-900"
+        />
+        <label htmlFor="canSubmit" className="flex flex-col gap-0.5 cursor-pointer">
+          <Text variant="small" className="font-bold text-white">제출 가능 여부</Text>
+          <Text variant="tiny" className="text-zinc-500">이 옵션이 꺼져 있으면 프로젝트를 제출할 수 없습니다.</Text>
+        </label>
       </div>
     </div>
   );

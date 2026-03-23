@@ -10,11 +10,14 @@ import { useSubmitSubmission } from "../hooks/useSubmitSubmission";
 
 interface Props {
   projectId: string;
+  canSubmit?: boolean;
 }
 
-export function SubmissionForm({ projectId }: Props) {
+export function SubmissionForm({ projectId, canSubmit = true }: Props) {
   const [repoUrl, setRepoUrl] = useState("");
   const { submitSubmission, isSubmitting, error, success } = useSubmitSubmission(projectId);
+
+  const isDisabled = !canSubmit || isSubmitting;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,25 +31,25 @@ export function SubmissionForm({ projectId }: Props) {
         <InputBox
           label="Repository URL"
           type="url"
-          placeholder="https://github.com/username/repo"
+          placeholder={"https://github.com/username/repo"}
           value={repoUrl}
           onChange={(e) => setRepoUrl(e.target.value)}
-          disabled={isSubmitting}
+          disabled={isDisabled}
           required
           icon={<Send size={14} />}
           error={error || undefined}
-          helperText={success ? "제출이 완료되었습니다. 곧 채점이 시작됩니다." : undefined}
+          helperText={success ? "제출이 완료되었습니다. 곧 채점이 시작됩니다." : (!canSubmit ? "해당 스터디는 OJ 채점 대상이 아닙니다." : undefined)}
         />
 
         <Button
           type="submit"
-          variant="primary"
+          variant={canSubmit ? "primary" : "secondary"}
           size="lg"
           isLoading={isSubmitting}
-          disabled={isSubmitting || !repoUrl}
+          disabled={isDisabled || !repoUrl}
           className="w-full mt-1"
         >
-          {isSubmitting ? "제출 중..." : "제출하기"}
+          {isSubmitting ? "제출 중..." : (canSubmit ? "제출하기" : "제출 불가")}
         </Button>
       </form>
     </Card>

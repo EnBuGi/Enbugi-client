@@ -88,7 +88,7 @@ export function ProjectForm({
   const router = useRouter();
 
   const [formData, setFormData] = useState<AssignmentFormState>(
-    initialData || {
+    {
       generation: '26',
       type: '',
       title: '',
@@ -96,8 +96,10 @@ export function ProjectForm({
       skeletonUrl: '',
       startDate: '',
       endDate: '',
+      canSubmit: true,
+      ...initialData,
     }
-  );
+);
 
   const [testCases, setTestCases] = useState<TestCaseDto[]>(initialData?.testCases || []);
   const [timeLimit, setTimeLimit] = useState<number>(initialData?.timeLimit || 2000);
@@ -167,6 +169,7 @@ export function ProjectForm({
           memoryLimit,
           cases: testCases,
         },
+        canSubmit: formData.canSubmit,
       };
 
       if (mode === 'create') {
