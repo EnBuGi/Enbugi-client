@@ -30,7 +30,7 @@ export const LoginForm = () => {
 
             <div className="text-center">
                 <Text variant="tiny" className="text-muted text-xs leading-relaxed">
-                    로그인 시 <span className="font-semibold text-primary/80">GitHub 프로필(이름,이메일)</span> 정보가 제공되며,<br />
+                    로그인 시 <span className="font-semibold text-primary/80">GitHub 프로필(이름,이메일) 및 비공개 레파지토리 접근</span> 권한이 요청되며,<br />
                     이용약관 및 개인정보처리방침에 동의하게 됩니다.
                 </Text>
             </div>
