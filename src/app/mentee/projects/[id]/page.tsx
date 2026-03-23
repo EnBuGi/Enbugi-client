@@ -68,7 +68,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
 
         {/* Right Side: Submission & History (30%) */}
         <div className="lg:w-[30%] flex flex-col gap-6 pr-2">
-          <SubmissionForm projectId={projectId} />
+          <SubmissionForm projectId={projectId} canSubmit={projectDetail?.canSubmit} />
           <SubmissionHistoryList projectId={projectId} history={history} isLoading={isLoading} onRefetch={refetch} />
         </div>
       </div>

@@ -24,6 +24,7 @@ export interface ProjectDetail {
   dueDate: string;
   skeletonUrl: string;
   scorePolicy: ScorePolicy;
+  canSubmit: boolean;
 }
 
 export interface SubmissionHistory {

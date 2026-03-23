@@ -8,4 +8,5 @@ export interface Project {
     dueDate: string;
     score?: number;
     status: ProjectStatus;
+    canSubmit: boolean;
 }
