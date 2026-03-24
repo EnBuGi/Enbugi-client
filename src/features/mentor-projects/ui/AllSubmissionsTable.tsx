@@ -139,8 +139,8 @@ export function AllSubmissionsTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출번호</TableHead>
-              <TableHead className="w-[150px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시각</TableHead>
+              <TableHead className="w-[60px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">No</TableHead>
+              <TableHead className="w-[180px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시각</TableHead>
               <TableHead className="w-[115px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시간</TableHead>
               <TableHead className="w-[100px] text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-4">이름</TableHead>
               <TableHead className="w-[350px] text-left text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-8">프로젝트 제목</TableHead>
@@ -158,22 +158,14 @@ export function AllSubmissionsTable({
                 className="group cursor-pointer hover:bg-white/5"
                 onClick={() => handleRowClick(s.submissionId)}
               >
-                {/* 제출번호 */}
+                {/* No */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
                   {totalElements - ((currentPage - 1) * pageSize + index)}
                 </TableCell>
 
-                {/* 제출 시각 (2줄 표시) */}
-                <TableCell className="text-center font-mono text-zinc-400 text-xs">
-                  {(() => {
-                    const [date, time] = formatDate(s.submittedAt).split(' ');
-                    return (
-                      <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-zinc-400">{date}</span>
-                        <span className="text-zinc-500 text-[10px]">{time}</span>
-                      </div>
-                    );
-                  })()}
+                {/* 제출 시각 (1줄 표시) */}
+                <TableCell className="text-center font-mono text-zinc-400 text-xs text-nowrap">
+                  {formatDate(s.submittedAt)}
                 </TableCell>
 
 
