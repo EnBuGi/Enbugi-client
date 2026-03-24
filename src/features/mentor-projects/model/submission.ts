@@ -37,10 +37,12 @@ export interface UserProjectSubmission {
   submittedAt: string;
 }
 
+export type TestStatus = 'PASSED' | 'FAILED' | 'ERROR' | 'SKIPPED';
+
 // 제출 상세 조회 (Admin Detail)
 export interface TestDetail {
   methodName: string;
-  status: SubmissionStatus;
+  status: TestStatus;
   durationMs: number | null;
   message: string | null;
   isHidden: boolean;

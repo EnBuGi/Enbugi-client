@@ -9,6 +9,7 @@ import {
   TableHead, 
   TableCell 
 } from '@/shared/components/ui/Table';
+import { CheckCircle2, XCircle } from 'lucide-react';
 import { AdminSubmissionDetailResponse } from '../../api/projects';
 import { SubmissionStatusBadge } from './SubmissionStatusBadge';
 import { cn } from '@/shared/utils/cn';
@@ -17,6 +18,20 @@ import { formatDate } from '@/shared/utils/date';
 interface AdminSubmissionDetailViewProps {
   detail: AdminSubmissionDetailResponse;
 }
+
+const TestStatusPill = ({ status }: { status: string }) => {
+    const isPassed = status === 'PASSED';
+    return (
+        <div className={cn(
+            "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border",
+            isPassed 
+                ? "bg-emerald-400/10 text-emerald-400 border-emerald-400/20" 
+                : "bg-rose-400/10 text-rose-400 border-rose-400/20"
+        )}>
+            {isPassed ? 'Passed' : 'Failed'}
+        </div>
+    );
+};
 
 export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewProps) {
   return (
@@ -89,15 +104,22 @@ export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewP
                 <TableBody>
                     {detail.testDetails.map((test, idx) => (
                         <TableRow key={idx}>
-                            <TableCell className="font-mono text-xs">
-                                {test.methodName}
-                                {test.isHidden && <span className="ml-2 px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[10px] border border-amber-500/20">Hidden</span>}
+                            <TableCell className="font-mono text-xs flex items-center gap-3">
+                                {test.status === 'PASSED' ? (
+                                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                                ) : (
+                                    <XCircle size={16} className="text-rose-400 shrink-0" />
+                                )}
+                                <div className="flex flex-col">
+                                    <span className="font-bold">{test.methodName}</span>
+                                    {test.isHidden && <span className="mt-1 w-fit px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[10px] border border-amber-500/20">Hidden</span>}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <SubmissionStatusBadge status={test.status} className="h-7 text-[11px]" />
+                                <TestStatusPill status={test.status} />
                             </TableCell>
                             <TableCell>
-                                <Text variant="small" className={cn("font-medium", test.status === 'COMPLETED' ? "text-emerald-400" : "text-white")}>
+                                <Text variant="small" className={cn("font-medium", test.status === 'PASSED' ? "text-emerald-400" : "text-white")}>
                                     {test.score}점
                                 </Text>
                             </TableCell>
