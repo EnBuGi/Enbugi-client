@@ -143,7 +143,7 @@ export function AllSubmissionsTable({
               <TableHead className="w-[150px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시각</TableHead>
               <TableHead className="w-[115px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시간</TableHead>
               <TableHead className="w-[100px] text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-4">이름</TableHead>
-              <TableHead className="w-[120px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-4">프로젝트 제목</TableHead>
+              <TableHead className="w-[350px] text-left text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-8">프로젝트 제목</TableHead>
               <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">결과</TableHead>
               <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">점수</TableHead>
               <TableHead className="w-[110px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">유형</TableHead>
@@ -163,9 +163,17 @@ export function AllSubmissionsTable({
                   {totalElements - ((currentPage - 1) * pageSize + index)}
                 </TableCell>
 
-                {/* 제출 시간 */}
-                <TableCell className="text-center font-mono text-zinc-400 text-xs text-nowrap">
-                  {formatDate(s.submittedAt)}
+                {/* 제출 시각 (2줄 표시) */}
+                <TableCell className="text-center font-mono text-zinc-400 text-xs">
+                  {(() => {
+                    const [date, time] = formatDate(s.submittedAt).split(' ');
+                    return (
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="text-zinc-400">{date}</span>
+                        <span className="text-zinc-500 text-[10px]">{time}</span>
+                      </div>
+                    );
+                  })()}
                 </TableCell>
 
 
@@ -180,8 +188,8 @@ export function AllSubmissionsTable({
                   <span className="font-semibold text-white">{s.name}</span>
                 </TableCell>
 
-                {/* 문제 이름 */}
-                <TableCell className="pl-4">
+                {/* 프로젝트 제목 */}
+                <TableCell className="pl-8 text-left">
                   <span className="text-zinc-200 text-sm">{s.problemTitle}</span>
                 </TableCell>
 

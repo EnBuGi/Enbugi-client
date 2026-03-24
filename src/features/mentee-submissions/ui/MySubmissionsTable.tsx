@@ -77,11 +77,11 @@ export function MySubmissionsTable({
   // 로컬 필터링 로직 (백엔드 미지원 시 임시 사용)
   const filteredSubmissions = (data?.content || []).filter(s => {
     const matchesSearch = s.problemTitle.toLowerCase().includes(search.toLowerCase());
-    const matchesFilter = 
-      filter === 'ALL' || 
-      (filter === 'PASS' && s.status === 'COMPLETED') || 
+    const matchesFilter =
+      filter === 'ALL' ||
+      (filter === 'PASS' && s.status === 'COMPLETED') ||
       (filter === 'FAIL' && s.status !== 'COMPLETED' && !['PENDING', 'RUNNING', 'ENQUEUING', 'QUEUED', 'PROCESSING'].includes(s.status));
-    
+
     return matchesSearch && matchesFilter;
   });
 
@@ -119,11 +119,10 @@ export function MySubmissionsTable({
                 key={opt}
                 type="button"
                 onClick={() => setFilter(opt)}
-                className={`px-5 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider transition-all ${
-                  isActive 
-                    ? activeColors[opt] 
-                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
-                }`}
+                className={`px-5 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider transition-all ${isActive
+                  ? activeColors[opt]
+                  : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                  }`}
               >
                 {opt}
               </button>
@@ -138,9 +137,9 @@ export function MySubmissionsTable({
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출번호</TableHead>
-              <TableHead className="w-[150px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시각</TableHead>
+              <TableHead className="w-[110px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시각</TableHead>
               <TableHead className="w-[115px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시간</TableHead>
-              <TableHead className="w-[120px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-4">프로젝트 제목</TableHead>
+              <TableHead className="w-[350px] text-left text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-8">프로젝트 제목</TableHead>
               <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">결과</TableHead>
               <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">점수</TableHead>
               <TableHead className="w-[110px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">유형</TableHead>
@@ -160,9 +159,17 @@ export function MySubmissionsTable({
                   {totalElements - (page * pageSize + index)}
                 </TableCell>
 
-                {/* 제출 시간 */}
-                <TableCell className="text-center font-mono text-zinc-400 text-xs text-nowrap">
-                  {formatDate(s.submittedAt)}
+                {/* 제출 시각 (2줄 표시) */}
+                <TableCell className="text-center font-mono text-zinc-400 text-xs">
+                  {(() => {
+                    const [date, time] = formatDate(s.submittedAt).split(' ');
+                    return (
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="text-zinc-400">{date}</span>
+                        <span className="text-zinc-500 text-[10px]">{time}</span>
+                      </div>
+                    );
+                  })()}
                 </TableCell>
 
 
@@ -171,8 +178,8 @@ export function MySubmissionsTable({
                   {timeAgo(s.submittedAt)}
                 </TableCell>
 
-                {/* 문제 이름 */}
-                <TableCell>
+                {/* 프로젝트 제목 */}
+                <TableCell className="pl-8">
                   <span className="text-zinc-200 text-sm">{s.problemTitle}</span>
                 </TableCell>
 
