@@ -114,9 +114,9 @@ export default function UserProjectSubmissionsPage() {
                     <SubmissionStatusBadge status={sub.status} />
                   </TableCell>
                   <TableCell>
-                    <Text className={cn("font-bold", sub.score === 100 ? "text-emerald-400" : "text-white")}>
-                      {sub.score !== null ? `${sub.score}점` : '-'}
-                    </Text>
+                    <span className={`text-sm font-mono ${sub.score === 100 ? 'text-emerald-400' : 'text-zinc-200'}`}>
+                      {sub.score ?? 0}<span className="text-zinc-500 text-xs">/100</span>
+                    </span>
                   </TableCell>
                   <TableCell className="text-right">
                      <ChevronRight size={18} className="inline text-sub group-hover:text-primary transition-colors" />

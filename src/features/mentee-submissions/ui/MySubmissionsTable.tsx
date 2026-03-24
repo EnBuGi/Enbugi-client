@@ -27,7 +27,7 @@ function StatusBadge({ status }: { status: SubmissionStatus }) {
     RUNNING: { intent: 'warning', tone: 'soft', label: '채점 중' },
     PROCESSING: { intent: 'warning', tone: 'soft', label: '채점 중' },
     COMPLETED: { intent: 'success', tone: 'soft', label: '성공' },
-    WRONG_ANSWER: { intent: 'danger', tone: 'soft', label: '오답' },
+    WRONG_ANSWER: { intent: 'danger', tone: 'soft', label: '실패' },
     SYSTEM_ERROR: { intent: 'danger', tone: 'soft', label: '시스템 에러' },
     CANCELLED: { intent: 'neutral', tone: 'soft', label: '취소됨' },
     COMPILE_ERROR: { intent: 'danger', tone: 'soft', label: '컴파일 에러' },
@@ -63,24 +63,30 @@ interface MySubmissionsTableProps {
   pageSize: number;
 }
 
-export function MySubmissionsTable({ 
-  data, 
-  page, 
-  onPageChange, 
-  pageSize 
+export function MySubmissionsTable({
+  data,
+  page,
+  onPageChange,
+  pageSize
 }: MySubmissionsTableProps) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterOption>('ALL');
   const [selectedSubmission, setSelectedSubmission] = useState<{ subId: string; projectId: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const submissions = data?.content || [];
+  // 로컬 필터링 로직 (백엔드 미지원 시 임시 사용)
+  const filteredSubmissions = (data?.content || []).filter(s => {
+    const matchesSearch = s.problemTitle.toLowerCase().includes(search.toLowerCase());
+    const matchesFilter =
+      filter === 'ALL' ||
+      (filter === 'PASS' && s.status === 'COMPLETED') ||
+      (filter === 'FAIL' && s.status !== 'COMPLETED' && !['PENDING', 'RUNNING', 'ENQUEUING', 'QUEUED', 'PROCESSING'].includes(s.status));
+
+    return matchesSearch && matchesFilter;
+  });
+
   const totalElements = data?.totalElements || 0;
 
-  // NOTE: Server-side filtering is not implemented in the backend yet for this endpoint, 
-  // but we should at least handle the pagination correctly.
-  // For now, we use the server-side pagination data.
-  
   const handleRowClick = (submissionId: string, projectId: string) => {
     setSelectedSubmission({ subId: submissionId, projectId });
     setIsModalOpen(true);
@@ -100,19 +106,28 @@ export function MySubmissionsTable({
         </div>
 
         <div className="flex p-1 bg-surface ring-1 ring-white/10 rounded-lg">
-          {FILTER_OPTIONS.map((opt) => (
-            <button
-              key={opt}
-              type="button"
-              onClick={() => setFilter(opt)}
-              className={`px-5 py-1.5 rounded-md text-sm font-semibold transition-all ${filter === opt
-                ? 'bg-red-950 text-red-400 shadow-sm'
-                : 'text-zinc-400 hover:text-white hover:bg-white/5'
-                }`}
-            >
-              {opt}
-            </button>
-          ))}
+          {FILTER_OPTIONS.map((opt) => {
+            const isActive = filter === opt;
+            const activeColors = {
+              ALL: 'bg-white/15 text-white shadow-sm ring-1 ring-white/20',
+              PASS: 'bg-emerald-500/20 text-emerald-400 shadow-sm ring-1 ring-emerald-500/30',
+              FAIL: 'bg-rose-500/20 text-rose-400 shadow-sm ring-1 ring-rose-500/30'
+            };
+
+            return (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => setFilter(opt)}
+                className={`px-5 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider transition-all ${isActive
+                    ? activeColors[opt]
+                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                  }`}
+              >
+                {opt}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -121,31 +136,30 @@ export function MySubmissionsTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px] text-center">제출번호</TableHead>
-              <TableHead className="w-[150px] text-center">제출 시각</TableHead>
-              <TableHead className="w-[115px] text-center">제출 시간</TableHead>
-              <TableHead className="w-[300px]">프로젝트 제목</TableHead>
-              <TableHead className="w-[100px] text-center">결과</TableHead>
-              <TableHead className="w-[110px] text-center">메모리</TableHead>
-              <TableHead className="w-[90px]  text-center">시간</TableHead>
-              <TableHead className="w-[110px] text-center">유형</TableHead>
-              <TableHead className="w-[100px] text-center">상세보기</TableHead>
+              <TableHead className="w-[60px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">No</TableHead>
+              <TableHead className="w-[180px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시각</TableHead>
+              <TableHead className="w-[115px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">제출 시간</TableHead>
+              <TableHead className="w-[350px] text-left text-zinc-500 font-bold uppercase text-[11px] tracking-widest pl-8">프로젝트 제목</TableHead>
+              <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">결과</TableHead>
+              <TableHead className="w-[100px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">점수</TableHead>
+              <TableHead className="w-[110px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest">유형</TableHead>
+              <TableHead className="w-[50px] text-center text-zinc-500 font-bold uppercase text-[11px] tracking-widest"></TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {submissions.map((s, index) => (
+            {filteredSubmissions.map((s, index) => (
               <TableRow
                 key={s.submissionId}
                 className="group cursor-pointer hover:bg-white/5"
                 onClick={() => handleRowClick(s.submissionId, s.projectId)}
               >
-                {/* 제출번호 */}
+                {/* No */}
                 <TableCell className="text-center font-mono text-zinc-500 text-xs">
                   {totalElements - (page * pageSize + index)}
                 </TableCell>
-
-                {/* 제출 시간 */}
+ 
+                {/* 제출 시각 (1줄 표시) */}
                 <TableCell className="text-center font-mono text-zinc-400 text-xs text-nowrap">
                   {formatDate(s.submittedAt)}
                 </TableCell>
@@ -156,8 +170,8 @@ export function MySubmissionsTable({
                   {timeAgo(s.submittedAt)}
                 </TableCell>
 
-                {/* 문제 이름 */}
-                <TableCell>
+                {/* 프로젝트 제목 */}
+                <TableCell className="pl-8">
                   <span className="text-zinc-200 text-sm">{s.problemTitle}</span>
                 </TableCell>
 
@@ -166,22 +180,11 @@ export function MySubmissionsTable({
                   <StatusBadge status={s.status} />
                 </TableCell>
 
-                {/* 메모리 */}
-                <TableCell className="text-center text-sm text-zinc-400">
-                  {s.memoryUsage !== null ? (
-                    <>{s.memoryUsage.toLocaleString()} <span className="text-zinc-600 text-xs">KB</span></>
-                  ) : (
-                    <span className="text-zinc-600">-</span>
-                  )}
-                </TableCell>
-
-                {/* 시간 */}
-                <TableCell className="text-center text-sm text-zinc-400">
-                  {s.timeUsage !== null ? (
-                    <>{s.timeUsage} <span className="text-zinc-600 text-xs">ms</span></>
-                  ) : (
-                    <span className="text-zinc-600">-</span>
-                  )}
+                {/* 점수 */}
+                <TableCell className="text-center">
+                  <span className={`text-sm font-mono ${s.score === 100 ? 'text-emerald-400' : 'text-zinc-200'}`}>
+                    {s.score ?? 0}<span className="text-zinc-500 text-xs">/100</span>
+                  </span>
                 </TableCell>
 
                 {/* 유형 */}
@@ -191,18 +194,18 @@ export function MySubmissionsTable({
                   </span>
                 </TableCell>
 
-                {/* 상세보기 */}
-                <TableCell className="text-center">
-                  <div className="flex items-center justify-center gap-0.5 text-sm text-zinc-400 group-hover:text-primary transition-colors">
-                    상세 보기 <ChevronRight size={15} />
+                {/* 상세보기 아이콘 */}
+                <TableCell className="text-center px-0">
+                  <div className="flex items-center justify-center text-zinc-400 group-hover:text-primary transition-colors pr-4">
+                    <ChevronRight size={18} />
                   </div>
                 </TableCell>
               </TableRow>
             ))}
 
-            {submissions.length === 0 && (
+            {filteredSubmissions.length === 0 && (
               <TableRow>
-                <TableCell colSpan={9} className="h-32 text-center text-zinc-500">
+                <TableCell colSpan={8} className="h-32 text-center text-zinc-500">
                   검색 결과가 없습니다.
                 </TableCell>
               </TableRow>

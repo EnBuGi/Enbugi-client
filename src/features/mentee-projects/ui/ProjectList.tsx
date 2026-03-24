@@ -16,7 +16,7 @@ const Score = ({ value }: { value?: number }) => {
     }
 
     const isPerfect = value === 100;
-    const colorClass = isPerfect ? "text-white" : "text-[#B93234]";
+    const colorClass = isPerfect ? "text-emerald-400" : "text-white";
 
     return (
         <span className={`text-sm font-semibold ${colorClass}`}>

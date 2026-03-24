@@ -58,7 +58,7 @@ export function AdminSubmissionDetailModal({ isOpen, onClose, submissionId }: Ad
         <div className="p-6 space-y-8 bg-surfaceStrong">
           
           {/* Dashboard Stats Grid (Option 3) */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <StatCard 
               label="상태" 
               value={<SubmissionStatusBadge status={detail.status} />}
@@ -69,16 +69,6 @@ export function AdminSubmissionDetailModal({ isOpen, onClose, submissionId }: Ad
               value={detail.score !== null ? `${detail.score} / 100` : '-'}
               icon={<CheckCircle2 size={16} className="text-emerald-400" />}
               highlight={detail.score === 100}
-            />
-            <StatCard 
-              label="실행 시간" 
-              value={detail.timeExecution ? `${detail.timeExecution}ms` : '-'}
-              icon={<Clock size={16} className="text-amber-400" />}
-            />
-            <StatCard 
-              label="메모리" 
-              value={detail.memoryUsage ? `${detail.memoryUsage.toFixed(1)}MB` : '-'}
-              icon={<Database size={16} className="text-indigo-400" />}
             />
           </div>
 

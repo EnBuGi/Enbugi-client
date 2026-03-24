@@ -84,9 +84,9 @@ export function SubmissionHistoryList({ projectId, history, isLoading, onRefetch
                         취소
                       </Button>
                     ) : (
-                      <div className="flex items-center justify-center bg-black/30 rounded-md px-2.5 py-1 min-w-[42px] border border-[var(--color-border)]">
-                        <Text variant="small" weight="bold" className="!text-[var(--color-main)] leading-none">
-                          {item.score ?? "—"}
+                      <div className="flex items-center justify-center min-w-[50px]">
+                        <Text variant="small" weight="bold" className={`font-mono !leading-none ${item.score === 100 ? '!text-emerald-400' : '!text-zinc-200'}`}>
+                          {item.score ?? 0}<span className="text-zinc-500 text-[10px] ml-0.5">/100</span>
                         </Text>
                       </div>
                     )}
