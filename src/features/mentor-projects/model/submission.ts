@@ -22,8 +22,6 @@ export interface GlobalSubmission {
   status: SubmissionStatus;
   score: number | null;
   projectType: string;
-  memoryUsage: number | null;
-  timeUsage: number | null;
 }
 
 // 특정 유저의 프로젝트 제출 이력
@@ -32,8 +30,6 @@ export interface UserProjectSubmission {
   status: SubmissionStatus;
   score: number | null;
   projectType: string;
-  memoryUsage: number | null;
-  timeExecution: number | null;
   submittedAt: string;
 }
 
@@ -56,8 +52,7 @@ export interface AdminSubmissionDetail {
   repoUrl: string;
   status: SubmissionStatus;
   score: number | null;
-  memoryUsage: number | null;
-  timeExecution: number | null;
+  projectType: string;
   submittedAt: string;
   sourceCode: string;
   testDetails: TestDetail[];

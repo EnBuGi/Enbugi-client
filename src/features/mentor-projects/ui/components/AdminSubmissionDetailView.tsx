@@ -54,7 +54,7 @@ export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewP
             <div className="text-right">
                 <Text variant="tiny" className="text-sub block uppercase tracking-wider mb-1">Score</Text>
                 <Text variant="h2" className={cn("font-bold", detail.score === 100 ? "text-emerald-400" : "text-white")}>
-                    {detail.score}점
+                    {detail.score}<span className="text-zinc-500 text-sm font-normal">/100</span>
                 </Text>
             </div>
         </div>
@@ -68,14 +68,6 @@ export function AdminSubmissionDetailView({ detail }: AdminSubmissionDetailViewP
                 <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <Text variant="small" className="text-sub">제출 시간</Text>
                     <Text variant="small">{formatDate(detail.submittedAt)}</Text>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-white/5">
-                    <Text variant="small" className="text-sub">메모리 사용량</Text>
-                    <Text variant="small">{detail.memoryUsage ? `${detail.memoryUsage.toFixed(2)} MB` : '-'}</Text>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-white/5">
-                    <Text variant="small" className="text-sub">실행 시간</Text>
-                    <Text variant="small">{detail.timeExecution ? `${detail.timeExecution} ms` : '-'}</Text>
                 </div>
                 <div className="py-2">
                     <Text variant="small" className="text-sub block mb-1">레포지토리</Text>
