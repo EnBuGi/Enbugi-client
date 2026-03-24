@@ -24,7 +24,7 @@ export async function fetchProjects(): Promise<Project[]> {
                 startDate: item.startDate.split('T')[0],
                 dueDate: item.dueDate.split('T')[0],
                 status: status,
-                score: undefined, // Score is not provided in list view
+                score: item.score,
             };
         });
     } catch (error) {

@@ -61,9 +61,11 @@ export interface AdminGlobalSubmissionResponse {
   githubId: string;
 }
 
+export type TestStatus = 'PASSED' | 'FAILED' | 'ERROR' | 'SKIPPED';
+
 export interface TestDetailResponse {
   methodName: string;
-  status: SubmissionStatus;
+  status: TestStatus;
   durationMs: number | null;
   message: string | null;
   isHidden: boolean;
@@ -146,8 +148,9 @@ export const mentorProjectApi = {
   },
 
   /** 제출 상세 조회 (관리자용) */
-  getAdminSubmissionDetail: (submissionId: string): Promise<AdminSubmissionDetailResponse> =>
-    fetchWithAuth(`/api/v1/admin/submissions/${submissionId}`),
+  getAdminSubmissionDetail: async (submissionId: string): Promise<AdminSubmissionDetailResponse> => {
+    return fetchWithAuth(`/api/v1/admin/submissions/${submissionId}`);
+  },
 
   /** 모든 프로젝트의 모든 제출 내역 조회 (전역 관리용) */
   getAllSubmissions: (params?: PageableParams): Promise<PageResponse<AdminGlobalSubmissionResponse>> => {
