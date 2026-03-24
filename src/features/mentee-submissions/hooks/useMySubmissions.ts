@@ -24,12 +24,12 @@ export function useMySubmissions(initialPage = 0, initialSize = 10) {
     };
   }, [page, size]);
 
-  return { 
-    data, 
-    isLoading, 
-    page, 
-    setPage, 
-    size, 
-    setSize 
+  return {
+    data,
+    isLoading,
+    page,
+    setPage,
+    size,
+    setSize
   } as const;
 }

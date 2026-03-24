@@ -56,8 +56,6 @@ export interface AdminGlobalSubmissionResponse {
   status: SubmissionStatus;
   score: number | null;
   submittedAt: string;
-  memoryUsage: number | null;
-  timeUsage: number | null;
   githubId: string;
 }
 
@@ -79,8 +77,6 @@ export interface AdminSubmissionDetailResponse {
   repoUrl: string;
   status: SubmissionStatus;
   score: number | null;
-  memoryUsage: number | null;
-  timeExecution: number | null;
   projectType: string;
   submittedAt: string;
   sourceCode: string;
