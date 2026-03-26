@@ -2,6 +2,7 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { formatDate } from "@/shared/utils/date";
 import type { ProjectDetail } from "../model/project";
 
 interface Props {
@@ -25,7 +26,7 @@ export function ProjectContent({ projectDetail, isLoading }: Props) {
       <h1 className="text-3xl font-bold mb-4 text-white">{projectDetail.title}</h1>
       <div className="flex gap-2 mb-8 text-sm text-white/50 border-b border-white/10 pb-4">
         <span className="bg-white/10 px-2 py-1 rounded text-white">{projectDetail.type}</span>
-        <span className="py-1">기간: {projectDetail.startDate} ~ {projectDetail.dueDate}</span>
+        <span className="py-1">기간: {formatDate(projectDetail.startDate, false)} ~ {formatDate(projectDetail.dueDate, false)}</span>
       </div>
       
       <div className="max-w-none">
