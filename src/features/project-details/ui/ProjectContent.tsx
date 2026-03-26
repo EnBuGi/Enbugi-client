@@ -28,7 +28,7 @@ export function ProjectContent({ projectDetail, isLoading }: Props) {
         <span className="py-1">기간: {projectDetail.startDate} ~ {projectDetail.dueDate}</span>
       </div>
       
-      <div className="prose prose-invert max-w-none">
+      <div className="max-w-none">
         <div className="mb-10 markdown-body !bg-transparent !text-zinc-200">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {projectDetail.description}
