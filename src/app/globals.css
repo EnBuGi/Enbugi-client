@@ -335,6 +335,7 @@
   .wmde-markdown li,
   .wmde-markdown blockquote {
     color: #d4d4d8 !important;
+    display: list-item !important;
   }
 
   .wmde-markdown code,
@@ -384,5 +385,28 @@
 
   .wmde-markdown blockquote {
     border-left-color: #5c191a !important;
+  }
+
+  /* Custom Markdown List Styles */
+  .markdown-body ul,
+  .wmde-markdown ul {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .markdown-body ol,
+  .wmde-markdown ol {
+    list-style-type: decimal !important;
+    padding-left: 1.5rem !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .markdown-body li,
+  .wmde-markdown li {
+    margin-bottom: 0.5rem !important;
+    display: list-item !important;
   }
 }

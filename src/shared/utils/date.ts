@@ -1,4 +1,4 @@
-export const formatDate = (dateStr: string) => {
+export const formatDate = (dateStr: string, includeSeconds: boolean = true) => {
   if (!dateStr) return '';
   // Convert standard SQL/ISO format with space to 'T' for better browser compatibility (Safari)
   const d = new Date(dateStr.replace(' ', 'T'));
@@ -12,7 +12,9 @@ export const formatDate = (dateStr: string) => {
   const minutes = pad(d.getMinutes());
   const seconds = pad(d.getSeconds());
   
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return includeSeconds 
+    ? `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    : `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
 export function timeAgo(dateStr: string): string {
